@@ -1,5 +1,8 @@
 package senac.ensineme.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Categoria {
     private String codCategoria;
     private String nomeCategoria;
