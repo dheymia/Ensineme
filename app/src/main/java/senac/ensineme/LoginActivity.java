@@ -1,4 +1,4 @@
-package senac.ensineme.ui.login;
+package senac.ensineme;
 
 import android.app.Activity;
 
@@ -22,7 +22,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import senac.ensineme.R;
+import senac.ensineme.ui.login.LoggedInUserView;
+import senac.ensineme.ui.login.LoginFormState;
+import senac.ensineme.ui.login.LoginResult;
 import senac.ensineme.ui.login.LoginViewModel;
 import senac.ensineme.ui.login.LoginViewModelFactory;
 
@@ -37,8 +39,8 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        final EditText usernameEditText = findViewById(R.id.username);
-        final EditText passwordEditText = findViewById(R.id.password);
+        final EditText usernameEditText = findViewById(R.id.txtEmail);
+        final EditText passwordEditText = findViewById(R.id.txtSenha);
         final Button loginButton = findViewById(R.id.login);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 

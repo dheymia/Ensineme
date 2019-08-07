@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         txtNome.setText("Olá " + name);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fabCadastro);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

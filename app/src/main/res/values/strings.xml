@@ -18,7 +18,9 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="title_activity_login">Entrar</string>
+    <string name="prompt_nome">Nome</string>
     <string name="prompt_email">Email</string>
+    <string name="prompt_phone">Celular</string>
     <string name="prompt_password">Senha</string>
     <string name="action_sign_in">Entrar</string>
     <string name="action_sign_in_short">Sign in</string>

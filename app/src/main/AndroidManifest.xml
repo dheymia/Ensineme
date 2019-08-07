@@ -17,14 +17,14 @@
         <activity
             android:name=".CadastroActivity"
             android:label="@string/title_activity_cadastro"
-            android:parentActivityName=".ui.login.LoginActivity"
+            android:parentActivityName=".LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="senac.ensineme.ui.login.LoginActivity" />
+                android:value="senac.ensineme.LoginActivity" />
         </activity>
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
             android:name=".SettingsActivity"
