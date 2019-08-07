@@ -98,7 +98,7 @@ public class Demanda {
             builder.append(", ");
         }
         if (horasaulaDemanda != null) {
-            builder.append("Carga Horária da Demanda = ");
+            builder.append("CH da Demanda = ");
             builder.append(horasaulaDemanda);
             builder.append(", ");
         }
