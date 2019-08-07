@@ -1,133 +1,186 @@
 package senac.ensineme;
 
-import android.app.Activity;
+import androidx.annotation.NonNull;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
+import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import senac.ensineme.ui.login.LoggedInUserView;
-import senac.ensineme.ui.login.LoginFormState;
-import senac.ensineme.ui.login.LoginResult;
-import senac.ensineme.ui.login.LoginViewModel;
-import senac.ensineme.ui.login.LoginViewModelFactory;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends AppCompatActivity {
+import senac.ensineme.models.Usuario;
 
-    private LoginViewModel loginViewModel;
+public class LoginActivity extends ComumActivity implements View.OnClickListener {
+
+    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener authStateListener;
+    private Usuario usuario;
+
+    private TextView cadastrar;
+    private Button btnLogin;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
-                .get(LoginViewModel.class);
 
-        final EditText usernameEditText = findViewById(R.id.txtEmail);
-        final EditText passwordEditText = findViewById(R.id.txtSenha);
-        final Button loginButton = findViewById(R.id.login);
-        final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+        firebaseAuth = FirebaseAuth.getInstance();
+        authStateListener = getFirebaseAuthResultHandler();
 
-        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
+        inicializarViews();
+
+        btnLogin = (Button) findViewById(R.id.btnLogin);
+        btnLogin.setOnClickListener(this);
+    }
+
+    protected void inicializarViews() {
+        email = (AutoCompleteTextView) findViewById(R.id.txtEmail);
+        password = (EditText) findViewById(R.id.txtSenha);
+        progressBar = (ProgressBar) findViewById(R.id.loading);
+        cadastrar = (TextView) findViewById(R.id.txtCadastrar);
+    }
+
+    protected void inicializarUsuario() {
+        usuario = new Usuario();
+        usuario.setEmail(email.getText().toString());
+        usuario.setPassword(password.getText().toString());
+    }
+
+
+    @Override
+    public void onClick(View v) {
+
+        inicializarUsuario();
+
+        int id = v.getId();
+        if (id == R.id.btnLogin) {
+
+            String EMAIL = email.getText().toString();
+            String SENHA = password.getText().toString();
+
+            boolean ok = true;
+
+            if (EMAIL.isEmpty()) {
+                email.setError("E-mail não informado!");
+
+                ok = false;
+            }
+
+            if (SENHA.isEmpty()) {
+                password.setError("Por favor digite uma senha!");
+
+                ok = false;
+            }
+
+            if (ok) {
+                btnLogin.setEnabled(false);
+                cadastrar.setEnabled(false);
+                progressBar.setFocusable(true);
+
+                openProgressBar();
+                verifyLogin();
+            } else {
+                closeProgressBar();
+            }
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        verifyLogged();
+    }
+
+    private void verifyLogged() {
+
+        if (firebaseAuth.getCurrentUser() != null) {
+            chamarMainActivity();
+        } else {
+            firebaseAuth.addAuthStateListener(authStateListener);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (authStateListener != null) {
+            firebaseAuth.removeAuthStateListener(authStateListener);
+        }
+    }
+
+    private FirebaseAuth.AuthStateListener getFirebaseAuthResultHandler() {
+        FirebaseAuth.AuthStateListener callback = new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onChanged(@Nullable LoginFormState loginFormState) {
-                if (loginFormState == null) {
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+
+                FirebaseUser userFirebase = firebaseAuth.getCurrentUser();
+
+                if (userFirebase == null) {
                     return;
                 }
-                loginButton.setEnabled(loginFormState.isDataValid());
-                if (loginFormState.getUsernameError() != null) {
-                    usernameEditText.setError(getString(loginFormState.getUsernameError()));
-                }
-                if (loginFormState.getPasswordError() != null) {
-                    passwordEditText.setError(getString(loginFormState.getPasswordError()));
-                }
-            }
-        });
 
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
-            @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
-                if (loginResult == null) {
-                    return;
+                if (usuario.getId() == null && isNameOk(usuario, userFirebase)) {
+
+                    usuario.setId(userFirebase.getUid());
+                    usuario.setNomeIfNull(userFirebase.getDisplayName());
+                    usuario.setEmailIfNull(userFirebase.getEmail());
+                    usuario.saveDB();
                 }
-                loadingProgressBar.setVisibility(View.GONE);
-                if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
-                }
-                if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
-                }
-                setResult(Activity.RESULT_OK);
 
-                //Complete and destroy login activity once successful
-                finish();
-            }
-        });
-
-        TextWatcher afterTextChangedListener = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // ignore
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // ignore
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                chamarMainActivity();
             }
         };
-        usernameEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
-                }
-                return false;
-            }
-        });
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-            }
-        });
+        return (callback);
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
-        // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+    private void verifyLogin() {
+        firebaseAuth.signInWithEmailAndPassword(
+                usuario.getEmail(),
+                usuario.getPassword())
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if (!task.isSuccessful()) {
+                            closeProgressBar();
+
+                            btnLogin.setEnabled(true);
+                            cadastrar.setEnabled(true);
+
+                            return;
+                        }
+                    }
+                });
     }
 
-    private void showLoginFailed(@StringRes Integer errorString) {
-        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        showSnackbar(connectionResult.getErrorMessage());
+    }
+
+    private boolean isNameOk(Usuario usuario, FirebaseUser firebaseUser) {
+        return (usuario.getNome() != null || firebaseUser.getDisplayName() != null);
+    }
+
+    private void chamarMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void chamarCadastro(View view) {
+        Intent intent = new Intent(this, CadastroActivity.class);
+        startActivity(intent);
     }
 }

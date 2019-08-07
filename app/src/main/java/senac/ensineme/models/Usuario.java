@@ -1,58 +1,85 @@
 package senac.ensineme.models;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
+
+import java.util.Map;
+
 public class Usuario {
-
-    private String codUsuario;
-    private String nomeUsuario;
-    private String emailUsuario;
-    private String foneUsuario;
-    private String tipoUsuario;
-
-    public Usuario(String codUsuario, String nomeUsuario, String emailUsuario, String foneUsuario, String tipoUsuario) {
-        this.codUsuario = codUsuario;
-        this.nomeUsuario = nomeUsuario;
-        this.emailUsuario = emailUsuario;
-        this.foneUsuario = foneUsuario;
-        this.tipoUsuario = tipoUsuario;
+    private String id;
+    private String nome;
+    private String email;
+    private String celular;
+    private String password;
+    public Usuario() {
     }
-
-    public String getCodUsuario() {
-        return codUsuario;
+    public String getId() {
+        return id;
     }
-
-    public void setCodUsuario(String codUsuario) {
-        this.codUsuario = codUsuario;
+    public void setId(String id) {
+        this.id = id;
     }
-
-    public String getNomeUsuario() {
-        return nomeUsuario;
+    public String getNome() {
+        return nome;
     }
-
-    public void setNomeUsuario(String nomeUsuario) {
-        this.nomeUsuario = nomeUsuario;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
-
-    public String getEmailUsuario() {
-        return emailUsuario;
+    private void setNameInMap(Map<String, Object> map) {
+        if (getNome() != null) {
+            map.put("nome", getNome());
+        }
     }
-
-    public void setEmailUsuario(String emailUsuario) {
-        this.emailUsuario = emailUsuario;
+    public void setNomeIfNull(String nome) {
+        if (this.nome == null) {
+            this.nome = nome;
+        }
     }
-
-    public String getFoneUsuario() {
-        return foneUsuario;
+    public String getCelular() {
+        return celular;
     }
-
-    public void setFoneUsuario(String foneUsuario) {
-        this.foneUsuario = foneUsuario;
+    public void setCelular(String celular) {
+        this.email = celular;
     }
-
-    public String getTipoUsuario() {
-        return tipoUsuario;
+    private void setCelularInMap(Map<String, Object> map) {
+        if (getCelular() != null) {
+            map.put("celular", getCelular());
+        }
     }
-
-    public void setTipoUsuario(String tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
+    public void setCelularIfNull(String celular) {
+        if (this.celular == null) {
+            this.celular = celular;
+        }
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    private void setEmailInMap(Map<String, Object> map) {
+        if (getEmail() != null) {
+            map.put("email", getEmail());
+        }
+    }
+    public void setEmailIfNull(String email) {
+        if (this.email == null) {
+            this.email = email;
+        }
+    }
+    @Exclude
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public void saveDB(DatabaseReference.CompletionListener... completionListener) {
+        DatabaseReference firebase = Bibioteca.getFirebase().child("usuarios").child(getId());
+        if (completionListener.length == 0) {
+            firebase.setValue(this);
+        } else {
+            firebase.setValue(this, completionListener[0]);
+        }
     }
 }

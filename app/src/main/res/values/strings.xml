@@ -29,4 +29,8 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Falha no login"</string>
     <string name="title_activity_cadastro">Novo cadastro</string>
+    <string name="msg_erro_nome">Nome não preeenchido</string>
+    <string name="msg_erro_email_empty">Email não preenchido</string>
+    <string name="msg_erro_celular">Celular não preeenchido</string>
+    <string name="msg_erro_senha_empty">Senha não preenchida</string>
 </resources>

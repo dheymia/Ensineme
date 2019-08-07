@@ -22,7 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
         android:gravity="right"
-        android:text="TextView"
+        android:text="@string/prompt_nome"
         android:textColor="@color/colorPrimaryDark"
-        android:textStyle="italic" />
+        android:textStyle="italic"
+        tools:text="@string/prompt_nome" />
 </LinearLayout>

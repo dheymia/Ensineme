@@ -2,16 +2,24 @@ package senac.ensineme;
 
 import android.os.Bundle;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import senac.ensineme.models.Usuario;
@@ -22,8 +30,8 @@ private FirebaseAuth mAuth;
 private FirebaseAuth.AuthStateListener mAuthStateListener;
 private Usuario usuario;
 private AutoCompleteTextView name;
+private AutoCompleteTextView email;
 private AutoCompleteTextView celular;
-
 private FloatingActionButton FabCadastrar;
 
 @Override
@@ -55,28 +63,28 @@ public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
         initViews();
 
-        FabCadastrar = (FloatingActionButton) findViewById(R.id.fabCadastro);
+        FabCadastrar = (FloatingActionButton) findViewById(R.id.fab);
         FabCadastrar.setOnClickListener(this);
+}
+
+        protected void initViews() {
+                name = (AutoCompleteTextView) findViewById(R.id.txtNome);
+                email = (AutoCompleteTextView) findViewById(R.id.txtEmail);
+                celular = (AutoCompleteTextView) findViewById(R.id.txtCelular);
+                password = (EditText) findViewById(R.id.txtSenha);
+                progressBar = (ProgressBar) findViewById(R.id.sign_up_progress);
         }
 
-protected void initViews() {
-        name = (AutoCompleteTextView) findViewById(R.id.txtNome);
-        email = (AutoCompleteTextView) findViewById(R.id.txtEmail);
-        celular = (AutoCompleteTextView) findViewById(R.id.txtCelular);
-        password = (AutoCompleteTextView) findViewById(R.id.txtSenha);
-        progressBar = (ProgressBar) findViewById(R.id.sign_up_progress);
+        protected void initUsuario() {
+                usuario = new Usuario();
+                usuario.setNome(name.getText().toString());
+                usuario.setEmail(email.getText().toString());
+                usuario.setCelular(celular.getText().toString());
+                usuario.setPassword(password.getText().toString());
         }
 
-protected void initUsuario() {
-        usuario = new Usuario();
-        usuario.setNome(name.getText().toString());
-        usuario.setEmail(email.getText().toString());
-        usuario.setCelular(celular.getText().toString());
-        usuario.setPassword(password.getText().toString());
-        }
-
-@Override
-public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
         initUsuario();
 
         String NOME = name.getText().toString();
@@ -177,4 +185,21 @@ public boolean onOptionsItemSelected(MenuItem item) {
 
         return super.onOptionsItemSelected(item);
         }
+
+
+        @Override
+        protected void inicializarViews() {
+
         }
+
+        @Override
+        protected void inicializarUsuario() {
+
+        }
+
+
+        @Override
+        public void onPointerCaptureChanged(boolean hasCapture) {
+
+        }
+}
