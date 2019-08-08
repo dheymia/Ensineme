@@ -3,15 +3,13 @@ package senac.ensineme.models;
 import java.util.Date;
 
 public class Oferta {
+    private Usuario usuario;
     private String codOferta;
-    private String usuarioOferta;
-    private String demandaOferta;
     private Double valorOferta;
     private Date dataOferta;
 
-    public Oferta(String usuarioOferta, String demandaOferta, Double valorOferta) {
-        this.usuarioOferta = usuarioOferta;
-        this.demandaOferta = demandaOferta;
+    public Oferta(Usuario usuario, Double valorOferta) {
+        this.usuario = usuario;
         this.valorOferta = valorOferta;
         this.dataOferta = new Date();
     }
@@ -24,20 +22,12 @@ public class Oferta {
         this.codOferta = codOferta;
     }
 
-    public String getUsuarioOferta() {
-        return usuarioOferta;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setUsuarioOferta(String usuarioOferta) {
-        this.usuarioOferta = usuarioOferta;
-    }
-
-    public String getDemandaOferta() {
-        return demandaOferta;
-    }
-
-    public void setDemandaOferta(String demandaOferta) {
-        this.demandaOferta = demandaOferta;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public Double getValorOferta() {
@@ -65,19 +55,15 @@ public class Oferta {
             builder.append(codOferta);
             builder.append(", ");
         }
-        if (usuarioOferta != null) {
+        if (usuario != null) {
             builder.append("Professor=");
-            builder.append(usuarioOferta);
+            builder.append(usuario);
             builder.append(", ");
         }
         if (valorOferta != null) {
             builder.append("Valor da Oferta=");
             builder.append(valorOferta);
             builder.append(", ");
-        }
-        if (demandaOferta != null) {
-            builder.append("Demanda=");
-            builder.append(demandaOferta);
         }
         builder.append("]");
         return builder.toString();

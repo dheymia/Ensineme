@@ -82,4 +82,5 @@ public class Usuario {
             firebase.setValue(this, completionListener[0]);
         }
     }
+
 }

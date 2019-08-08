@@ -1,9 +1,12 @@
 package senac.ensineme.models;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Demanda {
 
+    private Usuario usuario;
     private String codDemanda;
     private String catDemanda;
     private String descDemanda;
@@ -11,8 +14,11 @@ public class Demanda {
     private String turnoDemanda;
     private Date inicioDemanda;
     private String localDemanda;
+    private Boolean encerrado;
+    private List<Oferta> ofertas;
 
-    public Demanda(String codDemanda, String catDemanda, String subcatDemanda, String descDemanda, String horasaulaDemanda, String turnoDemanda, String localDemanda) {
+    public Demanda(Usuario usuario, String codDemanda, String catDemanda, String subcatDemanda, String descDemanda, String horasaulaDemanda, String turnoDemanda, String localDemanda) {
+        this.usuario = usuario;
         this.codDemanda = codDemanda;
         this.catDemanda = catDemanda;
         this.descDemanda = descDemanda;
@@ -20,6 +26,16 @@ public class Demanda {
         this.turnoDemanda = turnoDemanda;
         this.localDemanda = localDemanda;
         this.inicioDemanda = new Date();
+        this.ofertas = new ArrayList<Oferta>();
+        this.encerrado = false;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public String getCodDemanda() {
@@ -78,6 +94,14 @@ public class Demanda {
         this.localDemanda = localDemanda;
     }
 
+    public List<Oferta> getOfertas() {
+        return ofertas;
+    }
+
+    public void setOfertas(List<Oferta> ofertas) {
+        this.ofertas = ofertas;
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -115,8 +139,8 @@ public class Demanda {
             builder.append("Local da Demanda=");
             builder.append(localDemanda);
         }
-
         builder.append("]");
         return builder.toString();
+
     }
 }
