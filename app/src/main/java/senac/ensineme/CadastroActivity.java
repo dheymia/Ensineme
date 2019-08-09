@@ -21,21 +21,22 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 
 import senac.ensineme.models.Usuario;
 
 public class CadastroActivity extends ComumActivity implements DatabaseReference.CompletionListener, View.OnClickListener {
 
-private FirebaseAuth mAuth;
-private FirebaseAuth.AuthStateListener mAuthStateListener;
-private Usuario usuario;
-private AutoCompleteTextView name;
-private AutoCompleteTextView email;
-private AutoCompleteTextView celular;
-private FloatingActionButton FabCadastrar;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private Usuario usuario;
+    private AutoCompleteTextView txtNome, txtEmail, txtCelular;
+    private EditText txtSenha;
+    private RadioButton rbAluno, rbProfessor;
+    private FloatingActionButton FabCadastrar;
 
-@Override
-protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
 
@@ -48,158 +49,157 @@ protected void onCreate(Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-@Override
-public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
-        if (firebaseUser == null || usuario.getId() != null) {
-        return;
-        }
+                if (firebaseUser == null || usuario.getId() != null) {
+                    return;
+                }
 
-        usuario.setId(firebaseUser.getUid());
-        usuario.saveDB(CadastroActivity.this);
-        }
+                usuario.setId(firebaseUser.getUid());
+                usuario.saveDB(CadastroActivity.this);
+            }
         };
 
-        initViews();
+        inicializarViews();
 
         FabCadastrar = (FloatingActionButton) findViewById(R.id.fab);
         FabCadastrar.setOnClickListener(this);
-}
+    }
 
-        protected void initViews() {
-                name = (AutoCompleteTextView) findViewById(R.id.txtNome);
-                email = (AutoCompleteTextView) findViewById(R.id.txtEmail);
-                celular = (AutoCompleteTextView) findViewById(R.id.txtCelular);
-                password = (EditText) findViewById(R.id.txtSenha);
-                progressBar = (ProgressBar) findViewById(R.id.sign_up_progress);
+    @Override
+    protected void inicializarViews() {
+        txtNome = (AutoCompleteTextView) findViewById(R.id.txtNome);
+        txtEmail = (AutoCompleteTextView) findViewById(R.id.txtEmail);
+        txtCelular = (AutoCompleteTextView) findViewById(R.id.txtCelular);
+        txtSenha = (EditText) findViewById(R.id.txtSenha);
+        rbAluno = (RadioButton) findViewById(R.id.rbAprender);
+        rbProfessor = (RadioButton) findViewById(R.id.rbEnsinar);
+        progressBar = (ProgressBar) findViewById(R.id.sign_up_progress);
+    }
+
+    @Override
+    protected void inicializarUsuario() {
+        usuario = new Usuario();
+        usuario.setNome(txtNome.getText().toString());
+        usuario.setEmail(txtEmail.getText().toString());
+        usuario.setCelular(txtCelular.getText().toString());
+        usuario.setPassword(txtSenha.getText().toString());
+
+        if (rbAluno.isChecked()) {
+            usuario.setTipo("aluno");
+        } else if (rbProfessor.isChecked()) {
+            usuario.setTipo("professor");
         }
+    }
 
-        protected void initUsuario() {
-                usuario = new Usuario();
-                usuario.setNome(name.getText().toString());
-                usuario.setEmail(email.getText().toString());
-                usuario.setCelular(celular.getText().toString());
-                usuario.setPassword(password.getText().toString());
-        }
+    @Override
+    public void onClick(View v) {
+        inicializarUsuario();
 
-        @Override
-        public void onClick(View v) {
-        initUsuario();
-
-        String NOME = name.getText().toString();
-        String EMAIL = email.getText().toString();
-        String CELULAR = celular.getText().toString();
-        String SENHA = password.getText().toString();
+        String nome = txtNome.getText().toString();
+        String email = txtEmail.getText().toString();
+        String celular = txtCelular.getText().toString();
+        String senha = txtSenha.getText().toString();
 
         boolean ok = true;
 
-        if (NOME.isEmpty()) {
-        name.setError(getString(R.string.msg_erro_nome));
-        ok = false;
+        if (nome.isEmpty()) {
+            txtNome.setError(getString(R.string.msg_erro_nome));
+            ok = false;
         }
 
-        if (EMAIL.isEmpty()) {
-        email.setError(getString(R.string.msg_erro_email_empty));
-        ok = false;
+        if (email.isEmpty()) {
+            txtEmail.setError(getString(R.string.msg_erro_email_empty));
+            ok = false;
         }
 
-        if (CELULAR.isEmpty()) {
-        celular.setError(getString(R.string.msg_erro_celular));
-        ok = false;
+        if (celular.isEmpty()) {
+            txtCelular.setError(getString(R.string.msg_erro_celular));
+            ok = false;
         }
 
-        if (SENHA.isEmpty()) {
-        password.setError(getString(R.string.msg_erro_senha_empty));
-        ok = false;
+        if (senha.isEmpty()) {
+           txtSenha.setError(getString(R.string.msg_erro_senha_empty));
+            ok = false;
         }
 
         if (ok) {
-        FabCadastrar.setEnabled(false);
-        progressBar.setFocusable(true);
+            FabCadastrar.setEnabled(false);
+            progressBar.setFocusable(true);
 
-        openProgressBar();
-        salvarUsuario();
+            openProgressBar();
+            salvarUsuario();
         } else {
-        closeProgressBar();
+            closeProgressBar();
         }
-        }
+    }
 
-@Override
-protected void onStart() {
+    @Override
+    protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthStateListener);
-        }
+    }
 
-@Override
-protected void onStop() {
+    @Override
+    protected void onStop() {
         super.onStop();
         if (mAuthStateListener != null) {
-        mAuth.removeAuthStateListener(mAuthStateListener);
+            mAuth.removeAuthStateListener(mAuthStateListener);
         }
-        }
+    }
 
-private void salvarUsuario() {
+    private void salvarUsuario() {
 
         mAuth.createUserWithEmailAndPassword(
-        usuario.getEmail(),
-        usuario.getPassword()
+                usuario.getEmail(),
+                usuario.getPassword()
         ).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-@Override
-public void onComplete(@NonNull Task<AuthResult> task) {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
 
-        if (!task.isSuccessful()) {
-        closeProgressBar();
-        }
-        }
+                if (!task.isSuccessful()) {
+                    closeProgressBar();
+                }
+            }
         }).addOnFailureListener(this, new OnFailureListener() {
-@Override
-public void onFailure(@NonNull Exception e) {
-        showSnackbar(e.getMessage());
-        FabCadastrar.setEnabled(true);
-        }
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                showSnackbar(e.getMessage());
+                FabCadastrar.setEnabled(true);
+            }
         });
-        }
+    }
 
-@Override
-public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+    @Override
+    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
         mAuth.signOut();
 
         showToast("Conta criada com sucesso!");
         closeProgressBar();
         finish();
-        }
+    }
 
-@Override
-public void onConnectionFailed(ConnectionResult connectionResult) {
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
 
-        }
+    }
 
-@Override
-public boolean onOptionsItemSelected(MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case android.R.id.home:
-        finish();
-        return true;
+            case android.R.id.home:
+                finish();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
-        }
+    }
 
 
-        @Override
-        protected void inicializarViews() {
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
 
-        }
-
-        @Override
-        protected void inicializarUsuario() {
-
-        }
-
-
-        @Override
-        public void onPointerCaptureChanged(boolean hasCapture) {
-
-        }
+    }
 }
