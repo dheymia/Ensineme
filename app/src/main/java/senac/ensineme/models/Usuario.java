@@ -39,7 +39,7 @@ public class Usuario {
         return celular;
     }
     public void setCelular(String celular) {
-        this.email = celular;
+        this.celular = celular;
     }
     private void setCelularInMap(Map<String, Object> map) {
         if (getCelular() != null) {
