@@ -3,13 +3,13 @@ package senac.ensineme.models;
 import java.util.Date;
 
 public class Oferta {
-    private Usuario usuario;
+    private Usuario professor;
     private String codOferta;
     private Double valorOferta;
     private Date dataOferta;
 
-    public Oferta(Usuario usuario, Double valorOferta) {
-        this.usuario = usuario;
+    public Oferta(Usuario professor, Double valorOferta) {
+        this.professor = professor;
         this.valorOferta = valorOferta;
         this.dataOferta = new Date();
     }
@@ -22,12 +22,12 @@ public class Oferta {
         this.codOferta = codOferta;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Usuario getProfessor() {
+        return professor;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setProfessor(Usuario professor) {
+        this.professor = professor;
     }
 
     public Double getValorOferta() {
@@ -55,14 +55,19 @@ public class Oferta {
             builder.append(codOferta);
             builder.append(", ");
         }
-        if (usuario != null) {
-            builder.append("Professor=");
-            builder.append(usuario);
+        if (professor != null) {
+            builder.append("Usuário Professor=");
+            builder.append(professor);
             builder.append(", ");
         }
         if (valorOferta != null) {
             builder.append("Valor da Oferta=");
             builder.append(valorOferta);
+            builder.append(", ");
+        }
+        if (dataOferta != null) {
+            builder.append("Data da Oferta=");
+            builder.append(dataOferta);
             builder.append(", ");
         }
         builder.append("]");

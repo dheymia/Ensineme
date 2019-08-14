@@ -5,30 +5,30 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class AvaliaOferta {
+public class ListarOfertas {
 
-    private Double maiorDeTodos = Double.NEGATIVE_INFINITY;
+    private Double maior = Double.NEGATIVE_INFINITY;
 
-    private Double menorDeTodos = Double.POSITIVE_INFINITY;
+    private Double menor = Double.POSITIVE_INFINITY;
 
     private List<Oferta> menoresOfertas;
 
-    public void avalia(Demanda demanda) throws DemandaException {
+    public void listar(Demanda demanda) throws DemandaException {
         if (demanda.getOfertas().size() == 0) {
             throw new DemandaException("Nao existe oferta");
         }
         for (Oferta oferta: demanda.getOfertas ()) {
-            if (oferta.getValorOferta() > maiorDeTodos) {
-                maiorDeTodos = oferta.getValorOferta();
+            if (oferta.getValorOferta() > maior) {
+                maior = oferta.getValorOferta();
             }
-            if (oferta.getValorOferta() < menorDeTodos) {
-                menorDeTodos = oferta.getValorOferta();
+            if (oferta.getValorOferta() < menor) {
+                menor = oferta.getValorOferta();
             }
         }
-        pegaMenores(demanda);
+        listarMenores(demanda);
     }
 
-    private void pegaMenores(Demanda demanda) {
+    private void listarMenores(Demanda demanda) {
         menoresOfertas = new ArrayList<Oferta>(demanda.getOfertas());
         Collections.sort(menoresOfertas, new Comparator<Oferta>() {
             @Override
@@ -40,11 +40,11 @@ public class AvaliaOferta {
     }
 
     public Double getMenorOferta() {
-        return menorDeTodos;
+        return menor;
     }
 
     public Double getMaiorOferta() {
-        return maiorDeTodos;
+        return maior;
     }
 
     public List<Oferta> getMenoresOfertas() {

@@ -1,41 +1,46 @@
 package senac.ensineme.models;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class Demanda {
 
-    private Usuario usuario;
+    private Usuario aluno;
     private String codDemanda;
     private String catDemanda;
     private String descDemanda;
+    private Calendar dataDemanda;
     private String horasaulaDemanda;
+    private String validadeDemanda;
     private String turnoDemanda;
     private Date inicioDemanda;
     private String localDemanda;
-    private Boolean encerrado;
+    private Boolean encerrada;
     private List<Oferta> ofertas;
 
-    public Demanda(Usuario usuario, String codDemanda, String catDemanda, String subcatDemanda, String descDemanda, String horasaulaDemanda, String turnoDemanda, String localDemanda) {
-        this.usuario = usuario;
+    public Demanda(Usuario aluno, String codDemanda, String catDemanda, String subcatDemanda, String descDemanda, Calendar dataDemanda, String horasaulaDemanda, String turnoDemanda, String localDemanda, String validadeDemanda) {
+        this.aluno = aluno;
         this.codDemanda = codDemanda;
         this.catDemanda = catDemanda;
         this.descDemanda = descDemanda;
+        this.dataDemanda = dataDemanda;
         this.horasaulaDemanda = horasaulaDemanda;
         this.turnoDemanda = turnoDemanda;
         this.localDemanda = localDemanda;
         this.inicioDemanda = new Date();
+        this.validadeDemanda = validadeDemanda;
         this.ofertas = new ArrayList<Oferta>();
-        this.encerrado = false;
+        this.encerrada = false;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Usuario getAluno() {
+        return aluno;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setAluno(Usuario aluno) {
+        this.aluno = aluno;
     }
 
     public String getCodDemanda() {
@@ -60,6 +65,14 @@ public class Demanda {
 
     public void setDescDemanda(String descDemanda) {
         this.descDemanda = descDemanda;
+    }
+
+    public Calendar getDataDemanda() {
+        return dataDemanda;
+    }
+
+    public void setDataDemanda(Calendar dataDemanda) {
+        this.dataDemanda = dataDemanda;
     }
 
     public String getHorasaulaDemanda() {
@@ -94,6 +107,14 @@ public class Demanda {
         this.localDemanda = localDemanda;
     }
 
+    public String getValidadeDemanda() {
+        return validadeDemanda;
+    }
+
+    public void setValidadeDemanda(String validadeDemanda) {
+        this.validadeDemanda = validadeDemanda;
+    }
+
     public List<Oferta> getOfertas() {
         return ofertas;
     }
@@ -106,6 +127,11 @@ public class Demanda {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Demanda Ensine-me [");
+        if (aluno != null) {
+            builder.append("Usuário Aluno: ");
+            builder.append(aluno);
+            builder.append(", ");
+        }
         if (codDemanda != null) {
             builder.append("Código da Demanda: ");
             builder.append(codDemanda);
@@ -119,6 +145,11 @@ public class Demanda {
         if (descDemanda != null) {
             builder.append("Descrição da Demanda:");
             builder.append(codDemanda);
+            builder.append(", ");
+        }
+        if (dataDemanda != null) {
+            builder.append("Data da Demanda:");
+            builder.append(dataDemanda);
             builder.append(", ");
         }
         if (horasaulaDemanda != null) {
@@ -135,6 +166,10 @@ public class Demanda {
             builder.append("Data de Início=");
             builder.append(inicioDemanda);
         }
+        if (validadeDemanda != null) {
+            builder.append("Dias de validade da demanda=");
+            builder.append(validadeDemanda);
+        }
         if (localDemanda != null) {
             builder.append("Local da Demanda=");
             builder.append(localDemanda);
@@ -143,4 +178,36 @@ public class Demanda {
         return builder.toString();
 
     }
+
+    public void propoe(Oferta oferta) {
+        if (podeOfertar(oferta.getProfessor())) {
+            this.ofertas.add(oferta);
+        }
+    }
+
+    private boolean podeOfertar(Usuario professor) {
+        return !professor.equals(ultimaOferta().getProfessor())
+                && qtdOfertas(professor) < 1;
+    }
+    private int qtdOfertas(Usuario professor) {
+        int total = 0;
+        for (Oferta ofertaRecebida: ofertas) {
+            if (ofertaRecebida.getProfessor().equals(professor)) {
+                total++;
+            }
+        }
+        return total;
+    }
+    private Oferta ultimaOferta() {
+        return ofertas.get(ofertas.size() - 1);
+    }
+
+    public void encerra() {
+        encerrada = true;
+    }
+
+    public Boolean isEncerrado() {
+        return encerrada;
+    }
+
 }
