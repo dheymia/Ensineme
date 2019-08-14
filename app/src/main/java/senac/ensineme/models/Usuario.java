@@ -88,7 +88,7 @@ public class Usuario {
         return tipo;
     }
 
-    public void setTipo(String email) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
 
@@ -114,12 +114,13 @@ public class Usuario {
     }
 
     public void saveDB(DatabaseReference.CompletionListener... completionListener) {
-        DatabaseReference firebase = Bibioteca.getFirebase().child("usuarios").child(getTipo()).child(getId());
+        DatabaseReference firebase = Bibioteca.getFirebase().child("usuarios").child(getId());
         if (completionListener.length == 0) {
             firebase.setValue(this);
         } else {
             firebase.setValue(this, completionListener[0]);
         }
     }
+
 
 }

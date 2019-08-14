@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import senac.ensineme.models.Bibioteca;
+import senac.ensineme.models.Usuario;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
+    private String idUsuarioLogado, nameUsuariologado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +39,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         txtNome = findViewById(R.id.txtNome);
 
+
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String name = sharedPreferences.getString("signature", "visitante");
 
-        txtNome.setText("Olá " + name);
+        txtNome.setText("Olá " + nameUsuariologado);
 
         getSupportActionBar().setTitle("Autenticação Firebase");
 

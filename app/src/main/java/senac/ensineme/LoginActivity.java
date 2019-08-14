@@ -18,6 +18,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import senac.ensineme.models.Usuario;
 
@@ -25,6 +30,7 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
 
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
+    DataSnapshot snapshot;
     private Usuario usuario;
 
     private TextView cadastrar;
@@ -73,13 +79,10 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
 
             if (EMAIL.isEmpty()) {
                 email.setError("E-mail não informado!");
-
                 ok = false;
             }
-
             if (SENHA.isEmpty()) {
                 password.setError("Por favor digite uma senha!");
-
                 ok = false;
             }
 
@@ -87,10 +90,9 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
                 btnLogin.setEnabled(false);
                 cadastrar.setEnabled(false);
                 progressBar.setFocusable(true);
-
                 openProgressBar();
                 verifyLogin();
-            } else {
+                } else {
                 closeProgressBar();
             }
         }
@@ -173,11 +175,19 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
         return (usuario.getNome() != null || firebaseUser.getDisplayName() != null);
     }
 
+    //private void recuperaTipo(){
+    //    FirebaseUser userFirebase = firebaseAuth.getCurrentUser();
+    //    DatabaseReference dref = FirebaseDatabase.getInstance().getReference().child("usuarios").child(userFirebase.getUid());
+//
+  //      usuario.setTipo((String) snapshot.child("tipo").getValue());
+ //   }
+
+
     private void chamarMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            }
 
     public void chamarCadastro(View view) {
         Intent intent = new Intent(this, CadastroActivity.class);
