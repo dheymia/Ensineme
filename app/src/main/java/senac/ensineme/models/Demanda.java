@@ -9,7 +9,7 @@ public class Demanda {
 
     private Usuario aluno;
     private String codDemanda;
-    private String catDemanda;
+    private Categoria catDemanda;
     private String descDemanda;
     private Calendar dataDemanda;
     private String horasaulaDemanda;
@@ -20,7 +20,7 @@ public class Demanda {
     private Boolean encerrada;
     private List<Oferta> ofertas;
 
-    public Demanda(Usuario aluno, String codDemanda, String catDemanda, String subcatDemanda, String descDemanda, Calendar dataDemanda, String horasaulaDemanda, String turnoDemanda, String localDemanda, String validadeDemanda) {
+    public Demanda(Usuario aluno, String codDemanda, Categoria catDemanda, String subcatDemanda, String descDemanda, Calendar dataDemanda, String horasaulaDemanda, String turnoDemanda, String localDemanda, String validadeDemanda) {
         this.aluno = aluno;
         this.codDemanda = codDemanda;
         this.catDemanda = catDemanda;
@@ -51,11 +51,11 @@ public class Demanda {
         this.codDemanda = codDemanda;
     }
 
-    public String getCatDemanda() {
+    public Categoria getCatDemanda() {
         return catDemanda;
     }
 
-    public void setCatDemanda(String catDemanda) {
+    public void setCatDemanda(Categoria catDemanda) {
         this.catDemanda = catDemanda;
     }
 
