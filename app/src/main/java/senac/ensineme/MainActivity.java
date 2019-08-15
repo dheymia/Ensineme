@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import senac.ensineme.models.Bibioteca;
-import senac.ensineme.models.Demanda;
 
 public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         mTextMessage = findViewById(R.id.message);
         txtNome = findViewById(R.id.txtNome);
