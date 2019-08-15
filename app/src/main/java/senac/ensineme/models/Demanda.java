@@ -1,5 +1,7 @@
 package senac.ensineme.models;
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -208,6 +210,15 @@ public class Demanda {
 
     public Boolean isEncerrado() {
         return encerrada;
+    }
+
+    public void saveDemandaDB(DatabaseReference.CompletionListener... completionListener) {
+        DatabaseReference firebase = Bibioteca.getFirebase().child("demandas").child(getCodDemanda());
+        if (completionListener.length == 0) {
+            firebase.setValue(this);
+        } else {
+            firebase.setValue(this, completionListener[0]);
+        }
     }
 
 }

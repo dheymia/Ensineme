@@ -25,7 +25,7 @@ import android.widget.RadioButton;
 
 import senac.ensineme.models.Usuario;
 
-public class CadastroActivity extends ComumActivity implements DatabaseReference.CompletionListener, View.OnClickListener {
+public class UsuarioActivity extends ComumActivity implements DatabaseReference.CompletionListener, View.OnClickListener {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -58,7 +58,7 @@ public class CadastroActivity extends ComumActivity implements DatabaseReference
                 }
 
                 usuario.setId(firebaseUser.getUid());
-                usuario.saveDB(CadastroActivity.this);
+                usuario.saveUsuarioDB(UsuarioActivity.this);
             }
         };
 

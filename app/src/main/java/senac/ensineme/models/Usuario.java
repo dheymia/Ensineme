@@ -113,7 +113,7 @@ public class Usuario {
         this.password = password;
     }
 
-    public void saveDB(DatabaseReference.CompletionListener... completionListener) {
+    public void saveUsuarioDB(DatabaseReference.CompletionListener... completionListener) {
         DatabaseReference firebase = Bibioteca.getFirebase().child("usuarios").child(getId());
         if (completionListener.length == 0) {
             firebase.setValue(this);

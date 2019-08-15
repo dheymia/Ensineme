@@ -19,10 +19,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import senac.ensineme.models.Usuario;
 
@@ -137,7 +133,7 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
                     usuario.setId(userFirebase.getUid());
                     usuario.setNomeIfNull(userFirebase.getDisplayName());
                     usuario.setEmailIfNull(userFirebase.getEmail());
-                    usuario.saveDB();
+                    usuario.saveUsuarioDB();
                 }
 
                 chamarMainActivity();
@@ -175,22 +171,14 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
         return (usuario.getNome() != null || firebaseUser.getDisplayName() != null);
     }
 
-    //private void recuperaTipo(){
-    //    FirebaseUser userFirebase = firebaseAuth.getCurrentUser();
-    //    DatabaseReference dref = FirebaseDatabase.getInstance().getReference().child("usuarios").child(userFirebase.getUid());
-//
-  //      usuario.setTipo((String) snapshot.child("tipo").getValue());
- //   }
-
-
-    private void chamarMainActivity() {
+     private void chamarMainActivity() {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
             }
 
     public void chamarCadastro(View view) {
-        Intent intent = new Intent(this, CadastroActivity.class);
+        Intent intent = new Intent(this, UsuarioActivity.class);
         startActivity(intent);
     }
 }
