@@ -72,10 +72,12 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
     protected boolean validaCampo() {
        if (email.isEmpty()) {
             txtEmail.setError(getString(R.string.msg_erro_email_empty));
+            txtEmail.requestFocus();
             return false;
         }
         if (senha.isEmpty()) {
             txtSenha.setError(getString(R.string.msg_erro_senha_empty));
+            txtSenha.requestFocus();
             return false;
         }
         return true;

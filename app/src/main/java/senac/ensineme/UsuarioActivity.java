@@ -108,21 +108,25 @@ public class UsuarioActivity extends ComumActivity implements DatabaseReference.
     protected boolean validaCampo() {
         if (nome.isEmpty()) {
             txtNome.setError(getString(R.string.msg_erro_nome));
+            txtNome.requestFocus();
             return false;
         }
 
         if (email.isEmpty()) {
             txtEmail.setError(getString(R.string.msg_erro_email_empty));
+            txtEmail.requestFocus();
             return false;
         }
 
         if (celular.isEmpty()) {
             txtCelular.setError(getString(R.string.msg_erro_celular));
+            txtCelular.requestFocus();
             return false;
         }
 
         if (senha.isEmpty()) {
             txtSenha.setError(getString(R.string.msg_erro_senha_empty));
+            txtSenha.requestFocus();
             return false;
         }
 
