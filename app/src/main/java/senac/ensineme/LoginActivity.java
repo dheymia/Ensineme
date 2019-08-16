@@ -1,6 +1,7 @@
 package senac.ensineme;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,11 +27,12 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
 
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
-    DataSnapshot snapshot;
     private Usuario usuario;
-
     private TextView cadastrar;
+    private AutoCompleteTextView txtEmail;
+    private EditText txtSenha;
     private Button btnLogin;
+    private String email, senha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,49 +42,53 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
         firebaseAuth = FirebaseAuth.getInstance();
         authStateListener = getFirebaseAuthResultHandler();
 
-        inicializarViews();
+        inicializaViews();
 
-        btnLogin = (Button) findViewById(R.id.btnLogin);
+        btnLogin = (Button) findViewById(R.id.btnEntrar);
         btnLogin.setOnClickListener(this);
     }
 
-    protected void inicializarViews() {
-        email = (AutoCompleteTextView) findViewById(R.id.txtEmail);
-        password = (EditText) findViewById(R.id.txtSenha);
+    protected void inicializaViews() {
+        txtEmail = (AutoCompleteTextView) findViewById(R.id.txtEmail);
+        txtSenha = (EditText) findViewById(R.id.txtSenha);
         progressBar = (ProgressBar) findViewById(R.id.loading);
         cadastrar = (TextView) findViewById(R.id.txtCadastrar);
     }
 
-    protected void inicializarUsuario() {
+    @Override
+    protected void inicializaConteudo() {
+       email  = txtEmail.getText().toString();
+       senha  = txtSenha.getText().toString();
+    }
+
+    protected void inicializaObjeto() {
+        inicializaConteudo();
         usuario = new Usuario();
-        usuario.setEmail(email.getText().toString());
-        usuario.setPassword(password.getText().toString());
+        usuario.setEmail(email);
+        usuario.setPassword(senha);
+    }
+
+    @Override
+    protected boolean validaCampo() {
+       if (email.isEmpty()) {
+            txtEmail.setError(getString(R.string.msg_erro_email_empty));
+            return false;
+        }
+        if (senha.isEmpty()) {
+            txtSenha.setError(getString(R.string.msg_erro_senha_empty));
+            return false;
+        }
+        return true;
     }
 
 
     @Override
     public void onClick(View v) {
 
-        inicializarUsuario();
-
+        inicializaObjeto();
         int id = v.getId();
-        if (id == R.id.btnLogin) {
-
-            String EMAIL = email.getText().toString();
-            String SENHA = password.getText().toString();
-
-            boolean ok = true;
-
-            if (EMAIL.isEmpty()) {
-                email.setError("E-mail não informado!");
-                ok = false;
-            }
-            if (SENHA.isEmpty()) {
-                password.setError("Por favor digite uma senha!");
-                ok = false;
-            }
-
-            if (ok) {
+        if (id == R.id.btnEntrar) {
+            if (validaCampo()) {
                 btnLogin.setEnabled(false);
                 cadastrar.setEnabled(false);
                 progressBar.setFocusable(true);
@@ -133,7 +139,7 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
                     usuario.setId(userFirebase.getUid());
                     usuario.setNomeIfNull(userFirebase.getDisplayName());
                     usuario.setEmailIfNull(userFirebase.getEmail());
-                    usuario.saveUsuarioDB();
+                    usuario.salvaUsuarioDB();
                 }
 
                 chamarMainActivity();

@@ -13,8 +13,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 public abstract class ComumActivity extends AppCompatActivity {
 
-    protected AutoCompleteTextView email;
-    protected EditText password;
     protected ProgressBar progressBar;
 
 
@@ -40,9 +38,13 @@ public abstract class ComumActivity extends AppCompatActivity {
         progressBar.setVisibility( View.GONE );
     }
 
-    abstract protected void inicializarViews();
+    abstract protected void inicializaViews();
 
-    abstract protected void inicializarUsuario();
+    abstract protected void inicializaConteudo();
+
+    abstract protected void inicializaObjeto();
+
+    abstract protected boolean validaCampo();
 
     public abstract void onConnectionFailed(ConnectionResult connectionResult);
 }

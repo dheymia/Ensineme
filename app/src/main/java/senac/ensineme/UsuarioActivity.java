@@ -6,7 +6,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -33,12 +33,13 @@ public class UsuarioActivity extends ComumActivity implements DatabaseReference.
     private AutoCompleteTextView txtNome, txtEmail, txtCelular;
     private EditText txtSenha;
     private RadioButton rbAluno, rbProfessor;
-    private FloatingActionButton FabCadastrar;
+    private Button btnCadastrar;
+    private String nome, email, celular, senha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cadastro);
+        setContentView(R.layout.activity_usuario);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -58,34 +59,43 @@ public class UsuarioActivity extends ComumActivity implements DatabaseReference.
                 }
 
                 usuario.setId(firebaseUser.getUid());
-                usuario.saveUsuarioDB(UsuarioActivity.this);
+                usuario.salvaUsuarioDB(UsuarioActivity.this);
             }
         };
 
-        inicializarViews();
+        inicializaViews();
 
-        FabCadastrar = (FloatingActionButton) findViewById(R.id.fab);
-        FabCadastrar.setOnClickListener(this);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        btnCadastrar = (Button) findViewById(R.id.btnCadastrarUsuario);
+        btnCadastrar.setOnClickListener(this);
     }
 
     @Override
-    protected void inicializarViews() {
+    protected void inicializaViews() {
         txtNome = (AutoCompleteTextView) findViewById(R.id.txtNome);
         txtEmail = (AutoCompleteTextView) findViewById(R.id.txtEmail);
         txtCelular = (AutoCompleteTextView) findViewById(R.id.txtCelular);
         txtSenha = (EditText) findViewById(R.id.txtSenha);
         rbAluno = (RadioButton) findViewById(R.id.rbAprender);
         rbProfessor = (RadioButton) findViewById(R.id.rbEnsinar);
-        progressBar = (ProgressBar) findViewById(R.id.sign_up_progress);
     }
 
     @Override
-    protected void inicializarUsuario() {
+    protected void inicializaConteudo() {
+        nome = txtNome.getText().toString();
+        email = txtEmail.getText().toString();
+        celular = txtCelular.getText().toString();
+        senha = txtSenha.getText().toString();
+    }
+
+    @Override
+    protected void inicializaObjeto() {
+        inicializaConteudo();
         usuario = new Usuario();
-        usuario.setNome(txtNome.getText().toString());
-        usuario.setEmail(txtEmail.getText().toString());
-        usuario.setCelular(txtCelular.getText().toString());
-        usuario.setPassword(txtSenha.getText().toString());
+        usuario.setNome(nome);
+        usuario.setEmail(email);
+        usuario.setCelular(celular);
+        usuario.setPassword(senha);
 
         if (rbAluno.isChecked()) {
             usuario.setTipo("aluno");
@@ -95,42 +105,38 @@ public class UsuarioActivity extends ComumActivity implements DatabaseReference.
     }
 
     @Override
-    public void onClick(View v) {
-        inicializarUsuario();
-
-        String nome = txtNome.getText().toString();
-        String email = txtEmail.getText().toString();
-        String celular = txtCelular.getText().toString();
-        String senha = txtSenha.getText().toString();
-
-        boolean ok = true;
-
+    protected boolean validaCampo() {
         if (nome.isEmpty()) {
             txtNome.setError(getString(R.string.msg_erro_nome));
-            ok = false;
+            return false;
         }
 
         if (email.isEmpty()) {
             txtEmail.setError(getString(R.string.msg_erro_email_empty));
-            ok = false;
+            return false;
         }
 
         if (celular.isEmpty()) {
             txtCelular.setError(getString(R.string.msg_erro_celular));
-            ok = false;
+            return false;
         }
 
         if (senha.isEmpty()) {
-           txtSenha.setError(getString(R.string.msg_erro_senha_empty));
-            ok = false;
+            txtSenha.setError(getString(R.string.msg_erro_senha_empty));
+            return false;
         }
 
-        if (ok) {
-            FabCadastrar.setEnabled(false);
-            progressBar.setFocusable(true);
+        return true;
+    }
 
+    @Override
+    public void onClick(View v) {
+        inicializaObjeto();
+        if (validaCampo()) {
+            btnCadastrar.setEnabled(false);
+            progressBar.setFocusable(true);
             openProgressBar();
-            salvarUsuario();
+            salvaUsuario();
         } else {
             closeProgressBar();
         }
@@ -150,7 +156,7 @@ public class UsuarioActivity extends ComumActivity implements DatabaseReference.
         }
     }
 
-    private void salvarUsuario() {
+    private void salvaUsuario() {
 
         mAuth.createUserWithEmailAndPassword(
                 usuario.getEmail(),
@@ -167,7 +173,7 @@ public class UsuarioActivity extends ComumActivity implements DatabaseReference.
             @Override
             public void onFailure(@NonNull Exception e) {
                 showSnackbar(e.getMessage());
-                FabCadastrar.setEnabled(true);
+                btnCadastrar.setEnabled(true);
             }
         });
     }

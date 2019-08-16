@@ -17,4 +17,60 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="inserirtexto">
+        <item name="android:selectAllOnFocus">true</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/inserirtexto</item>
+        <item name="android:layout_marginTop">16dp</item>
+    </style>
+    <style name="inserirEmail">
+        <item name="android:selectAllOnFocus">true</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/inserirtexto</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:hint">@string/prompt_email</item>
+        <item name="android:inputType">textEmailAddress</item>
+    </style>
+    <style name="inserirSenha">
+        <item name="android:selectAllOnFocus">true</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/inserirtexto</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:hint">@string/prompt_password</item>
+        <item name="android:imeActionLabel">@string/action_sign_in_short</item>
+        <item name="android:imeOptions">actionDone</item>
+         <item name="android:inputType">textPassword</item>
+    </style>
+    <style name="layoutTelasInserir">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginLeft">36dp</item>
+        <item name="android:layout_marginRight">36dp</item>
+    </style>
+
+    <style name="botao">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">start</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:enabled">true</item>
+        <item name="android:background">@drawable/botao</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:onClick">OnClick</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="titulo">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:textColor">@color/verdedestaque</item>
+
+    </style>
+
 </resources>

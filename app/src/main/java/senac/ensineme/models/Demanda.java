@@ -9,20 +9,17 @@ import java.util.List;
 
 public class Demanda {
 
-    private Usuario aluno;
-    private String codDemanda;
+    private String aluno, codDemanda, descDemanda, horasaulaDemanda,validadeDemanda, turnoDemanda, localDemanda;
     private Categoria catDemanda;
-    private String descDemanda;
     private Calendar dataDemanda;
-    private String horasaulaDemanda;
-    private String validadeDemanda;
-    private String turnoDemanda;
     private Date inicioDemanda;
-    private String localDemanda;
     private Boolean encerrada;
     private List<Oferta> ofertas;
 
-    public Demanda(Usuario aluno, String codDemanda, Categoria catDemanda, String subcatDemanda, String descDemanda, Calendar dataDemanda, String horasaulaDemanda, String turnoDemanda, String localDemanda, String validadeDemanda) {
+    public Demanda() {
+    }
+
+    public Demanda(String aluno, String codDemanda, Categoria catDemanda, String subcatDemanda, String descDemanda, Calendar dataDemanda, String horasaulaDemanda, String turnoDemanda, String localDemanda, String validadeDemanda) {
         this.aluno = aluno;
         this.codDemanda = codDemanda;
         this.catDemanda = catDemanda;
@@ -37,11 +34,11 @@ public class Demanda {
         this.encerrada = false;
     }
 
-    public Usuario getAluno() {
+    public String getAluno() {
         return aluno;
     }
 
-    public void setAluno(Usuario aluno) {
+    public void setAluno(String aluno) {
         this.aluno = aluno;
     }
 
@@ -212,7 +209,7 @@ public class Demanda {
         return encerrada;
     }
 
-    public void saveDemandaDB(DatabaseReference.CompletionListener... completionListener) {
+    public void salvaDemandaDB(DatabaseReference.CompletionListener... completionListener) {
         DatabaseReference firebase = Bibioteca.getFirebase().child("demandas").child(getCodDemanda());
         if (completionListener.length == 0) {
             firebase.setValue(this);

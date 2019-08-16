@@ -8,6 +8,7 @@ import senac.ensineme.R;
 public class Categoria {
     private String codCategoria;
     private String nomeCategoria;
+    private List <Categoria> categorias;
     private int imgCategoria;
 
     public Categoria(String codCategoria, String nomeCategoria) {
