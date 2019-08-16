@@ -24,26 +24,29 @@
         <item name="android:background">@drawable/inserirtexto</item>
         <item name="android:layout_marginTop">16dp</item>
     </style>
+
     <style name="inserirEmail">
         <item name="android:selectAllOnFocus">true</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/inserirtexto</item>
         <item name="android:layout_marginTop">16dp</item>
-        <item name="android:hint">@string/prompt_email</item>
-        <item name="android:inputType">textEmailAddress</item>
+        <item name="android:hint">@string/email</item>
+        <item name="android:inputType">textEmailAddress|textAutoCorrect|textAutoComplete</item>
     </style>
+
     <style name="inserirSenha">
         <item name="android:selectAllOnFocus">true</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/inserirtexto</item>
         <item name="android:layout_marginTop">16dp</item>
-        <item name="android:hint">@string/prompt_password</item>
-        <item name="android:imeActionLabel">@string/action_sign_in_short</item>
+        <item name="android:hint">@string/senha</item>
+        <item name="android:imeActionLabel">@string/acaoEntrarCurta</item>
         <item name="android:imeOptions">actionDone</item>
-         <item name="android:inputType">textPassword</item>
+        <item name="android:inputType">textPassword</item>
     </style>
+
     <style name="layoutTelasInserir">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -58,6 +61,7 @@
         <item name="android:layout_marginTop">24dp</item>
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
         <item name="android:enabled">true</item>
         <item name="android:background">@drawable/botao</item>
         <item name="android:textAllCaps">true</item>

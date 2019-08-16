@@ -210,7 +210,7 @@ public class Demanda {
     }
 
     public void salvaDemandaDB(DatabaseReference.CompletionListener... completionListener) {
-        DatabaseReference firebase = Bibioteca.getFirebase().child("demandas").child(getCodDemanda());
+        DatabaseReference firebase = FirebaseDB.getFirebase().child("demandas").child(getCodDemanda());
         if (completionListener.length == 0) {
             firebase.setValue(this);
         } else {

@@ -5,8 +5,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,9 +16,10 @@ import androidx.preference.PreferenceManager;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
-import senac.ensineme.models.Bibioteca;
+import senac.ensineme.models.FirebaseDB;
 
 public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
@@ -40,9 +42,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
-                    Intent intent = new Intent(getBaseContext(), DemandaActivity.class);
-                    startActivity(intent);
-                    return true;
+                                        return true;
             }
             return false;
         }
@@ -76,8 +76,17 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.addAuthStateListener(authStateListener);
-        databaseReference = Bibioteca.getFirebase();
+        databaseReference = FirebaseDB.getFirebase();
         databaseReference.getRef();
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getBaseContext(), DemandaActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -93,13 +102,13 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.acao_sair) {
+        if (id == R.id.acaoSair) {
             FirebaseAuth.getInstance().signOut();
             finish();
         }
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.acaoConfigurar) {
             Intent novaConfig = new Intent(getBaseContext(), ConfiguracaoActivity.class);
             startActivity(novaConfig);
         }

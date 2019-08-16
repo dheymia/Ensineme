@@ -35,7 +35,7 @@
                 style="@style/inserirtexto"
 
                 android:layout_marginTop="32dp"
-                android:hint="@string/prompt_nome"
+                android:hint="@string/nome"
                 android:inputType="textPersonName"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +52,7 @@
                 android:id="@+id/txtCelular"
                 style="@style/inserirtexto"
 
-                android:hint="@string/prompt_phone"
+                android:hint="@string/celular"
                 android:inputType="phone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +71,7 @@
                 android:id="@+id/txtInteresse"
                 style="@style/titulo"
 
-                android:text="Qual o seu interesse?"
+                android:text="@string/interesse"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtSenha" />
@@ -108,7 +108,8 @@
             <Button
                 android:id="@+id/btnCadastrarUsuario"
                 style="@style/botao"
-                android:text="Cadastrar"
+                android:text="@string/acaoCadastrar"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/radioGroup" />

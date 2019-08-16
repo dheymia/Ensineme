@@ -9,4 +9,12 @@
         <item>reply</item>
         <item>reply_all</item>
     </string-array>
+
+    <string-array name="turnoDemanda">
+        <item>Diurno</item>
+        <item>Matutino</item>
+        <item>Vespertino</item>
+        <item>Noturno</item>
+    </string-array>
+
 </resources>

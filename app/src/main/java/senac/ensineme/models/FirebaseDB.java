@@ -3,10 +3,10 @@ package senac.ensineme.models;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class Bibioteca {
+public class FirebaseDB {
     private static DatabaseReference firebase;
 
-    private Bibioteca(){}
+    private FirebaseDB(){}
 
     public static DatabaseReference getFirebase(){
         if( firebase == null ){

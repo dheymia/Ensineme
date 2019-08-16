@@ -114,7 +114,7 @@ public class Usuario {
     }
 
     public void salvaUsuarioDB(DatabaseReference.CompletionListener... completionListener) {
-        DatabaseReference firebase = Bibioteca.getFirebase().child("usuarios").child(getId());
+        DatabaseReference firebase = FirebaseDB.getFirebase().child("usuarios").child(getId());
         if (completionListener.length == 0) {
             firebase.setValue(this);
         } else {

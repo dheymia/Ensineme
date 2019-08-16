@@ -1,7 +1,51 @@
 <resources>
+    <!-- Nome do App-->
     <string name="app_name">Ensine-me</string>
-    <string name="action_settings">Settings</string>
+
+    <!-- Activities Títulos-->
+    <string name="title_activity_login">Entrar</string>
+    <string name="title_activity_cadastro">Novo cadastro</string>
+    <string name="title_activity_main">Ensine-me</string>
     <string name="title_activity_settings">Configurações</string>
+    <string name="title_activity_demanda">Cadastrar nova demanda</string>
+
+    <!-- Campos de entrada de dados-->
+    <string name="nome">Nome</string>
+    <string name="email">Email</string>
+    <string name="celular">Celular</string>
+    <string name="senha">Senha</string>
+    <string name="demanda">Demanda</string>
+    <string name="interesseAprender">Aprender</string>
+    <string name="interesseEnsinar">Ensinar</string>
+
+    <!-- Mensagens de erros-->
+    <string name="emailInvalido">Email inválido</string>
+    <string name="senhaInvalida">Password must be >5 characters</string>
+    <string name="falhaLogin">Falha no login</string>
+    <string name="msg_erro_nome">Nome não preeenchido</string>
+    <string name="msg_erro_email_empty">Email não preenchido</string>
+    <string name="msg_erro_celular">Celular não preeenchido</string>
+    <string name="msg_erro_senha_empty">Senha não preenchida</string>
+
+    <!-- Títulos Orientação-->
+    <string name="interesse">Qual o seu interesse?</string>
+    <string name="semacadastro">Não possui cadastro?</string>
+    <string name="cadastrese">Cadastre-se aqui.</string>
+    <string name="categoria">Escolha a categoria</string>
+    <string name="turno">Qual o melhor turno?</string>
+
+
+    <!-- Menu Principal-->
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <!-- Ações-->
+    <string name="acaoEntrar">Entrar</string>
+    <string name="acaoEntrarCurta">Entrar</string>
+    <string name="acaoConfigurar">Configurar</string>
+    <string name="acaoSair">Sair</string>
+    <string name="acaoCadastrar">Cadastrar</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
@@ -17,28 +61,8 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="title_activity_login">Entrar</string>
-    <string name="prompt_nome">Nome</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_phone">Celular</string>
-    <string name="prompt_password">Senha</string>
-    <string name="action_sign_in">Entrar</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Bem vindo!"</string>
-    <string name="invalid_username">Email inválido</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Falha no login"</string>
-    <string name="title_activity_cadastro">Novo cadastro</string>
-    <string name="msg_erro_nome">Nome não preeenchido</string>
-    <string name="msg_erro_email_empty">Email não preenchido</string>
-    <string name="msg_erro_celular">Celular não preeenchido</string>
-    <string name="msg_erro_senha_empty">Senha não preenchida</string>
-    <string name="interesseAprender">Aprender</string>
-    <string name="interesseEnsinar">Ensinar</string>
-    <string name="title_activity_main">Ensine-me</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="title_activity_demanda">Cadastrar nova demanda</string>
+    <string name="title_activity_oferta">Oferta</string>
+    <string name="action_settings">Settings</string>
+
 
 </resources>

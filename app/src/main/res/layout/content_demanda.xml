@@ -13,7 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout style="@style/layoutTelasInserir">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            style="@style/layoutTelasInserir"
+            android:layout_height="match_parent">
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -30,36 +32,84 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/txtEscolherCategoria"
                 style="@style/titulo"
-                android:text="Selecione a categoria"
+                android:text="@string/categoria"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
-                android:id="@+id/spinner2"
+                android:id="@+id/spCategorias"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView2" />
+                app:layout_constraintTop_toBottomOf="@id/txtEscolherCategoria" />
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/txtDemanda"
                 style="@style/inserirtexto"
                 android:inputType="textMultiLine"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spinner2" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spCategorias" />
+
+            <EditText
+                android:id="@+id/txtCargaHorária"
+                style="@style/inserirtexto"
+
+                android:inputType="number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtDemanda" />
+
+            <EditText
+                android:id="@+id/txtLocal"
+                style="@style/inserirtexto"
+
+                android:inputType="textPostalAddress"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtCargaHorária" />
+
+            <EditText
+                android:id="@+id/txtData"
+                style="@style/inserirtexto"
+
+                android:inputType="date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtLocal" />
+
+            <TextView
+                android:id="@+id/txtSelecionaTurno"
+                style="@style/titulo"
+
+                android:text="@string/turno"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtData" />
+
+            <Spinner
+                android:id="@+id/spTurno"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/turnoDemanda"
+                android:spinnerMode="dialog"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtSelecionaTurno" />
 
             <Button
                 android:id="@+id/btnCadastrarDemanda"
                 style="@style/botao"
-                 android:text="Button"
+                                android:text="@string/acaoCadastrar"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/editText" />
+                app:layout_constraintTop_toBottomOf="@id/spTurno" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
