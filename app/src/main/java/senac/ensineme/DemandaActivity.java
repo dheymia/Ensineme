@@ -1,5 +1,6 @@
 package senac.ensineme;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -11,33 +12,28 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
-import android.widget.AutoCompleteTextView;
+
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
-import senac.ensineme.models.Categoria;
 import senac.ensineme.models.Demanda;
-import senac.ensineme.models.Oferta;
-import senac.ensineme.models.Usuario;
+
 
 public class DemandaActivity extends ComumActivity implements DatabaseReference.CompletionListener, View.OnClickListener {
 
     private Button btnCadastrar;
-    private AutoCompleteTextView txtDescDemanda;
-    private EditText txtLocalDemanda;
+    private Context context;
+    private EditText txtLocalDemanda, txtDescDemanda;
     private CalendarView inicioDemanda;
     private Spinner spnCatDemanda, spnTurnoDemanda, spnValidadeDemanda, spnHorasaulaDemanda;
-    private Demanda demanda;
     private String aluno, codDemanda, catDemanda, descDemanda, horasaulaDemanda, turnoDemanda, localDemanda;
     private Date diaSelecionado, dataDemanda;
+    Demanda demanda;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +75,9 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
 
     @Override
     protected void inicializaViews() {
+        txtDescDemanda = findViewById(R.id.txtDemanda);
 
-    }
-
+           }
     @Override
     protected void inicializaConteudo() {
 

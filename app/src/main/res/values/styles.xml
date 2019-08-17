@@ -76,5 +76,15 @@
         <item name="android:textColor">@color/verdedestaque</item>
 
     </style>
-
+   <style name="spinner">
+       <item name="android:layout_width">0dp</item>
+       <item name="android:layout_height">wrap_content</item>
+       <item name="android:layout_centerVertical">true</item>
+       <item name="android:layout_marginTop">16dp</item>
+       <item name="android:background">@drawable/spinner</item>
+       <item name="android:gravity">center</item>
+       <item name="android:spinnerMode">dropdown</item>
+       <item name="android:foreground">@drawable/spinnerdrop</item>
+       <item name="android:foregroundGravity">center|right</item>
+   </style>
 </resources>

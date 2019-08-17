@@ -41,9 +41,9 @@
 
             <Spinner
                 android:id="@+id/spCategorias"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dropdown"
+                style="@style/spinner"
+                android:entries="@array/categoriaDemanda"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txtEscolherCategoria" />
@@ -57,7 +57,7 @@
                 app:layout_constraintTop_toBottomOf="@id/spCategorias" />
 
             <EditText
-                android:id="@+id/txtCargaHorária"
+                android:id="@+id/txtCargaHoraria"
                 style="@style/inserirtexto"
 
                 android:inputType="number"
@@ -72,7 +72,7 @@
                 android:inputType="textPostalAddress"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtCargaHorária" />
+                app:layout_constraintTop_toBottomOf="@id/txtCargaHoraria" />
 
             <EditText
                 android:id="@+id/txtData"
@@ -92,20 +92,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txtData" />
 
+
             <Spinner
                 android:id="@+id/spTurno"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/spinner"
                 android:entries="@array/turnoDemanda"
-                android:spinnerMode="dialog"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txtSelecionaTurno" />
 
+
             <Button
                 android:id="@+id/btnCadastrarDemanda"
                 style="@style/botao"
-                                android:text="@string/acaoCadastrar"
+                android:text="@string/acaoCadastrar"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

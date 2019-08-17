@@ -16,5 +16,9 @@
         <item>Vespertino</item>
         <item>Noturno</item>
     </string-array>
+    <string-array name="categoriaDemanda">
+        <item>Dança</item>
+        <item>Outras</item>
+    </string-array>
 
 </resources>

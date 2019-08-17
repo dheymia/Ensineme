@@ -6,6 +6,7 @@
     style="@style/layoutTelasInserir"
     tools:context=".LoginActivity">
 
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="210dp"
@@ -94,5 +95,6 @@
             android:textColor="@color/colorAccent" />
 
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
