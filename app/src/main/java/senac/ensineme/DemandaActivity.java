@@ -11,8 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,13 +31,13 @@ import senac.ensineme.models.Usuario;
 public class DemandaActivity extends ComumActivity implements DatabaseReference.CompletionListener, View.OnClickListener {
 
     private Button btnCadastrar;
+    private AutoCompleteTextView txtDescDemanda;
+    private EditText txtLocalDemanda;
+    private CalendarView inicioDemanda;
+    private Spinner spnCatDemanda, spnTurnoDemanda, spnValidadeDemanda, spnHorasaulaDemanda;
     private Demanda demanda;
-    private String aluno, codDemanda, descDemanda, horasaulaDemanda,validadeDemanda, turnoDemanda, localDemanda;
-    private Categoria catDemanda;
-    private Calendar dataDemanda;
-    private Date inicioDemanda;
-    private Boolean encerrada;
-    private List<Oferta> ofertas;
+    private String aluno, codDemanda, catDemanda, descDemanda, horasaulaDemanda, turnoDemanda, localDemanda;
+    private Date diaSelecionado, dataDemanda;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
