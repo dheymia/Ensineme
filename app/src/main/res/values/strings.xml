@@ -29,8 +29,8 @@
 
     <!-- Títulos Orientação-->
     <string name="interesse">Qual o seu interesse?</string>
-    <string name="semacadastro">Não possui cadastro?</string>
-    <string name="cadastrese">Cadastre-se aqui.</string>
+    <string name="esqueceuSenha">Esqueceu a senha?</string>
+    <string name="recuperaSenha">Clique aqui.</string>
     <string name="categoria">Escolha a categoria</string>
     <string name="turno">Qual o melhor turno?</string>
 
@@ -46,6 +46,7 @@
     <string name="acaoConfigurar">Configurar</string>
     <string name="acaoSair">Sair</string>
     <string name="acaoCadastrar">Cadastrar</string>
+    <string name="acaoRecuperarSenha">Receber email</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>

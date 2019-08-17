@@ -185,8 +185,9 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
             finish();
             }
 
-    public void chamarCadastro(View view) {
-        Intent intent = new Intent(this, UsuarioActivity.class);
+    public void recuperaSenha(View view) {
+        Intent intent = new Intent(this, RecuperaSenhaActivity.class);
         startActivity(intent);
     }
+
 }

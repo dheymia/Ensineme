@@ -15,13 +15,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".OfertaActivity"
-            android:label="@string/title_activity_oferta"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".RecuperaSenhaActivity"
+            android:parentActivityName=".LoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="senac.ensineme.MainActivity" />
+                android:value="senac.ensineme.LoginActivity"
+                android:windowSoftInputMode="adjustResize" />
+        </activity>
+        <activity android:name=".PrincipalActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".DemandaActivity"
@@ -34,13 +40,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:label="@string/title_activity_main"></activity>
         <activity
             android:name=".UsuarioActivity"
             android:label="@string/title_activity_cadastro"
@@ -53,7 +53,13 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login" />
+            android:label="@string/title_activity_login"
+            android:parentActivityName=".PrincipalActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="senac.ensineme.PrincipalActivity"
+                android:windowSoftInputMode="adjustResize" />
+        </activity>
         <activity
             android:name=".ConfiguracaoActivity"
             android:label="@string/title_activity_settings"

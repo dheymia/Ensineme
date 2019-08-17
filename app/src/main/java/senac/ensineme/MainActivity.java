@@ -62,22 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         txtNome.setText("Olá " + name);
 
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
-                if (firebaseAuth.getCurrentUser() == null) {
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-        };
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.addAuthStateListener(authStateListener);
-        databaseReference = FirebaseDB.getFirebase();
-        databaseReference.getRef();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.acaoSair) {
             FirebaseAuth.getInstance().signOut();
+            Intent principal = new Intent(getBaseContext(), PrincipalActivity.class);
+            startActivity(principal);
             finish();
         }
 
