@@ -36,7 +36,12 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     //Entradas do usuário no cadastro a demanda
     private Button btnCadastrar; //enviará os dados para o firebase
     private AutoCompleteTextView txtDescDemanda; // descrição suscinta da demanda
-    private EditText txtLocalDemanda; //selecionado através da API viaCEP
+    private EditText txtCEPDemanda; //selecionado através da API viaCEP
+    private EditText txtLogradouroDemanda; //selecionado através da API viaCEP
+    private EditText txtBairroDemanda; //selecionado através da API viaCEP
+    private EditText txtComplementoDemanda; //selecionado através da API viaCEP
+    private EditText txtLocalidadeDemanda; //selecionado através da API viaCEP
+    private EditText txtEstadoDemanda; //selecionado através da API viaCEP
     private CalendarView inicioDemanda; //selecionado a partir de uma calendário
     private Spinner spnCatDemanda; // Dança, Esporte, Instrumentos, Culinária e Disciplinas
     private Spinner spnTurnoDemanda; // matutino, verpertino e nortuno
@@ -45,7 +50,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     private Demanda demanda;
 
     // Armazena entradas
-    private String descricao, categoria, turno, horasaula, local;
+    private String descricao, categoria, turno, horasaula, CEP, logradouro, bairro, complemento, localidade, estado;
     private Date datadeinicio;
 
     @Override
