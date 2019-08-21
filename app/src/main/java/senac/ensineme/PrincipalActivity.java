@@ -12,7 +12,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
 import senac.ensineme.models.FirebaseDB;
-import senac.ensineme.models.Usuario;
 
 public class PrincipalActivity extends AppCompatActivity {
 
@@ -43,7 +42,7 @@ public class PrincipalActivity extends AppCompatActivity {
         databaseReference = FirebaseDB.getFirebase();
         databaseReference.getRef();
 
-        btnCadastrar = (Button) findViewById(R.id.btnCadastrar);
+        btnCadastrar = (Button) findViewById(R.id.btnCadastrarDemanda);
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -28,12 +28,12 @@
         android:layout_marginTop="32dp"
         android:text="@string/acaoEntrar"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/btnCadastrar"
+        app:layout_constraintRight_toLeftOf="@id/btnCadastrarDemanda"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
 
     <Button
-        android:id="@+id/btnCadastrar"
+        android:id="@+id/btnCadastrarDemanda"
         style="@style/botao"
         android:layout_width="140dp"
         android:layout_marginTop="32dp"

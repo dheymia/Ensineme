@@ -1,5 +1,6 @@
 package senac.ensineme;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -16,16 +17,22 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import senac.ensineme.models.Demanda;
 
 
 public class DemandaActivity extends ComumActivity implements DatabaseReference.CompletionListener, View.OnClickListener {
+
+    Calendar myCalendar = Calendar.getInstance();
 
     //Não serão entradas do usuário no cadastro a demanda
     private String alunoDemanda; //obtida a partir do login e vinculada a demanda cadastrada
@@ -35,14 +42,14 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
 
     //Entradas do usuário no cadastro a demanda
     private Button btnCadastrar; //enviará os dados para o firebase
-    private AutoCompleteTextView txtDescDemanda; // descrição suscinta da demanda
+    private EditText txtDescDemanda; // descrição suscinta da demanda
     private EditText txtCEPDemanda; //selecionado através da API viaCEP
     private EditText txtLogradouroDemanda; //selecionado através da API viaCEP
     private EditText txtBairroDemanda; //selecionado através da API viaCEP
     private EditText txtComplementoDemanda; //selecionado através da API viaCEP
     private EditText txtLocalidadeDemanda; //selecionado através da API viaCEP
     private EditText txtEstadoDemanda; //selecionado através da API viaCEP
-    private CalendarView inicioDemanda; //selecionado a partir de uma calendário
+    private EditText txtInicioDemanda; //selecionado a partir de uma calendário
     private Spinner spnCatDemanda; // Dança, Esporte, Instrumentos, Culinária e Disciplinas
     private Spinner spnTurnoDemanda; // matutino, verpertino e nortuno
     private Spinner spnValidadeDemanda; // Em dias: de 1 a 30 ou multiplos de 2 até 30 ou multiplos de 5 até 30
@@ -51,7 +58,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
 
     // Armazena entradas
     private String descricao, categoria, turno, horasaula, CEP, logradouro, bairro, complemento, localidade, estado;
-    private Date datadeinicio;
+    private Date inicioDemanda;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +74,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         btnCadastrar = (Button) findViewById(R.id.btnCadastrarDemanda);
-        btnCadastrar.setOnClickListener(this);
+        btnCadastrar.setOnClickListener((View.OnClickListener) this);
     }
 
     @Override
@@ -93,9 +100,10 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
 
     @Override
     protected void inicializaViews() {
-        txtDescDemanda = findViewById(R.id.txtDemanda);
+        txtDescDemanda = findViewById(R.id.txtDescricaoDemanda);
 
-           }
+    }
+
     @Override
     protected void inicializaConteudo() {
 
@@ -115,5 +123,32 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
+    }
+
+    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel();
+        }
+
+    };
+
+         public void ClickDate (View view){
+        new DatePickerDialog(this, date, myCalendar
+                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    private void updateLabel() {
+
+        String myFormat = "dd/MM/yyyy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
+
+        txtInicioDemanda.setText(sdf.format(myCalendar.getTime()));
     }
 }

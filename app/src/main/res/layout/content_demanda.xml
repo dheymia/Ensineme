@@ -13,106 +13,115 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             style="@style/layoutTelasInserir"
-            android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/textView"
+                style="@style/titulo"
+                android:layout_width="match_parent"
+                android:text="@string/desejaaprender" />
+
+
+            <EditText
+                android:id="@+id/txtDescricaoDemanda"
+                style="@style/inserirtexto"
+
+                android:hint="@string/descricaodemanda"
+                android:inputType="textMultiLine" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+
+                        android:id="@+id/textView2"
+                        style="@style/titulosipinners"
+                        android:text="@string/categoria" />
+
+                    <Spinner
+                        android:id="@+id/spinner2"
+                        style="@style/spinner"
+                        android:layout_marginRight="1dp"
+                        android:entries="@array/categoriaDemanda" />
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        style="@style/titulosipinners"
+                        android:text="@string/inicioDemanda" />
+
+                    <EditText
+                        android:id="@+id/txtInicioDemanda"
+                        style="@style/inserirtexto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginRight="1dp"
+                        android:hint="@string/data"
+                        android:inputType="date"
+                        android:onClick="ClickDate" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        style="@style/titulosipinners"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cargahoraria" />
+
+                    <Spinner
+                        android:id="@+id/spinner3"
+                        style="@style/spinner"
+                        android:layout_marginLeft="1dp"
+                        android:entries="@array/cargaHorária" />
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        style="@style/titulosipinners"
+                        android:layout_height="wrap_content"
+                        android:text="@string/turnoDemanda" />
+
+                    <Spinner
+                        android:id="@+id/spinner4"
+                        style="@style/spinner"
+                        android:layout_marginLeft="1dp"
+                        android:entries="@array/turnoDemanda" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView8"
+                style="@style/titulo"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="8dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/txtNome"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/txtEscolherCategoria"
-                style="@style/titulo"
-                android:text="@string/categoria"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Spinner
-                android:id="@+id/spCategorias"
-                style="@style/spinner"
-                android:entries="@array/categoriaDemanda"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtEscolherCategoria" />
-
-            <EditText
-                android:id="@+id/txtDemanda"
-                style="@style/inserirtexto"
-                android:inputType="textMultiLine"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spCategorias" />
-
-            <EditText
-                android:id="@+id/txtCargaHoraria"
-                style="@style/inserirtexto"
-
-                android:inputType="number"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtDemanda" />
-
-            <EditText
-                android:id="@+id/txtLocal"
-                style="@style/inserirtexto"
-
-                android:inputType="textPostalAddress"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtCargaHoraria" />
-
-            <EditText
-                android:id="@+id/txtData"
-                style="@style/inserirtexto"
-
-                android:inputType="date"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtLocal" />
-
-            <TextView
-                android:id="@+id/txtSelecionaTurno"
-                style="@style/titulo"
-
-                android:text="@string/turno"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtData" />
-
-
-            <Spinner
-                android:id="@+id/spTurno"
-                style="@style/spinner"
-                android:entries="@array/turnoDemanda"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtSelecionaTurno" />
-
+                android:text="TextView" />
 
             <Button
                 android:id="@+id/btnCadastrarDemanda"
                 style="@style/botao"
-                android:text="@string/acaoCadastrar"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spTurno" />
+                android:text="@string/acaoCadastrar" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </ScrollView>
 
 </LinearLayout>
