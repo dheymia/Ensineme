@@ -1,17 +1,21 @@
 package senac.ensineme.models;
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.Date;
 
 public class Oferta {
-    private Usuario professor;
-    private String codOferta;
+    private String codOferta, professorOferta;
     private Double valorOferta;
     private Date dataOferta;
 
     public Oferta(Usuario professor, Double valorOferta) {
-        this.professor = professor;
+        this.professorOferta = professorOferta;
         this.valorOferta = valorOferta;
         this.dataOferta = new Date();
+    }
+
+    public Oferta() {
     }
 
     public String getCodOferta() {
@@ -22,12 +26,12 @@ public class Oferta {
         this.codOferta = codOferta;
     }
 
-    public Usuario getProfessor() {
-        return professor;
+    public String getProfessorOferta() {
+        return professorOferta;
     }
 
-    public void setProfessor(Usuario professor) {
-        this.professor = professor;
+    public void setProfessorOferta(String professorOferta) {
+        this.professorOferta = professorOferta;
     }
 
     public Double getValorOferta() {
@@ -46,31 +50,13 @@ public class Oferta {
         this.dataOferta = dataOferta;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Oferta [");
-        if (codOferta != null) {
-            builder.append("Código da Oferta=");
-            builder.append(codOferta);
-            builder.append(", ");
+    public void salvaOfertaDB(DatabaseReference.CompletionListener... completionListener) {
+        DatabaseReference firebase = FirebaseDB.getFirebase().child("ofertas").child(getCodOferta());
+        if (completionListener.length == 0) {
+            firebase.setValue(this);
+        } else {
+            firebase.setValue(this, completionListener[0]);
         }
-        if (professor != null) {
-            builder.append("Usuário Professor=");
-            builder.append(professor);
-            builder.append(", ");
-        }
-        if (valorOferta != null) {
-            builder.append("Valor da Oferta=");
-            builder.append(valorOferta);
-            builder.append(", ");
-        }
-        if (dataOferta != null) {
-            builder.append("Data da Oferta=");
-            builder.append(dataOferta);
-            builder.append(", ");
-        }
-        builder.append("]");
-        return builder.toString();
     }
+
 }
