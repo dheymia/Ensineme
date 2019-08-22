@@ -9,8 +9,7 @@ import java.util.List;
 
 public class Demanda {
 
-    private String alunoDemanda, codDemanda, descDemanda, horasaulaDemanda,validadeDemanda, turnoDemanda, statusDemanda;
-    private Categoria catDemanda;
+    private String alunoDemanda, codDemanda, descDemanda, horasaulaDemanda,validadeDemanda, turnoDemanda, statusDemanda, catDemanda;
     private EnderecoDemanda localDemanda;
     private Date dataDemanda,inicioDemanda,expiraDemanda;
     private List <Oferta> ofertas;
@@ -19,7 +18,7 @@ public class Demanda {
     public Demanda() {
     }
 
-    public Demanda(String alunoDemanda, String codDemanda, String descDemanda, String horasaulaDemanda, String validadeDemanda, String turnoDemanda, String statusDemanda, Categoria catDemanda, EnderecoDemanda localDemanda, Date dataDemanda, Date inicioDemanda, Date expiraDemanda, List<Oferta> ofertas, Boolean encerrada) {
+    public Demanda(String alunoDemanda, String codDemanda, String descDemanda, String horasaulaDemanda, String validadeDemanda, String turnoDemanda, String statusDemanda, String catDemanda, EnderecoDemanda localDemanda, Date dataDemanda, Date inicioDemanda, Date expiraDemanda, List<Oferta> ofertas, Boolean encerrada) {
         this.alunoDemanda = alunoDemanda;
         this.codDemanda = codDemanda;
         this.descDemanda = descDemanda;
@@ -92,11 +91,11 @@ public class Demanda {
         this.statusDemanda = statusDemanda;
     }
 
-    public Categoria getCatDemanda() {
+    public String getCatDemanda() {
         return catDemanda;
     }
 
-    public void setCatDemanda(Categoria catDemanda) {
+    public void setCatDemanda(String catDemanda) {
         this.catDemanda = catDemanda;
     }
 

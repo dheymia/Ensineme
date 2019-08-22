@@ -34,6 +34,7 @@
     <string name="msg_erro_email_empty">Email não preenchido</string>
     <string name="msg_erro_celular">Celular não preeenchido</string>
     <string name="msg_erro_senha_empty">Senha não preenchida</string>
+    <string name="msg_erro_campo_empty">Campo obrigatório</string>
 
     <!-- Títulos Orientação-->
     <string name="interesse">Qual o seu interesse?</string>
