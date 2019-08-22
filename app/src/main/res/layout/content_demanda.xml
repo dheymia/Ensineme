@@ -39,9 +39,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/metadetela"
                     android:orientation="vertical">
 
                     <TextView
@@ -51,7 +49,7 @@
                         android:text="@string/categoria" />
 
                     <Spinner
-                        android:id="@+id/spinner2"
+                        android:id="@+id/spCategoria"
                         style="@style/spinner"
                         android:layout_marginRight="1dp"
                         android:entries="@array/categoriaDemanda" />
@@ -75,9 +73,8 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    style="@style/metadetela"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
@@ -88,10 +85,10 @@
                         android:text="@string/cargahoraria" />
 
                     <Spinner
-                        android:id="@+id/spinner3"
+                        android:id="@+id/spCargaHoraria"
                         style="@style/spinner"
                         android:layout_marginLeft="1dp"
-                        android:entries="@array/cargaHorária" />
+                        android:entries="@array/cargaHoraria" />
 
                     <TextView
                         android:id="@+id/textView7"
@@ -100,7 +97,7 @@
                         android:text="@string/turnoDemanda" />
 
                     <Spinner
-                        android:id="@+id/spinner4"
+                        android:id="@+id/spTurno"
                         style="@style/spinner"
                         android:layout_marginLeft="1dp"
                         android:entries="@array/turnoDemanda" />
@@ -114,12 +111,155 @@
                 style="@style/titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="@string/localaulas" />
 
-            <Button
-                android:id="@+id/btnCadastrarDemanda"
-                style="@style/botao"
-                android:text="@string/acaoCadastrar" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    style="@style/metadetela"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/txtCep"
+                        style="@style/inserirtexto"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="1dp"
+                        android:hint="@string/cep"
+                        android:inputType="textPostalAddress" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/metadetela"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/txtCidade"
+                        style="@style/inserirtexto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/cidade"
+                        android:inputType="number" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/txtLogradouro"
+                style="@style/inserirtexto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="@string/logradouro"
+                android:inputType="textMultiLine|textPostalAddress" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    style="@style/metadetela"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/txtComplemento"
+                        style="@style/inserirtexto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:gravity="start|top"
+                        android:hint="@string/complemento"
+                        android:inputType="textMultiLine" />
+                </LinearLayout>
+                    <LinearLayout
+                        style="@style/metadetela"
+                        android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/txtNumero"
+                style="@style/inserirtexto"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="1dp"
+                android:hint="@string/numero"
+                android:inputType="number" />
+                    </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    style="@style/metadetela"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+
+                    <EditText
+                        android:id="@+id/txtBairro"
+                        style="@style/inserirtexto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/bairro"
+                        android:inputType="textPersonName" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/metadetela"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/txtEstado"
+                        style="@style/inserirtexto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="1dp"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:hint="@string/estado"
+                        android:inputType="text" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView9"
+                style="@style/titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/validadeDemanda" />
+
+            <Spinner
+                android:id="@+id/spValidadeDemanda"
+                style="@style/spinner"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:entries="@array/validadeDemanda" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnCadastrarDemanda"
+                    style="@style/botao"
+                    android:text="@string/acaoCadastrar" />
+            </LinearLayout>
+
 
         </LinearLayout>
     </ScrollView>

@@ -101,16 +101,40 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     @Override
     protected void inicializaViews() {
         txtDescDemanda = findViewById(R.id.txtDescricaoDemanda);
-
+        txtCEPDemanda = findViewById(R.id.txtCep);
+        txtLogradouroDemanda = findViewById(R.id.txtLogradouro);
+        txtBairroDemanda = findViewById(R.id.txtBairro);
+        txtComplementoDemanda = findViewById(R.id.txtComplemento);
+        txtLocalidadeDemanda = findViewById(R.id.txtCidade);
+        txtEstadoDemanda = findViewById(R.id.txtEstado);
+        txtInicioDemanda = findViewById(R.id.txtInicioDemanda);
+        spnCatDemanda = findViewById(R.id.spCategoria);
+        spnTurnoDemanda = findViewById(R.id.spTurno);
+        spnValidadeDemanda = findViewById(R.id.spValidadeDemanda);
+        spnHorasaulaDemanda = findViewById(R.id.spCargaHoraria);
     }
 
     @Override
     protected void inicializaConteudo() {
+        descricao = txtDescDemanda.getText().toString();
+        categoria = txtDescDemanda.getText().toString();
+        turno = txtDescDemanda.getText().toString();
+        horasaula = txtDescDemanda.getText().toString();
+        CEP = txtCEPDemanda.getText().toString();
+        logradouro = txtDescDemanda.getText().toString();
+        bairro = txtDescDemanda.getText().toString();
+        complemento = txtDescDemanda.getText().toString();
+        localidade = txtDescDemanda.getText().toString();
+        estado = txtDescDemanda.getText().toString();
 
     }
 
     @Override
     protected void inicializaObjeto() {
+        inicializaConteudo();
+        demanda = new Demanda();
+
+
 
 
     }

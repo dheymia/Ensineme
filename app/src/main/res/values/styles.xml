@@ -57,7 +57,6 @@
     <style name="botao">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">start</item>
         <item name="android:layout_marginTop">24dp</item>
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
@@ -96,10 +95,10 @@
        <item name="android:foregroundGravity">center|right</item>
    </style>
        <style name="metadetela">
-           <item name="android:layout_width">match_parent</item>
-           <item name="android:layout_height">match_parent</item>
-           <item name="android:layout_marginLeft">36dp</item>
-           <item name="android:layout_marginRight">36dp</item>
+           <item name="android:layout_width">0dp</item>
+           <item name="android:layout_weight">1</item>
+           <item name="android:layout_height">wrap_content</item>
+
 
 
 

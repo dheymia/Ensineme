@@ -21,7 +21,7 @@
         <item>Dança</item>
         <item>Outras</item>
     </string-array>
-    <string-array name="cargaHorária">
+    <string-array name="cargaHoraria">
         <item>4 horas/aula</item>
         <item>8 horas/aula</item>
         <item>12 horas/aula</item>
@@ -31,6 +31,15 @@
         <item>32 horas/aula</item>
         <item>A combinar</item>
         <item>Outras</item>
+    </string-array>
+
+    <string-array name="validadeDemanda">
+        <item>1 dia</item>
+        <item>3 dias</item>
+        <item>5 dias</item>
+        <item>7 dias</item>
+        <item>15 dias</item>
+        <item>30 dias</item>
     </string-array>
 
 </resources>

@@ -18,6 +18,13 @@
     <string name="descricaodemanda">Decrição da demanda</string>
     <string name="interesseAprender">Aprender</string>
     <string name="interesseEnsinar">Ensinar</string>
+    <string name="cep">CEP</string>
+    <string name="estado">Estado</string>
+    <string name="cidade">Cidade</string>
+    <string name="logradouro">Logradouro</string>
+    <string name="complemento">Complemento</string>
+    <string name="numero">n.º</string>
+    <string name="bairro">Bairro</string>
 
     <!-- Mensagens de erros-->
     <string name="emailInvalido">Email inválido</string>
@@ -34,6 +41,7 @@
     <string name="recuperaSenha">Clique aqui.</string>
     <string name="validadeDemanda">Quanto tempo você aguardará propostas?</string>
     <string name="desejaaprender">O que deseja aprender?</string>
+    <string name="localaulas">Onde serão as aulas?</string>
 
     <!-- Títulos campos -->
     <string name="categoria">Categoria</string>
