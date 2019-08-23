@@ -39,26 +39,14 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     Calendar myCalendar = Calendar.getInstance();
 
     DatabaseReference firebase;
-    //Não serão entradas do usuário no cadastro a demanda
-    private String alunoDemanda; //obtida a partir do login e vinculada a demanda cadastrada
-    private String codDemanda; //obtida a partir do firebase
-    private Date dataDemanda; //obtida do sistema ou firebase na data do cadastro da demanda
-    private Date expiraDemanda; //obtida da soma da data da demanda aos dias de validade da demanda
+    private String alunoDemanda, codDemanda;
+    private Date dataDemanda, expiraDemanda;
 
-    //Entradas do usuário no cadastro a demanda
-    private Button btnCadastrar; //enviará os dados para o firebase
-    private EditText txtDescDemanda; // descrição suscinta da demanda
-    private EditText txtCEPDemanda; //selecionado através da API viaCEP
-    private EditText txtLogradouroDemanda; //selecionado através da API viaCEP
-    private EditText txtBairroDemanda; //selecionado através da API viaCEP
-    private EditText txtComplementoDemanda; //selecionado através da API viaCEP
-    private EditText txtLocalidadeDemanda; //selecionado através da API viaCEP
-    private EditText txtEstadoDemanda; //selecionado através da API viaCEP
-    private EditText txtInicioDemanda; //selecionado a partir de uma calendário
-    private Spinner spnCatDemanda; // Dança, Esporte, Instrumentos, Culinária e Disciplinas
-    private Spinner spnTurnoDemanda; // matutino, verpertino e nortuno
-    private Spinner spnValidadeDemanda; // Em dias: de 1 a 30 ou multiplos de 2 até 30 ou multiplos de 5 até 30
-    private Spinner spnHorasaulaDemanda; //Em horas-aula (50 minutos): de 1 a 30 ou multiplos de 2 até 30 ou multiplos de 5 até 30
+
+
+    private Button btnCadastrar;
+    private EditText txtDescDemanda, txtCEPDemanda, txtLogradouroDemanda, txtBairroDemanda, txtComplementoDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtInicioDemanda;
+    private Spinner spnCatDemanda, spnTurnoDemanda, spnValidadeDemanda, spnHorasaulaDemanda;
     private Demanda demanda;
 
     // Armazena entradas

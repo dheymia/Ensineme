@@ -83,24 +83,24 @@
         <item name="android:textAlignment">center</item>
 
     </style>
-   <style name="spinner">
-       <item name="android:layout_width">match_parent</item>
-       <item name="android:layout_height">wrap_content</item>
-       <item name="android:layout_centerVertical">true</item>
-       <item name="android:layout_marginTop">1dp</item>
-       <item name="android:background">@drawable/spinner</item>
-       <item name="android:gravity">center</item>
-       <item name="android:spinnerMode">dropdown</item>
-       <item name="android:foreground">@drawable/spinnerdrop</item>
-       <item name="android:foregroundGravity">center|right</item>
-   </style>
-       <style name="metadetela">
-           <item name="android:layout_width">0dp</item>
-           <item name="android:layout_weight">1</item>
-           <item name="android:layout_height">wrap_content</item>
+
+    <style name="spinner">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginTop">1dp</item>
+        <item name="android:background">@drawable/spinner</item>
+        <item name="android:gravity">center</item>
+        <item name="android:spinnerMode">dropdown</item>
+        <item name="android:foreground">@drawable/spinnerdrop</item>
+        <item name="android:foregroundGravity">center|right</item>
+    </style>
+
+    <style name="metadetela">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
 
 
-
-
-   </style>
+    </style>
 </resources>
