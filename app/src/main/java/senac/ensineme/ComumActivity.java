@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.ParseException;
+
 public abstract class ComumActivity extends AppCompatActivity {
 
     protected ProgressBar progressBar;
@@ -40,9 +42,9 @@ public abstract class ComumActivity extends AppCompatActivity {
 
     abstract protected void inicializaViews();
 
-    abstract protected void inicializaConteudo();
+    abstract protected void inicializaConteudo() throws ParseException;
 
-    abstract protected void inicializaObjeto();
+    abstract protected void inicializaObjeto() throws ParseException;
 
     abstract protected boolean validaCampo();
 

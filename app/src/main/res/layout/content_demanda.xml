@@ -62,12 +62,13 @@
                     <EditText
                         android:id="@+id/txtInicioDemanda"
                         style="@style/inserirtexto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
                         android:layout_marginTop="1dp"
                         android:layout_marginRight="1dp"
+                        android:foregroundGravity="center|right"
                         android:hint="@string/data"
                         android:inputType="date"
+                        android:linksClickable="true"
+                        android:longClickable="true"
                         android:onClick="ClickDate" />
 
                 </LinearLayout>

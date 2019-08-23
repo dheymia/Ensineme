@@ -9,134 +9,149 @@ import java.util.List;
 
 public class Demanda {
 
-    private String alunoDemanda, codDemanda, descDemanda, horasaulaDemanda,validadeDemanda, turnoDemanda, statusDemanda, catDemanda;
-    private EnderecoDemanda localDemanda;
-    private Date dataDemanda,inicioDemanda,expiraDemanda;
-    private List <Oferta> ofertas;
+    DatabaseReference firebase;
+    private String aluno, codigo, descricao , turno, status, categoria, inicio, data, expiracao,CEP, logradouro, bairro, complemento, localidade, estado;
+    private int horasaula, validade;
     private Boolean encerrada;
 
     public Demanda() {
     }
 
-    public Demanda(String alunoDemanda, String codDemanda, String descDemanda, String horasaulaDemanda, String validadeDemanda, String turnoDemanda, String statusDemanda, String catDemanda, EnderecoDemanda localDemanda, Date dataDemanda, Date inicioDemanda, Date expiraDemanda, List<Oferta> ofertas, Boolean encerrada) {
-        this.alunoDemanda = alunoDemanda;
-        this.codDemanda = codDemanda;
-        this.descDemanda = descDemanda;
-        this.horasaulaDemanda = horasaulaDemanda;
-        this.validadeDemanda = validadeDemanda;
-        this.turnoDemanda = turnoDemanda;
-        this.statusDemanda = statusDemanda;
-        this.catDemanda = catDemanda;
-        this.localDemanda = localDemanda;
-        this.dataDemanda = new Date();
-        this.inicioDemanda = new Date();
-        this.expiraDemanda = new Date();
-        this.ofertas = new ArrayList<Oferta>();
-        this.encerrada = encerrada;
+    public String getAluno() {
+        return aluno;
     }
 
-    public String getAlunoDemanda() {
-        return alunoDemanda;
+    public void setAluno(String aluno) {
+        this.aluno = aluno;
     }
 
-    public void setAlunoDemanda(String alunoDemanda) {
-        this.alunoDemanda = alunoDemanda;
+    public String getCodigo() {
+        return codigo;
     }
 
-    public String getCodDemanda() {
-        return codDemanda;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
-    public void setCodDemanda(String codDemanda) {
-        this.codDemanda = codDemanda;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public String getDescDemanda() {
-        return descDemanda;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
-    public void setDescDemanda(String descDemanda) {
-        this.descDemanda = descDemanda;
+    public int getValidade() {
+        return validade;
     }
 
-    public String getHorasaulaDemanda() {
-        return horasaulaDemanda;
+    public void setValidade(int validade) {
+        this.validade = validade;
     }
 
-    public void setHorasaulaDemanda(String horasaulaDemanda) {
-        this.horasaulaDemanda = horasaulaDemanda;
+    public String getTurno() {
+        return turno;
     }
 
-    public String getValidadeDemanda() {
-        return validadeDemanda;
+    public void setTurno(String turno) {
+        this.turno = turno;
     }
 
-    public void setValidadeDemanda(String validadeDemanda) {
-        this.validadeDemanda = validadeDemanda;
+    public String getStatus() {
+        return status;
     }
 
-    public String getTurnoDemanda() {
-        return turnoDemanda;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public void setTurnoDemanda(String turnoDemanda) {
-        this.turnoDemanda = turnoDemanda;
+    public String getCategoria() {
+        return categoria;
     }
 
-    public String getStatusDemanda() {
-        return statusDemanda;
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
-    public void setStatusDemanda(String statusDemanda) {
-        this.statusDemanda = statusDemanda;
+    public String getInicio() {
+        return inicio;
     }
 
-    public String getCatDemanda() {
-        return catDemanda;
+    public void setInicio(String inicio) {
+        this.inicio = inicio;
     }
 
-    public void setCatDemanda(String catDemanda) {
-        this.catDemanda = catDemanda;
+    public String getData() {
+        return data;
     }
 
-    public EnderecoDemanda getLocalDemanda() {
-        return localDemanda;
+    public void setData(String data) {
+        this.data = data;
     }
 
-    public void setLocalDemanda(EnderecoDemanda localDemanda) {
-        this.localDemanda = localDemanda;
+    public String getExpiracao() {
+        return expiracao;
     }
 
-    public Date getDataDemanda() {
-        return dataDemanda;
+    public void setExpiracao(String expiracao) {
+        this.expiracao = expiracao;
     }
 
-    public void setDataDemanda(Date dataDemanda) {
-        this.dataDemanda = dataDemanda;
+    public int getHorasaula() {
+        return horasaula;
     }
 
-    public Date getInicioDemanda() {
-        return inicioDemanda;
+    public void setHorasaula(int horasaula) {
+        this.horasaula = horasaula;
     }
 
-    public void setInicioDemanda(Date inicioDemanda) {
-        this.inicioDemanda = inicioDemanda;
+
+    public String getCEP() {
+        return CEP;
     }
 
-    public Date getExpiraDemanda() {
-        return expiraDemanda;
+    public void setCEP(String CEP) {
+        this.CEP = CEP;
     }
 
-    public void setExpiraDemanda(Date expiraDemanda) {
-        this.expiraDemanda = expiraDemanda;
+    public String getLogradouro() {
+        return logradouro;
     }
 
-    public List<Oferta> getOfertas() {
-        return ofertas;
+    public void setLogradouro(String logradouro) {
+        this.logradouro = logradouro;
     }
 
-    public void setOfertas(List<Oferta> ofertas) {
-        this.ofertas = ofertas;
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    public String getComplemento() {
+        return complemento;
+    }
+
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
+    }
+
+    public String getLocalidade() {
+        return localidade;
+    }
+
+    public void setLocalidade(String localidade) {
+        this.localidade = localidade;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public Boolean getEncerrada() {
@@ -147,7 +162,7 @@ public class Demanda {
         this.encerrada = encerrada;
     }
 
-    public void encerra() {
+    public void encerrada() {
         encerrada = true;
     }
 
@@ -156,12 +171,13 @@ public class Demanda {
     }
 
     public void salvaDemandaDB(DatabaseReference.CompletionListener... completionListener) {
-        DatabaseReference firebase = FirebaseDB.getFirebase().child("demandas").child(getCodDemanda());
+        firebase = FirebaseDB.getFirebase().child("demandas").child(getCodigo());
         if (completionListener.length == 0) {
             firebase.setValue(this);
         } else {
             firebase.setValue(this, completionListener[0]);
         }
     }
+
 
 }

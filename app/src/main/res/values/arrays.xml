@@ -29,8 +29,6 @@
         <item>24 horas/aula</item>
         <item>28 horas/aula</item>
         <item>32 horas/aula</item>
-        <item>A combinar</item>
-        <item>Outras</item>
     </string-array>
 
     <string-array name="validadeDemanda">

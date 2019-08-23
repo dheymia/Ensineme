@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,22 +37,17 @@ import senac.ensineme.models.FirebaseDB;
 
 public class DemandaActivity extends ComumActivity implements DatabaseReference.CompletionListener, View.OnClickListener {
 
-    Calendar myCalendar = Calendar.getInstance();
-
-    DatabaseReference firebase;
-    private String alunoDemanda, codDemanda;
-    private Date dataDemanda, expiraDemanda;
-
-
-
     private Button btnCadastrar;
     private EditText txtDescDemanda, txtCEPDemanda, txtLogradouroDemanda, txtBairroDemanda, txtComplementoDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtInicioDemanda;
     private Spinner spnCatDemanda, spnTurnoDemanda, spnValidadeDemanda, spnHorasaulaDemanda;
+    private String alunoDemanda, codDemanda, descricao, categoria, turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado,inicioDemanda;
+    private int horasaula;
+    private Date dataDemanda, expiraDemanda;
+    private Calendar myCalendar;
     private Demanda demanda;
-
-    // Armazena entradas
-    private String descricao, categoria, turno, horasaula, CEP, logradouro, bairro, complemento, localidade, estado;
-    private Date inicioDemanda;
+    private DatabaseReference firebase;
+    private String myFormat = "dd/MM/yyyy";
+    SimpleDateFormat formatoData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +59,10 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Nova demanda");
 
+        myCalendar = Calendar.getInstance();
+        firebase = FirebaseDB.getFirebase();
+        codDemanda = firebase.child("demandas").push().getKey();
+
 
         inicializaViews();
 
@@ -73,7 +73,9 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
 
     @Override
     public void onClick(View view) {
-        inicializaObjeto();
+
+            inicializaObjeto();
+
         if (validaCampo()) {
             btnCadastrar.setEnabled(false);
             progressBar.setFocusable(true);
@@ -113,33 +115,64 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         descricao = txtDescDemanda.getText().toString();
         categoria = spnCatDemanda.getSelectedItem().toString();
         turno = spnTurnoDemanda.getSelectedItem().toString();
-        horasaula = spnHorasaulaDemanda.getSelectedItem().toString();
         CEP = txtCEPDemanda.getText().toString();
         logradouro = txtLogradouroDemanda.getText().toString();
         bairro = txtBairroDemanda.getText().toString();
         complemento = txtComplementoDemanda.getText().toString();
         localidade = txtLocalidadeDemanda.getText().toString();
         estado = txtEstadoDemanda.getText().toString();
+        cargaHoraria = spnHorasaulaDemanda.getSelectedItem().toString();
+        inicioDemanda = txtInicioDemanda.getText().toString();
 
-    }
+        switch (cargaHoraria) {
+            case "4 horas/aula":
+                horasaula = 4;
+                break;
+            case "8 horas/aula":
+                horasaula = 8;
+                break;
+            case "12 horas/aula":
+                horasaula = 12;
+                break;
+            case "16 horas/aula":
+                horasaula = 16;
+                break;
+            case "24 horas/aula":
+                horasaula = 24;
+                break;
+            case "28 horas/aula":
+                horasaula = 28;
+                break;
+            case "32 horas/aula":
+                horasaula = 32;
+                break;
+        }
+
+       }
 
     @Override
     protected void inicializaObjeto() {
-        inicializaConteudo();
-        demanda = new Demanda();
-        //alunoDemanda;
-        demanda.setCodDemanda("111111");
-        demanda.setDescDemanda(descricao);
-        demanda.setHorasaulaDemanda (horasaula);
-        //validadeDemanda;
-        demanda.setTurnoDemanda(turno);
-        //statusDemanda;
-        demanda.setCatDemanda(categoria);
-        //localDemanda;
-        //dataDemanda;
-        //inicioDemanda;
-        //expiraDemanda;
 
+        inicializaConteudo();
+
+        demanda = new Demanda();
+        //aluno;
+        demanda.setCodigo(codDemanda);
+        demanda.setDescricao(descricao);
+        demanda.setHorasaula (horasaula);
+        //validade;
+        demanda.setTurno(turno);
+        //status;
+        demanda.setCategoria(categoria);
+        //data;
+        demanda.setInicio(inicioDemanda);
+        //expiracao;
+        demanda.setCEP(CEP);
+       demanda.setLogradouro(logradouro);
+       demanda.setBairro(bairro);
+       demanda.setComplemento (complemento);
+       demanda.setLocalidade(localidade);
+       demanda.setEstado(estado);
     }
 
     @Override
@@ -149,8 +182,39 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
             txtDescDemanda.requestFocus();
             return false;
         }
-        if (horasaula.isEmpty()) {
-            spnHorasaulaDemanda.requestFocus();
+        if (inicioDemanda.isEmpty()) {
+            txtInicioDemanda.setError(getString(R.string.msg_erro_campo_empty));
+            txtInicioDemanda.requestFocus();
+            return false;
+        }
+        if (CEP.isEmpty()) {
+            txtCEPDemanda.setError(getString(R.string.msg_erro_campo_empty));
+            txtCEPDemanda.requestFocus();
+            return false;
+        }
+        if (logradouro.isEmpty()) {
+            txtLogradouroDemanda.setError(getString(R.string.msg_erro_campo_empty));
+            txtLogradouroDemanda.requestFocus();
+            return false;
+        }
+        if (bairro.isEmpty()) {
+            txtBairroDemanda.setError(getString(R.string.msg_erro_campo_empty));
+            txtBairroDemanda.requestFocus();
+            return false;
+        }
+        if (complemento.isEmpty()) {
+            txtComplementoDemanda.setError(getString(R.string.msg_erro_campo_empty));
+            txtComplementoDemanda.requestFocus();
+            return false;
+        }
+        if (localidade.isEmpty()) {
+            txtLocalidadeDemanda.setError(getString(R.string.msg_erro_campo_empty));
+            txtLocalidadeDemanda.requestFocus();
+            return false;
+        }
+        if (estado.isEmpty()) {
+            txtEstadoDemanda.setError(getString(R.string.msg_erro_campo_empty));
+            txtEstadoDemanda.requestFocus();
             return false;
         }
         return true;
@@ -174,7 +238,9 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
 
     };
 
-         public void ClickDate (View view){
+
+
+        public void ClickDate (View view){
         new DatePickerDialog(this, date, myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -182,9 +248,9 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
 
     private void updateLabel() {
 
-        String myFormat = "dd/MM/yyyy"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
-
-        txtInicioDemanda.setText(sdf.format(myCalendar.getTime()));
+        formatoData = new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
+        txtInicioDemanda.setText(formatoData.format(myCalendar.getTime()));
     }
+
+
 }
