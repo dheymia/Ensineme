@@ -68,8 +68,7 @@
                         android:hint="@string/data"
                         android:inputType="date"
                         android:linksClickable="true"
-                        android:longClickable="true"
-                        android:onClick="ClickDate" />
+                        android:longClickable="true" />
 
                 </LinearLayout>
 

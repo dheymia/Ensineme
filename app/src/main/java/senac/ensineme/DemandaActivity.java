@@ -98,6 +98,14 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
                    consultaCEP();}
             }
         });
+        txtInicioDemanda.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus){
+                    Toast.makeText(getApplicationContext(), "Escolha a data", Toast.LENGTH_SHORT).show();
+                    chamaCalendario();}
+            }
+        });
 
         progressBar = (ProgressBar) findViewById(R.id.loading);
         btnCadastrar = (Button) findViewById(R.id.btnCadastrarDemanda);
@@ -297,7 +305,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     };
 
 
-    public void ClickDate(View view) {
+    public void chamaCalendario() {
         new DatePickerDialog(this, date, myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
