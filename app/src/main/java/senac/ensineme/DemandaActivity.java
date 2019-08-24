@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -40,12 +42,13 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     private Button btnCadastrar;
     private EditText txtDescDemanda, txtCEPDemanda, txtLogradouroDemanda, txtBairroDemanda, txtComplementoDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtInicioDemanda;
     private Spinner spnCatDemanda, spnTurnoDemanda, spnValidadeDemanda, spnHorasaulaDemanda;
-    private String alunoDemanda, codDemanda, descricao, categoria, turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado,inicioDemanda;
-    private int horasaula;
+    private String aluno, codDemanda, descricao, categoria, turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado, inicioDemanda, validadeDemanda;
+    private int horasaula, validade;
     private Date dataDemanda, expiraDemanda;
     private Calendar myCalendar;
     private Demanda demanda;
     private DatabaseReference firebase;
+    private FirebaseAuth firebaseAuth;
     private String myFormat = "dd/MM/yyyy";
     SimpleDateFormat formatoData;
 
@@ -61,7 +64,14 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
 
         myCalendar = Calendar.getInstance();
         firebase = FirebaseDB.getFirebase();
+        firebaseAuth = FirebaseAuth.getInstance();
         codDemanda = firebase.child("demandas").push().getKey();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+        if (firebaseUser != null) {
+            aluno = firebaseUser.getUid();
+        }
+
 
 
         inicializaViews();
@@ -74,7 +84,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     @Override
     public void onClick(View view) {
 
-            inicializaObjeto();
+        inicializaObjeto();
 
         if (validaCampo()) {
             btnCadastrar.setEnabled(false);
@@ -123,6 +133,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         estado = txtEstadoDemanda.getText().toString();
         cargaHoraria = spnHorasaulaDemanda.getSelectedItem().toString();
         inicioDemanda = txtInicioDemanda.getText().toString();
+        validadeDemanda = spnValidadeDemanda.getSelectedItem().toString();
 
         switch (cargaHoraria) {
             case "4 horas/aula":
@@ -148,7 +159,30 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
                 break;
         }
 
-       }
+
+        switch (validadeDemanda) {
+            case "1 dia":
+                validade = 1;
+                break;
+            case "3 dias":
+                validade = 3;
+                break;
+            case "5 dias":
+                validade = 5;
+                break;
+            case "7 dias":
+                validade = 7;
+                break;
+            case "15 dias":
+                validade = 15;
+                break;
+            case "30 dias":
+                validade = 30;
+                break;
+
+        }
+
+    }
 
     @Override
     protected void inicializaObjeto() {
@@ -156,23 +190,23 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         inicializaConteudo();
 
         demanda = new Demanda();
-        //aluno;
+        demanda.setAluno(aluno);
         demanda.setCodigo(codDemanda);
         demanda.setDescricao(descricao);
-        demanda.setHorasaula (horasaula);
-        //validade;
+        demanda.setHorasaula(horasaula);
+        demanda.setValidade(validade);
         demanda.setTurno(turno);
-        //status;
+        demanda.setStatus("Aguardando proposta");
         demanda.setCategoria(categoria);
         //data;
         demanda.setInicio(inicioDemanda);
         //expiracao;
         demanda.setCEP(CEP);
-       demanda.setLogradouro(logradouro);
-       demanda.setBairro(bairro);
-       demanda.setComplemento (complemento);
-       demanda.setLocalidade(localidade);
-       demanda.setEstado(estado);
+        demanda.setLogradouro(logradouro);
+        demanda.setBairro(bairro);
+        demanda.setComplemento(complemento);
+        demanda.setLocalidade(localidade);
+        demanda.setEstado(estado);
     }
 
     @Override
@@ -239,8 +273,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     };
 
 
-
-        public void ClickDate (View view){
+    public void ClickDate(View view) {
         new DatePickerDialog(this, date, myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
