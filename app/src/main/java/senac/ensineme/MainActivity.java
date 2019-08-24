@@ -8,6 +8,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,9 +25,11 @@ import senac.ensineme.models.FirebaseDB;
 public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
     private TextView txtNome;
-    private DatabaseReference databaseReference;
+    private DatabaseReference firebase;
+    private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
+    private String usuariologado, tipousuario;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -62,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
 
         txtNome.setText("Olá " + name);
 
+        firebase = FirebaseDB.getFirebase().child("usuarios");
+        firebaseAuth = FirebaseAuth.getInstance();
+
+
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -73,7 +80,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+@Override
+protected void onStart() {
+    super.onStart();
+   // tipousuario = firebase.child(usuariologado).child("tipo").toString();
+    //switch (tipousuario){
+    //    case "aluno":
+    //       Intent aluno = new Intent(this, MainActivity.class);
+    //      startActivity(aluno);
+    //     finish();
 
+    //   case "professor":
+    //       Intent  professor = new Intent(this, DemandaActivity.class);
+    //        startActivity(professor);
+    //        finish();
+    //  }
+}
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);

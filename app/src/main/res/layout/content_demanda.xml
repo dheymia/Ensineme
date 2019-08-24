@@ -145,8 +145,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="1dp"
                         android:hint="@string/cep"
-                        android:inputType="textPostalAddress"
-                        android:onClick="onClickCEP" />
+                        android:inputType="textPostalAddress" />
 
                 </LinearLayout>
 

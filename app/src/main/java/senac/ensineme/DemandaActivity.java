@@ -65,6 +65,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     private Demanda demanda;
     private DatabaseReference firebase;
     private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
     private String myFormat = "dd/MM/yyyy";
     SimpleDateFormat formatoData;
 
@@ -78,80 +79,25 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Nova demanda");
 
-        txtCEPDemanda = findViewById(R.id.txtCep);
-        txtLogradouroDemanda = findViewById(R.id.txtLogradouro);
-        txtBairroDemanda = findViewById(R.id.txtBairro);
-        txtComplementoDemanda = findViewById(R.id.txtComplemento);
-        txtLocalidadeDemanda = findViewById(R.id.txtCidade);
-        txtEstadoDemanda = findViewById(R.id.txtEstado);
-
-        txtCEPDemanda.setOnFocusChangeListener (new View.OnFocusChangeListener(){
-            @Override
-            public void onFocusChange (View v, boolean hasFocus){
-                if (!hasFocus)
-                    Toast.makeText(getApplicationContext(), "unfocus", 2000).show();
-
-                RequestQueue requestQueue;
-
-                // Instantiate the cache
-                Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
-
-                // Set up the network to use HttpURLConnection as the HTTP client.
-                Network network = new BasicNetwork(new HurlStack());
-
-                // Instantiate the RequestQueue with the cache and network.
-                requestQueue = new RequestQueue(cache, network);
-
-                // Start the queue
-                requestQueue.start();
-
-                String cep = txtCEPDemanda.getText().toString();
-
-                String url = "https://viacep.com.br/ws/" + cep +"/json/";
-
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            bairro = (response.getString("bairro"));
-                            CEP = (response.getString("cep"));
-                            complemento = (response.getString("complemento"));
-                            localidade = (response.getString("localidade"));
-                            logradouro = (response.getString("logradouro"));
-                            estado = (response.getString("uf"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        txtLogradouroDemanda.setText(logradouro);
-                        txtBairroDemanda.setText(bairro);
-                        txtLocalidadeDemanda.setText(localidade);
-                        txtEstadoDemanda.setText(estado);
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("jsonObjectError", error.toString());
-                        txtCEPDemanda.setError("Digite um CEP Válido!");
-                    }
-                });
-
-                requestQueue.add(jsonObjectRequest);
-            }
-        });
-
         myCalendar = Calendar.getInstance();
         firebase = FirebaseDB.getFirebase();
         firebaseAuth = FirebaseAuth.getInstance();
         codDemanda = firebase.child("demandas").push().getKey();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseUser = firebaseAuth.getCurrentUser();
 
         if (firebaseUser != null) {
             aluno = firebaseUser.getUid();
         }
         inicializaViews();
+
+        txtCEPDemanda.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus){
+                    Toast.makeText(getApplicationContext(), "unfocus", Toast.LENGTH_SHORT).show();
+                   consultaCEP();}
+            }
+        });
 
         progressBar = (ProgressBar) findViewById(R.id.loading);
         btnCadastrar = (Button) findViewById(R.id.btnCadastrarDemanda);
@@ -363,5 +309,51 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         txtInicioDemanda.setText(formatoData.format(myCalendar.getTime()));
     }
 
+    private void consultaCEP() {
+        RequestQueue requestQueue;
+
+        Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
+
+        Network network = new BasicNetwork(new HurlStack());
+
+        requestQueue = new RequestQueue(cache, network);
+
+        requestQueue.start();
+
+        String cep = txtCEPDemanda.getText().toString();
+
+        String url = "https://viacep.com.br/ws/" + cep + "/json/";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    bairro = (response.getString("bairro"));
+                    CEP = (response.getString("cep"));
+                    complemento = (response.getString("complemento"));
+                    localidade = (response.getString("localidade"));
+                    logradouro = (response.getString("logradouro"));
+                    estado = (response.getString("uf"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                txtLogradouroDemanda.setText(logradouro);
+                txtBairroDemanda.setText(bairro);
+                txtLocalidadeDemanda.setText(localidade);
+                txtEstadoDemanda.setText(estado);
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("jsonObjectError", error.toString());
+                txtCEPDemanda.setError("Digite um CEP Válido!");
+            }
+        });
+
+        requestQueue.add(jsonObjectRequest);
+    }
 
 }

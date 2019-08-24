@@ -20,7 +20,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 
+import senac.ensineme.models.FirebaseDB;
 import senac.ensineme.models.Usuario;
 
 public class LoginActivity extends ComumActivity implements View.OnClickListener {
@@ -57,8 +59,8 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
 
     @Override
     protected void inicializaConteudo() {
-       email  = txtEmail.getText().toString();
-       senha  = txtSenha.getText().toString();
+        email = txtEmail.getText().toString();
+        senha = txtSenha.getText().toString();
     }
 
     protected void inicializaObjeto() {
@@ -70,7 +72,7 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
 
     @Override
     protected boolean validaCampo() {
-       if (email.isEmpty()) {
+        if (email.isEmpty()) {
             txtEmail.setError(getString(R.string.msg_erro_email_empty));
             txtEmail.requestFocus();
             return false;
@@ -96,7 +98,7 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
                 progressBar.setFocusable(true);
                 openProgressBar();
                 verifyLogin();
-                } else {
+            } else {
                 closeProgressBar();
             }
         }
@@ -143,7 +145,6 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
                     usuario.setEmailIfNull(userFirebase.getEmail());
                     usuario.salvaUsuarioDB();
                 }
-
                 chamarMainActivity();
             }
         };
@@ -179,15 +180,19 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
         return (usuario.getNome() != null || firebaseUser.getDisplayName() != null);
     }
 
-     private void chamarMainActivity() {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
-            }
+    private void chamarMainActivity() {
+
+        Intent aluno = new Intent(this, MainActivity.class);
+        startActivity(aluno);
+        finish();
+
+    }
 
     public void recuperaSenha(View view) {
         Intent intent = new Intent(this, RecuperaSenhaActivity.class);
         startActivity(intent);
     }
+
+
 
 }
