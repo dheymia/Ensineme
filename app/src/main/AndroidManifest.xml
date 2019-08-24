@@ -11,15 +11,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".OfertaActivity"
-            android:label="@string/title_activity_oferta"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="senac.ensineme.MainActivity" />
-        </activity>
-        <activity
             android:name=".RecuperaSenhaActivity"
             android:parentActivityName=".LoginActivity">
             <meta-data

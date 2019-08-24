@@ -4,7 +4,18 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.android.volley.Cache;
+import com.android.volley.Network;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
@@ -15,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
 
 import android.widget.AutoCompleteTextView;
@@ -24,6 +36,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -62,6 +78,70 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Nova demanda");
 
+        txtCEPDemanda = findViewById(R.id.txtCep);
+        txtLogradouroDemanda = findViewById(R.id.txtLogradouro);
+        txtBairroDemanda = findViewById(R.id.txtBairro);
+        txtComplementoDemanda = findViewById(R.id.txtComplemento);
+        txtLocalidadeDemanda = findViewById(R.id.txtCidade);
+        txtEstadoDemanda = findViewById(R.id.txtEstado);
+
+        txtCEPDemanda.setOnFocusChangeListener (new View.OnFocusChangeListener(){
+            @Override
+            public void onFocusChange (View v, boolean hasFocus){
+                if (!hasFocus)
+                    Toast.makeText(getApplicationContext(), "unfocus", 2000).show();
+
+                RequestQueue requestQueue;
+
+                // Instantiate the cache
+                Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
+
+                // Set up the network to use HttpURLConnection as the HTTP client.
+                Network network = new BasicNetwork(new HurlStack());
+
+                // Instantiate the RequestQueue with the cache and network.
+                requestQueue = new RequestQueue(cache, network);
+
+                // Start the queue
+                requestQueue.start();
+
+                String cep = txtCEPDemanda.getText().toString();
+
+                String url = "https://viacep.com.br/ws/" + cep +"/json/";
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            bairro = (response.getString("bairro"));
+                            CEP = (response.getString("cep"));
+                            complemento = (response.getString("complemento"));
+                            localidade = (response.getString("localidade"));
+                            logradouro = (response.getString("logradouro"));
+                            estado = (response.getString("uf"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        txtLogradouroDemanda.setText(logradouro);
+                        txtBairroDemanda.setText(bairro);
+                        txtLocalidadeDemanda.setText(localidade);
+                        txtEstadoDemanda.setText(estado);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("jsonObjectError", error.toString());
+                        txtCEPDemanda.setError("Digite um CEP Válido!");
+                    }
+                });
+
+                requestQueue.add(jsonObjectRequest);
+            }
+        });
+
         myCalendar = Calendar.getInstance();
         firebase = FirebaseDB.getFirebase();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -71,14 +151,12 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         if (firebaseUser != null) {
             aluno = firebaseUser.getUid();
         }
-
-
-
         inicializaViews();
 
         progressBar = (ProgressBar) findViewById(R.id.loading);
         btnCadastrar = (Button) findViewById(R.id.btnCadastrarDemanda);
         btnCadastrar.setOnClickListener((View.OnClickListener) this);
+
     }
 
     @Override
