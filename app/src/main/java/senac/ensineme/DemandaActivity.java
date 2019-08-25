@@ -2,10 +2,11 @@ package senac.ensineme;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.net.Network;
 import android.os.Bundle;
 
 import com.android.volley.Cache;
-import com.android.volley.Network;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -15,6 +16,7 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.common.ConnectionResult;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+
 
 import android.util.Log;
 import android.view.View;
@@ -101,7 +104,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         txtInicioDemanda.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus){
+                if (hasFocus){
                     Toast.makeText(getApplicationContext(), "Escolha a data", Toast.LENGTH_SHORT).show();
                     chamaCalendario();}
             }
@@ -322,9 +325,9 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
 
         Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
 
-        Network network = new BasicNetwork(new HurlStack());
+        BasicNetwork network = new BasicNetwork(new HurlStack());
 
-        requestQueue = new RequestQueue(cache, network);
+        requestQueue = new RequestQueue(cache, (com.android.volley.Network) network);
 
         requestQueue.start();
 

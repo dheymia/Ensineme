@@ -37,7 +37,7 @@
     <string name="msg_erro_campo_empty">Campo obrigatório</string>
 
     <!-- Títulos Orientação-->
-    <string name="interesse">Qual o seu interesse?</string>
+    <string name="interesse">Qual seu interesse?</string>
     <string name="esqueceuSenha">Esqueceu a senha?</string>
     <string name="recuperaSenha">Clique aqui.</string>
     <string name="validadeDemanda">Quanto tempo você aguardará propostas?</string>
@@ -45,10 +45,10 @@
     <string name="localaulas">Onde serão as aulas?</string>
 
     <!-- Títulos campos -->
-    <string name="categoria">Categoria</string>
-    <string name="cargahoraria">Tempo previsto</string>
-    <string name="inicioDemanda">Início das aulas</string>
-    <string name="turnoDemanda">Turno disponível</string>
+    <string name="categoria">categoria</string>
+    <string name="cargahoraria">tempo previsto</string>
+    <string name="inicioDemanda">início das aulas</string>
+    <string name="turnoDemanda">turno disponível</string>
 
 
     <!-- Menu Principal-->
