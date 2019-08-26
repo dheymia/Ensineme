@@ -65,7 +65,7 @@ public class UsuarioActivity extends ComumActivity implements DatabaseReference.
 
         inicializaViews();
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) findViewById(R.id.loading);
         btnCadastrar = (Button) findViewById(R.id.btnCadastrarUsuario);
         btnCadastrar.setOnClickListener(this);
     }

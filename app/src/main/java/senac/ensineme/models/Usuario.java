@@ -16,6 +16,14 @@ public class Usuario {
     public Usuario() {
     }
 
+    public Usuario(String id, String nome, String email, String celular, String tipo) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.celular = celular;
+        this.tipo = tipo;
+    }
+
     public String getId() {
         return id;
     }

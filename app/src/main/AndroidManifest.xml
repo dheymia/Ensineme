@@ -11,14 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".RecuperaSenhaActivity"
-            android:parentActivityName=".LoginActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="senac.ensineme.LoginActivity"
-                android:windowSoftInputMode="adjustResize" />
-        </activity>
-        <activity android:name=".PrincipalActivity">
+            android:name=".FullscreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,22 +23,43 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DemandaActivity"
-            android:label="@string/title_activity_demanda"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".ProfessorMainActivity"
+            android:label="@string/title_activity_professor_main"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".RecuperaSenhaActivity"
+            android:parentActivityName=".LoginActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="senac.ensineme.MainActivity" />
+                android:value="senac.ensineme.LoginActivity"
+                android:windowSoftInputMode="adjustResize" />
+        </activity>
+        <activity android:name=".PrincipalActivity"
+            android:label="@string/title_activity_principal"
+            android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main" />
+            android:name=".DemandaActivity"
+            android:label="@string/title_activity_demanda"
+            android:parentActivityName=".LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="senac.ensineme.LoginActivity"
+                android:windowSoftInputMode="adjustResize" />
+        </activity>
+        <activity
+            android:name=".AlunoMainActivity"
+            android:label="@string/title_activity_aluno_main"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".UsuarioActivity"
             android:label="@string/title_activity_cadastro"
             android:parentActivityName=".LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="senac.ensineme.LoginActivity"
@@ -50,19 +68,22 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
-            android:parentActivityName=".PrincipalActivity">
+            android:parentActivityName=".PrincipalActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="senac.ensineme.PrincipalActivity"
+                android:value="senac.ensineme.LoginActivity"
                 android:windowSoftInputMode="adjustResize" />
         </activity>
         <activity
             android:name=".ConfiguracaoActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".AlunoMainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="senac.ensineme.MainActivity" />
+                android:value="senac.ensineme.AlunoMainActivity" />
         </activity>
 
         <meta-data

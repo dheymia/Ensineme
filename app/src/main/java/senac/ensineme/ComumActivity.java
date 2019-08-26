@@ -18,15 +18,15 @@ public abstract class ComumActivity extends AppCompatActivity {
     protected ProgressBar progressBar;
 
 
-    protected void showSnackbar( String message ){
+    protected void showSnackbar(String message){
         Snackbar.make(progressBar,
                 message,
                 Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
 
-    protected void showToast( String message ){
-        Toast.makeText(this,
+    protected void showToast(String message){
+        Toast.makeText(ComumActivity.this,
                 message,
                 Toast.LENGTH_LONG)
                 .show();

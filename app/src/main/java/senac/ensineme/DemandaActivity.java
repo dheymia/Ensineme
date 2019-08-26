@@ -1,8 +1,7 @@
 package senac.ensineme;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
-import android.net.Network;
+
 import android.os.Bundle;
 
 import com.android.volley.Cache;
@@ -17,12 +16,12 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.common.ConnectionResult;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,9 +31,9 @@ import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
-import android.widget.AutoCompleteTextView;
+
 import android.widget.Button;
-import android.widget.CalendarView;
+
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -44,15 +43,15 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import senac.ensineme.models.Categoria;
+
 import senac.ensineme.models.Demanda;
-import senac.ensineme.models.EnderecoDemanda;
+
 import senac.ensineme.models.FirebaseDB;
 
 
@@ -61,9 +60,9 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     private Button btnCadastrar;
     private EditText txtDescDemanda, txtCEPDemanda, txtLogradouroDemanda, txtBairroDemanda, txtComplementoDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtInicioDemanda;
     private Spinner spnCatDemanda, spnTurnoDemanda, spnValidadeDemanda, spnHorasaulaDemanda;
-    private String aluno, codDemanda, descricao, categoria, turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado, inicioDemanda, validadeDemanda;
+    private String aluno, codDemanda, descricao, categoria, turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado, inicioDemanda, validadeDemanda, data;
     private int horasaula, validade;
-    private Date dataDemanda, expiraDemanda;
+    private Date expiraDemanda;
     private Calendar myCalendar;
     private Demanda demanda;
     private DatabaseReference firebase;
@@ -91,22 +90,25 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         if (firebaseUser != null) {
             aluno = firebaseUser.getUid();
         }
+
         inicializaViews();
 
         txtCEPDemanda.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus){
+                if (!hasFocus) {
                     Toast.makeText(getApplicationContext(), "unfocus", Toast.LENGTH_SHORT).show();
-                   consultaCEP();}
+                    consultaCEP();
+                }
             }
         });
         txtInicioDemanda.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus){
+                if (hasFocus) {
                     Toast.makeText(getApplicationContext(), "Escolha a data", Toast.LENGTH_SHORT).show();
-                    chamaCalendario();}
+                    chamaCalendario();
+                }
             }
         });
 
@@ -125,7 +127,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
             btnCadastrar.setEnabled(false);
             progressBar.setFocusable(true);
             openProgressBar();
-            demanda.salvaDemandaDB();
+            demanda.salvaDemandaDB(DemandaActivity.this);
         } else {
             closeProgressBar();
         }
@@ -134,9 +136,16 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
 
     @Override
     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-        showToast("Demanda criada com sucesso!");
-        closeProgressBar();
-        finish();
+
+        if (databaseError != null) {
+            showSnackbar(databaseError.getMessage());
+            closeProgressBar();
+            btnCadastrar.setEnabled(true);
+        } else {
+            showToast("Demanda criada com sucesso!");
+            closeProgressBar();
+            finish();
+        }
     }
 
     @Override
@@ -169,6 +178,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         cargaHoraria = spnHorasaulaDemanda.getSelectedItem().toString();
         inicioDemanda = txtInicioDemanda.getText().toString();
         validadeDemanda = spnValidadeDemanda.getSelectedItem().toString();
+
 
         switch (cargaHoraria) {
             case "4 horas/aula":
@@ -233,7 +243,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         demanda.setTurno(turno);
         demanda.setStatus("Aguardando proposta");
         demanda.setCategoria(categoria);
-        //data;
+        demanda.setData((formatoData.format(new Date())));
         demanda.setInicio(inicioDemanda);
         //expiracao;
         demanda.setCEP(CEP);

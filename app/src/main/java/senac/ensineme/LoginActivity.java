@@ -20,29 +20,38 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import senac.ensineme.models.FirebaseDB;
 import senac.ensineme.models.Usuario;
 
 public class LoginActivity extends ComumActivity implements View.OnClickListener {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
-    private Usuario usuario;
+    private DatabaseReference firebase;
+    private Usuario usuario, usuariologado;
     private TextView cadastrar;
     private AutoCompleteTextView txtEmail;
     private EditText txtSenha;
     private Button btnLogin;
-    private String email, senha;
+    private String email, senha, idUsuario, tipoUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         firebaseAuth = FirebaseAuth.getInstance();
         authStateListener = getFirebaseAuthResultHandler();
+
 
         inicializaViews();
 
@@ -144,7 +153,9 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
                     usuario.setNomeIfNull(userFirebase.getDisplayName());
                     usuario.setEmailIfNull(userFirebase.getEmail());
                     usuario.salvaUsuarioDB();
+
                 }
+
                 chamarMainActivity();
             }
         };
@@ -182,10 +193,42 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
 
     private void chamarMainActivity() {
 
-        Intent aluno = new Intent(this, MainActivity.class);
-        startActivity(aluno);
-        finish();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            usuario.setId(user.getUid());
+            idUsuario = usuario.getId();
+        } else{
+            return;
+        }
 
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("usuarios/" + idUsuario);
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                usuariologado = dataSnapshot.getValue(Usuario.class);
+                tipoUsuario = usuariologado.getTipo();
+                showToast(idUsuario + " " + usuariologado.getTipo());
+
+                if (tipoUsuario.equals("aluno")) {
+                    Intent aluno = new Intent(LoginActivity.this, AlunoMainActivity.class);
+                    startActivity(aluno);
+                    finish();
+                } else if (tipoUsuario.equals("professor")) {
+                    Intent professor = new Intent(LoginActivity.this, ProfessorMainActivity.class);
+                    startActivity(professor);
+                    finish();
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                showSnackbar("Erro de leitura: " + databaseError.getCode());
+            }
+        });
     }
 
     public void recuperaSenha(View view) {
@@ -194,5 +237,5 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
     }
 
 
-
 }
+

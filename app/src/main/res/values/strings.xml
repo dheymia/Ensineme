@@ -5,9 +5,12 @@
     <!-- Activities Títulos-->
     <string name="title_activity_login">Entrar</string>
     <string name="title_activity_cadastro">Novo cadastro</string>
-    <string name="title_activity_main">Ensine-me</string>
+    <string name="title_activity_professor_main">Professor</string>
+    <string name="title_activity_aluno_main">Aluno</string>
     <string name="title_activity_settings">Configurações</string>
     <string name="title_activity_demanda">Cadastrar nova demanda</string>
+    <string name="title_activity_oferta">Oferta</string>
+    <string name="title_activity_fullscreen">ensine-me</string>
 
     <!-- Campos de entrada de dados-->
     <string name="nome">Nome</string>
@@ -16,8 +19,8 @@
     <string name="senha">Senha</string>
     <string name="data">DD/MM/AAAA</string>
     <string name="descricaodemanda">Decrição da demanda</string>
-    <string name="interesseAprender">Aprender</string>
-    <string name="interesseEnsinar">Ensinar</string>
+    <string name="interesseAprender">aprender</string>
+    <string name="interesseEnsinar">ensinar</string>
     <string name="cep">CEP</string>
     <string name="estado">Estado</string>
     <string name="cidade">Cidade</string>
@@ -39,7 +42,7 @@
     <!-- Títulos Orientação-->
     <string name="interesse">Qual seu interesse?</string>
     <string name="esqueceuSenha">Esqueceu a senha?</string>
-    <string name="recuperaSenha">Clique aqui.</string>
+    <string name="recuperaSenha">clique aqui.</string>
     <string name="validadeDemanda">Quanto tempo você aguardará propostas?</string>
     <string name="desejaaprender">O que deseja aprender?</string>
     <string name="localaulas">Onde serão as aulas?</string>
@@ -78,8 +81,8 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="title_activity_oferta">Oferta</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_principal">Seja bem vindo</string>
 
 
 </resources>

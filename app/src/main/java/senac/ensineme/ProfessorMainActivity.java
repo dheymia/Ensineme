@@ -6,10 +6,13 @@ import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
@@ -19,17 +22,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import senac.ensineme.models.FirebaseDB;
+import senac.ensineme.models.Usuario;
 
-public class MainActivity extends AppCompatActivity {
+public class ProfessorMainActivity extends AppCompatActivity {
     private TextView mTextMessage;
     private TextView txtNome;
+    Usuario usuario,usuariologado;
     private DatabaseReference firebase;
     private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
-    private String usuariologado, tipousuario;
+    private String idUsuario, nomeUsuario;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -45,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
-                                        return true;
+                    return true;
             }
             return false;
         }
@@ -54,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_professor_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         mTextMessage = findViewById(R.id.message);
         txtNome = findViewById(R.id.txtNome);
@@ -63,13 +69,37 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String name = sharedPreferences.getString("signature", "visitante");
 
-        txtNome.setText("Olá " + name);
+        //txtNome.setText("Olá " + name);
 
-        firebase = FirebaseDB.getFirebase().child("usuarios");
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
 
+        usuario = new Usuario();
+        if (firebaseUser != null) {
+            usuario.setId(firebaseUser.getUid());
+            idUsuario = usuario.getId();
+        }else{
+            return;
+        }
 
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("usuarios/" + idUsuario);
 
+        ref.addValueEventListener(new ValueEventListener() {
+                                      @Override
+                                      public void onDataChange(DataSnapshot dataSnapshot) {
+                                          usuariologado = dataSnapshot.getValue(Usuario.class);
+                                          if (usuariologado.getTipo() != null) {
+                                              nomeUsuario = usuariologado.getNome();
+                                              txtNome.setText("Olá " + nomeUsuario);
+                                          }
+                                      }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -80,22 +110,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-@Override
-protected void onStart() {
-    super.onStart();
-   // tipousuario = firebase.child(usuariologado).child("tipo").toString();
-    //switch (tipousuario){
-    //    case "aluno":
-    //       Intent aluno = new Intent(this, MainActivity.class);
-    //      startActivity(aluno);
-    //     finish();
-
-    //   case "professor":
-    //       Intent  professor = new Intent(this, DemandaActivity.class);
-    //        startActivity(professor);
-    //        finish();
-    //  }
-}
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -111,7 +125,7 @@ protected void onStart() {
 
         if (id == R.id.acaoSair) {
             FirebaseAuth.getInstance().signOut();
-            Intent principal = new Intent(getBaseContext(), PrincipalActivity.class);
+            Intent principal = new Intent(getBaseContext(), FullscreenActivity.class);
             startActivity(principal);
             finish();
         }

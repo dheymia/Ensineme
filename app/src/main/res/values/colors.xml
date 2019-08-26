@@ -7,4 +7,6 @@
     <color name="verdefoco">#cfeeeb</color>
     <color name="azulfoco">#CFE4F2</color>
     <color name="verdedestaque">#0f9a8d</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>
