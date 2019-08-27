@@ -1,57 +1,68 @@
 package senac.ensineme.models;
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import senac.ensineme.CategoriasActivity;
 import senac.ensineme.R;
 
 public class Categoria {
-    private String codCategoria;
-    private String nomeCategoria;
-    private List <Categoria> categorias;
-    private int imgCategoria;
+    DatabaseReference firebase;
+    private String codigo;
+    private String categoria;
+    private int imagem;
 
-    public Categoria(String codCategoria, String nomeCategoria) {
-        this.codCategoria = codCategoria;
-        this.nomeCategoria = nomeCategoria;
+    public Categoria() {
     }
 
-    public String getCodCategoria() {
-        return codCategoria;
+    public String getCodigo() {
+        return codigo;
     }
 
-    public void setCodCategoria(String codCategoria) {
-        this.codCategoria = codCategoria;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
-    public String getNomeCategoria() {
-        return nomeCategoria;
+    public String getCategoria() {
+        return categoria;
     }
 
-    public void setNomeCategoria(String nomeCategoria) {
-        this.nomeCategoria = nomeCategoria;
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     public int getFoto() {
-        switch (nomeCategoria){
+        switch (categoria){
             case "Dança":
-                imgCategoria = R.drawable.danca;
+                imagem = R.drawable.danca;
                 break;
             case "Esporte":
-                imgCategoria = R.drawable.esporte;
+                imagem = R.drawable.esporte;
                 break;
             case "Culinária":
-                imgCategoria = R.drawable.culinaria;
+                imagem = R.drawable.culinaria;
                 break;
             case "Instrumentos Musicais":
-                imgCategoria = R.drawable.instrumentos;
+                imagem = R.drawable.instrumentos;
                 break;
             case "Disciplinas Escolares":
-                imgCategoria = R.drawable.disciplinas;
+                imagem = R.drawable.disciplinas;
                 break;
 
         }
-        return imgCategoria;
+        return imagem;
+    }
+
+    public void salvaCategoriaDB(DatabaseReference.CompletionListener... completionListener) {
+        firebase = FirebaseDB.getFirebase().child("demandas").child(getCodigo());
+        if (completionListener.length == 0) {
+            firebase.setValue(this);
+        } else {
+            firebase.setValue(this, completionListener[0]);
+        }
+
     }
 
 }

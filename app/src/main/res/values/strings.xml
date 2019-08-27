@@ -66,6 +66,9 @@
     <string name="acaoSair">Sair</string>
     <string name="acaoCadastrar">Cadastrar</string>
     <string name="acaoRecuperarSenha">Receber email</string>
+    <string name="acaoVerCategorias">Categorias</string>
+    <string name="acaoVerTelaProfessor">Professor</string>
+    <string name="acaoVerTelaAluno">Aluno</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
@@ -83,6 +86,7 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_principal">Seja bem vindo</string>
+    <string name="title_activity_categoria">CategoriaActivity</string>
 
 
 </resources>

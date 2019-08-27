@@ -120,9 +120,11 @@ public class FullscreenActivity extends AppCompatActivity {
                         Intent professor = new Intent(FullscreenActivity.this, ProfessorMainActivity.class);
                         startActivity(professor);
                         finish();
-                    }
-
-                } else{
+                    }else if (tipoUsuario.equals("administrador")) {
+                        Intent administrador = new Intent(FullscreenActivity.this, AdministradorMainActivity.class);
+                        startActivity(administrador);
+                        finish();
+                }
                    return;
                 }
             }

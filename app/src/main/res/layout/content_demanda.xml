@@ -11,10 +11,20 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout style="@style/layoutTelasInserir">
 
+
+            <Button
+                android:id="@+id/btnCadastrarDemanda"
+                style="@style/botao"
+                android:text="@string/acaoCadastrar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spValidadeDemanda"
+                app:layout_constraintVertical_bias="0.666" />
 
             <EditText
                 android:id="@+id/txtDescricaoDemanda"
@@ -25,7 +35,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtViewDesejaAprender" />
-
 
             <EditText
                 android:id="@+id/txtLogradouro"
@@ -300,6 +309,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
             <TextView
                 android:id="@+id/textView8"
                 style="@style/titulo"
@@ -308,7 +318,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layoutDadosDemanda" />
-
 
             <TextView
                 android:id="@+id/textView9"
@@ -320,14 +329,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layoutBairroEst" />
-
-            <Button
-                android:id="@+id/btnCadastrarDemanda"
-                style="@style/botao"
-                android:text="@string/acaoCadastrar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spValidadeDemanda" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

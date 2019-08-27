@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AdministradorMainActivity" >
+
+<ScrollView
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    style="@style/layoutTelasInserir"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/txtNome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="24dp"
+        android:gravity="right"
+        android:text="@string/nome"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/nome" />
+
+    <Button
+        android:id="@+id/btnAluno"
+        style="@style/botao"
+        android:layout_width="0dp"
+
+        android:layout_marginTop="140dp"
+        android:text="@string/acaoVerTelaAluno"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtNome" />
+    <Button
+        android:id="@+id/btnProfessor"
+        style="@style/botao"
+        android:layout_width="0dp"
+
+        android:text="@string/acaoVerTelaProfessor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnAluno" />
+
+    <Button
+        android:id="@+id/btnCategorias"
+        style="@style/botao"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:text="@string/acaoVerCategorias"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnProfessor" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
+</LinearLayout>

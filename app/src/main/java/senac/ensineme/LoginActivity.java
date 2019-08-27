@@ -220,7 +220,10 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
                     startActivity(professor);
                     finish();
 
-
+                }else if (tipoUsuario.equals("administrador")) {
+                    Intent administrador = new Intent(LoginActivity.this, AdministradorMainActivity.class);
+                    startActivity(administrador);
+                    finish();
                 }
             }
 

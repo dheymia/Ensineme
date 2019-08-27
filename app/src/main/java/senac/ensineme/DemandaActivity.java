@@ -179,7 +179,6 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         inicioDemanda = txtInicioDemanda.getText().toString();
         validadeDemanda = spnValidadeDemanda.getSelectedItem().toString();
 
-
         switch (cargaHoraria) {
             case "4 horas/aula":
                 horasaula = 4;
