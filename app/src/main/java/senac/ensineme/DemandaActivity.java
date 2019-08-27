@@ -245,7 +245,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         demanda.setCategoria(categoria);
         demanda.setData((formatoData.format(new Date())));
         demanda.setInicio(inicioDemanda);
-        //expiracao;
+        demanda.setExpiracao(expiraDemanda());
         demanda.setCEP(CEP);
         demanda.setLogradouro(logradouro);
         demanda.setBairro(bairro);
@@ -322,6 +322,14 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         new DatePickerDialog(this, date, myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    public String expiraDemanda (){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new java.util.Date());
+        calendar.add (Calendar.DAY_OF_MONTH, validade);
+        String diaFormat = new SimpleDateFormat("dd/MM/yyyy").format(calendar.getTime());
+        return diaFormat;
     }
 
     private void updateLabel() {
