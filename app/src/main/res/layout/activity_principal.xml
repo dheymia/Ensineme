@@ -44,7 +44,7 @@
                     android:layout_height="100dp">
 
                     <Button
-                        android:id="@+id/btnEntrar"
+                        android:id="@+id/btnCancelar"
                         style="@style/botao"
                         android:layout_width="140dp"
 
@@ -60,7 +60,7 @@
                     android:layout_height="100dp">
 
                     <Button
-                        android:id="@+id/btnCadastrarDemanda"
+                        android:id="@+id/btnCadastrarCategoria"
                         style="@style/botao"
                         android:layout_width="140dp"
                         android:text="@string/acaoCadastrar"

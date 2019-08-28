@@ -63,6 +63,7 @@
 
     <!-- Ações-->
     <string name="acaoEntrar">Entrar</string>
+    <string name="acaoCancelar">Cancelar</string>
     <string name="acaoEntrarCurta">Entrar</string>
     <string name="acaoConfigurar">Configurar</string>
     <string name="acaoSair">Sair</string>

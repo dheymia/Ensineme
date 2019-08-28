@@ -113,7 +113,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         });
 
         progressBar = (ProgressBar) findViewById(R.id.loading);
-        btnCadastrar = (Button) findViewById(R.id.btnCadastrarDemanda);
+        btnCadastrar = (Button) findViewById(R.id.btnCadastrarCategoria);
         btnCadastrar.setOnClickListener((View.OnClickListener) this);
 
     }

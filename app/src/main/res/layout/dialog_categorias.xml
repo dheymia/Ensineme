@@ -19,21 +19,55 @@
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="8dp"
                 android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/btnCadastrar"
+                app:layout_constraintBottom_toTopOf="@+id/layoutBotoes"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <Button
-                android:id="@+id/btnCadastrar"
-                style="@style/botao"
-                android:text="@string/acaoCadastrar"
+            <LinearLayout
+                android:id="@+id/layoutBotoes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
 
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtCategoria" />
+                app:layout_constraintTop_toBottomOf="@+id/txtCategoria">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    style="@style/metadetela"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp">
+
+                    <Button
+                        android:id="@+id/btnCancelar"
+                        style="@style/botao"
+                        android:layout_width="110dp"
+
+                        android:text="@string/acaoCancelar"
+                        android:textSize="10sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    style="@style/metadetela"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp">
+
+                    <Button
+                        android:id="@+id/btnCadastrarCategoria"
+                        style="@style/botao"
+                        android:layout_width="110dp"
+                        android:text="@string/acaoCadastrar"
+                        android:textSize="10sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
 
             <EditText
                 android:id="@+id/txtCategoria"

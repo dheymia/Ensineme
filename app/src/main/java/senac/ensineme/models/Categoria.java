@@ -33,7 +33,15 @@ public class Categoria {
         this.categoria = categoria;
     }
 
-    public int getFoto() {
+    public int getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(int imagem) {
+        this.imagem = imagem;
+    }
+
+    public int Foto() {
         switch (categoria){
             case "Dança":
                 imagem = R.drawable.danca;
@@ -44,10 +52,10 @@ public class Categoria {
             case "Culinária":
                 imagem = R.drawable.culinaria;
                 break;
-            case "Instrumentos Musicais":
+            case "Instrumentos musicais":
                 imagem = R.drawable.instrumentos;
                 break;
-            case "Disciplinas Escolares":
+            case "Disciplinas escolares":
                 imagem = R.drawable.disciplinas;
                 break;
 
@@ -56,7 +64,7 @@ public class Categoria {
     }
 
     public void salvaCategoriaDB(DatabaseReference.CompletionListener... completionListener) {
-        firebase = FirebaseDB.getFirebase().child("demandas").child(getCodigo());
+        firebase = FirebaseDB.getFirebase().child("categorias").child(getCodigo());
         if (completionListener.length == 0) {
             firebase.setValue(this);
         } else {

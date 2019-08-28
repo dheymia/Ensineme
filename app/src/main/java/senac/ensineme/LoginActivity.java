@@ -55,7 +55,7 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
 
         inicializaViews();
 
-        btnLogin = (Button) findViewById(R.id.btnEntrar);
+        btnLogin = (Button) findViewById(R.id.btnCancelar);
         btnLogin.setOnClickListener(this);
     }
 
@@ -100,7 +100,7 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
 
         inicializaObjeto();
         int id = v.getId();
-        if (id == R.id.btnEntrar) {
+        if (id == R.id.btnCancelar) {
             if (validaCampo()) {
                 btnLogin.setEnabled(false);
                 cadastrar.setEnabled(false);

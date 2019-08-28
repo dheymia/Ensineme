@@ -56,7 +56,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtValor" />
 
             <Button
-                android:id="@+id/btnEntrar"
+                android:id="@+id/btnCancelar"
                 style="@style/botao"
                 android:layout_width="140dp"
                 android:hapticFeedbackEnabled="false"
@@ -92,7 +92,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.541"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnEntrar"
+        app:layout_constraintTop_toBottomOf="@+id/btnCancelar"
         app:layout_constraintVertical_bias="0.03">
 
 
