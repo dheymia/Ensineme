@@ -2,6 +2,7 @@ package senac.ensineme;
 
 import android.app.DatePickerDialog;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import com.android.volley.Cache;
@@ -19,25 +20,32 @@ import com.google.android.gms.common.ConnectionResult;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 
 import android.util.Log;
 import android.view.View;
 
 
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -45,14 +53,20 @@ import org.json.JSONObject;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
+import senac.ensineme.adapters.CategoriaAdapter;
+import senac.ensineme.models.Categoria;
 import senac.ensineme.models.Demanda;
 
 import senac.ensineme.models.FirebaseDB;
+
+import static android.R.layout.simple_dropdown_item_1line;
 
 
 public class DemandaActivity extends ComumActivity implements DatabaseReference.CompletionListener, View.OnClickListener {
@@ -60,11 +74,14 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     private Button btnCadastrar;
     private EditText txtDescDemanda, txtCEPDemanda, txtLogradouroDemanda, txtBairroDemanda, txtComplementoDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtInicioDemanda;
     private Spinner spnCatDemanda, spnTurnoDemanda, spnValidadeDemanda, spnHorasaulaDemanda;
-    private String aluno, codDemanda, descricao, categoria, turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado, inicioDemanda, validadeDemanda, data;
-    private int horasaula, validade;
-    private Date expiraDemanda;
+    private String aluno, codDemanda, descricao,  turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado, inicioDemanda, validadeDemanda, data;
+    private int horasaula, validade,categoria;
+    private ArrayAdapter<String> adapter;
+    private List<Categoria> categoriaList = new ArrayList<Categoria>();
+    private ArrayList<String> arrayCategoria = new ArrayList<String>();;
     private Calendar myCalendar;
     private Demanda demanda;
+    private Categoria catDemanda;
     private DatabaseReference firebase;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -92,6 +109,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         }
 
         inicializaViews();
+        addDadosSpinnerCategoria();
 
         txtCEPDemanda.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -121,12 +139,13 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     @Override
     public void onClick(View view) {
 
-        inicializaObjeto();
+        inicializaConteudo();
 
         if (validaCampo()) {
             btnCadastrar.setEnabled(false);
             progressBar.setFocusable(true);
             openProgressBar();
+            inicializaObjeto();
             demanda.salvaDemandaDB(DemandaActivity.this);
         } else {
             closeProgressBar();
@@ -167,7 +186,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     @Override
     protected void inicializaConteudo() {
         descricao = txtDescDemanda.getText().toString();
-        categoria = spnCatDemanda.getSelectedItem().toString();
+        categoria = spnCatDemanda.getSelectedItemPosition();
         turno = spnTurnoDemanda.getSelectedItem().toString();
         CEP = txtCEPDemanda.getText().toString();
         logradouro = txtLogradouroDemanda.getText().toString();
@@ -231,8 +250,6 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     @Override
     protected void inicializaObjeto() {
 
-        inicializaConteudo();
-
         demanda = new Demanda();
         demanda.setAluno(aluno);
         demanda.setCodigo(codDemanda);
@@ -241,7 +258,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         demanda.setValidade(validade);
         demanda.setTurno(turno);
         demanda.setStatus("Aguardando proposta");
-        demanda.setCategoria(categoria);
+        demanda.setCategoria(arrayCategoria.get(categoria));
         demanda.setData((formatoData.format(new Date())));
         demanda.setInicio(inicioDemanda);
         demanda.setExpiracao(expiraDemanda());
@@ -297,10 +314,47 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         }
         return true;
     }
+private void addDadosSpinnerCategoria() {
+    FirebaseDatabase data = FirebaseDatabase.getInstance();
+    DatabaseReference categoriaRef = data.getReference("categorias");
+
+    ValueEventListener ListenerGeral = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            categoriaList.clear();
+            arrayCategoria.clear();
+            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                catDemanda = ds.getValue(Categoria.class);
+                categoriaList.add(catDemanda);
+                arrayCategoria.add(catDemanda.getCategoria());
+
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+    categoriaRef.orderByChild("categoria").addValueEventListener(ListenerGeral);
+    adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, arrayCategoria);
+    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    spnCatDemanda.setAdapter(adapter);
+
+    //spnCatDemanda.setSelection(adapter.getPosition("Culinária"));
+}
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
+    }
+
+    public String expiraDemanda (){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new java.util.Date());
+        calendar.add (Calendar.DAY_OF_MONTH, validade);
+        String diaFormat = new SimpleDateFormat("dd/MM/yyyy").format(calendar.getTime());
+        return diaFormat;
     }
 
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -317,19 +371,13 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     };
 
 
+
     public void chamaCalendario() {
         new DatePickerDialog(this, date, myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    public String expiraDemanda (){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new java.util.Date());
-        calendar.add (Calendar.DAY_OF_MONTH, validade);
-        String diaFormat = new SimpleDateFormat("dd/MM/yyyy").format(calendar.getTime());
-        return diaFormat;
-    }
 
     private void updateLabel() {
 

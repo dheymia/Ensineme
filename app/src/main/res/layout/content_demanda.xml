@@ -75,7 +75,6 @@
                         style="@style/spinner"
                         android:layout_width="0dp"
                         android:layout_marginTop="1dp"
-                        android:entries="@array/categoriaDemanda"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView2" />

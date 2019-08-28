@@ -41,11 +41,10 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
 
     private AlertDialog alerta;
     private ProgressBar progressBar;
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
     private EditText txtCategoria;
-    private TextView txtNomeCategoria;
     private RecyclerView recyclerView;
-    CategoriaAdapter adapter;
+    private CategoriaAdapter adapter;
     private List<Categoria> categoriaList = new ArrayList<>();
     private Button btnCadastrarCategoria, btnCancelar;
     private String nomeCategoria, codCategoria;
@@ -67,22 +66,18 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
         recyclerView = findViewById(R.id.listCategorias);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, HORIZONTAL));
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Carregando...");
         progressDialog.show();
         ref.limitToFirst(100).orderByChild("categoria").addValueEventListener(ListenerGeral);
 
-
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                alterar = false;
                 dialogCategorias();
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -137,28 +132,48 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
         progressBar = view.findViewById(R.id.loading);
         txtCategoria = view.findViewById(R.id.txtCategoria);
 
-        if (alterar) {
+        if(alterar){
             txtCategoria.setText(String.valueOf(categoriaSelecionada.getCategoria()));
+            btnCadastrarCategoria.setText("alterar");
         }
+
 
         view.findViewById(R.id.btnCadastrarCategoria).setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
-                DatabaseReference database = FirebaseDB.getFirebase();
-                codCategoria = database.child("categorias").push().getKey();
                 nomeCategoria = txtCategoria.getText().toString();
 
-                if (nomeCategoria.isEmpty()) {
-                    txtCategoria.setError(getString(R.string.msg_erro_campo_empty));
-                    txtCategoria.requestFocus();
+                if (alterar){
+                    if (nomeCategoria.isEmpty()) {
+                        txtCategoria.setError(getString(R.string.msg_erro_campo_empty));
+                        txtCategoria.requestFocus();
+                    } else {
+                        categoria = new Categoria();
+                        categoria.setCategoria(nomeCategoria);
+                        categoria.setCodigo(categoriaSelecionada.getCodigo());
+                        btnCadastrarCategoria.setEnabled(false);
+                        btnCancelar.setEnabled(false);
+                        progressBar.setFocusable(true);
+                        openProgressBar();
+                        categoria.salvaCategoriaDB(CategoriasActivity.this);
+                    }
+
                 } else {
-                    categoria = new Categoria();
-                    categoria.setCategoria(nomeCategoria);
-                    categoria.setCodigo(codCategoria);
-                    btnCadastrarCategoria.setEnabled(false);
-                    btnCancelar.setEnabled(false);
-                    progressBar.setFocusable(true);
-                    openProgressBar();
-                    categoria.salvaCategoriaDB(CategoriasActivity.this);
+
+                    if (nomeCategoria.isEmpty()) {
+                        txtCategoria.setError(getString(R.string.msg_erro_campo_empty));
+                        txtCategoria.requestFocus();
+                    } else {
+                        DatabaseReference database = FirebaseDB.getFirebase();
+                        codCategoria = database.child("categorias").push().getKey();
+                        categoria = new Categoria();
+                        categoria.setCategoria(nomeCategoria);
+                        categoria.setCodigo(codCategoria);
+                        btnCadastrarCategoria.setEnabled(false);
+                        btnCancelar.setEnabled(false);
+                        progressBar.setFocusable(true);
+                        openProgressBar();
+                        categoria.salvaCategoriaDB(CategoriasActivity.this);
+                    }
                 }
             }
         });
@@ -170,7 +185,12 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
         });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Nova categoria");
+        if (alterar){
+            builder.setTitle("Alterar categoria");
+        } else{
+            builder.setTitle("Nova categoria");
+        }
+
         builder.setView(view);
         alerta = builder.create();
         alerta.show();
@@ -187,7 +207,12 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
         } else {
             closeProgressBar();
             alerta.dismiss();
-            showToast("Categoria criada com sucesso!");
+            if(alterar){
+                showToast("Categoria atualizada com sucesso!");
+            }else{
+                showToast("Categoria criada com sucesso!");
+            }
+
         }
     }
 

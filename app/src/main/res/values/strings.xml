@@ -11,6 +11,8 @@
     <string name="title_activity_demanda">Cadastrar nova demanda</string>
     <string name="title_activity_oferta">Oferta</string>
     <string name="title_activity_fullscreen">ensine-me</string>
+    <string name="title_activity_principal">Seja bem vindo</string>
+    <string name="title_activity_categoria">Categorias</string>
 
     <!-- Campos de entrada de dados-->
     <string name="nome">Nome</string>
@@ -88,8 +90,7 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_principal">Seja bem vindo</string>
-    <string name="title_activity_categoria">CategoriaActivity</string>
+
 
 
 </resources>

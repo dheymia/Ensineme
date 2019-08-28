@@ -18,8 +18,8 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-
     </com.google.android.material.appbar.AppBarLayout>
+
     <include layout="@layout/content_categorias" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
