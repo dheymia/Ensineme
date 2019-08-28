@@ -28,6 +28,7 @@
     <string name="complemento">Complemento</string>
     <string name="numero">n.º</string>
     <string name="bairro">Bairro</string>
+    <string name="valor">Valor</string>
 
     <!-- Mensagens de erros-->
     <string name="emailInvalido">Email inválido</string>
@@ -44,12 +45,13 @@
     <string name="esqueceuSenha">Esqueceu a senha?</string>
     <string name="recuperaSenha">clique aqui.</string>
     <string name="validadeDemanda">Quanto tempo você aguardará propostas?</string>
+    <string name="expiraDemanda">Data de Expiração da Demanda</string>
     <string name="desejaaprender">O que deseja aprender?</string>
     <string name="localaulas">Onde serão as aulas?</string>
 
     <!-- Títulos campos -->
     <string name="categoria">categoria</string>
-    <string name="cargahoraria">tempo previsto</string>
+    <string name="cargahoraria">carga horária</string>
     <string name="inicioDemanda">início das aulas</string>
     <string name="turnoDemanda">turno disponível</string>
 

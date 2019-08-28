@@ -60,7 +60,7 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
     }
 
     protected void inicializaViews() {
-        txtEmail = (AutoCompleteTextView) findViewById(R.id.txtEmail);
+        txtEmail = (AutoCompleteTextView) findViewById(R.id.txtValor);
         txtSenha = (EditText) findViewById(R.id.txtSenha);
         progressBar = (ProgressBar) findViewById(R.id.loading);
         cadastrar = (TextView) findViewById(R.id.txtCadastrar);

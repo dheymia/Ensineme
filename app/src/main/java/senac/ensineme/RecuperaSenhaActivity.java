@@ -1,11 +1,9 @@
 package senac.ensineme;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,9 +13,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.core.Tag;
 
 public class RecuperaSenhaActivity extends ComumActivity implements View.OnClickListener {
 
@@ -33,13 +28,13 @@ public class RecuperaSenhaActivity extends ComumActivity implements View.OnClick
         inicializaViews();
 
         progressBar = (ProgressBar) findViewById(R.id.loading);
-        btnRecuperaSenha = (Button) findViewById(R.id.btnRecuperaSenha);
+        btnRecuperaSenha = (Button) findViewById(R.id.btnCadastrarOferta);
         btnRecuperaSenha.setOnClickListener(this);
     }
 
     @Override
     protected void inicializaViews() {
-        txtEmail = findViewById(R.id.txtEmail);
+        txtEmail = findViewById(R.id.txtValor);
 
     }
 

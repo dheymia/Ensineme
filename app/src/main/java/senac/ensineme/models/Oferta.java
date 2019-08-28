@@ -5,14 +5,13 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.Date;
 
 public class Oferta {
-    private String codOferta, professorOferta;
-    private Double valorOferta;
-    private Date dataOferta;
+    private String codOferta, professorOferta, statusOferta, dataOferta, valorOferta;
 
-    public Oferta(Usuario professor, Double valorOferta) {
+
+    public Oferta(Usuario professor, String valorOferta, String dataOferta) {
         this.professorOferta = professorOferta;
         this.valorOferta = valorOferta;
-        this.dataOferta = new Date();
+        this.dataOferta = dataOferta;
     }
 
     public Oferta() {
@@ -34,19 +33,27 @@ public class Oferta {
         this.professorOferta = professorOferta;
     }
 
-    public Double getValorOferta() {
+    public String getStatusOferta() {
+        return statusOferta;
+    }
+
+    public void setStatusOferta(String statusOferta) {
+        this.statusOferta = statusOferta;
+    }
+
+    public String getValorOferta() {
         return valorOferta;
     }
 
-    public void setValorOferta(Double valorOferta) {
+    public void setValorOferta(String valorOferta) {
         this.valorOferta = valorOferta;
     }
 
-    public Date getDataOferta() {
+    public String getDataOferta() {
         return dataOferta;
     }
 
-    public void setDataOferta(Date dataOferta) {
+    public void setDataOferta(String dataOferta) {
         this.dataOferta = dataOferta;
     }
 
