@@ -52,10 +52,10 @@
     <string name="localaulas">Onde serão as aulas?</string>
 
     <!-- Títulos campos -->
-    <string name="categoria">categoria</string>
-    <string name="cargahoraria">carga horária</string>
-    <string name="inicioDemanda">início das aulas</string>
-    <string name="turnoDemanda">turno disponível</string>
+    <string name="categoria">Categoria</string>
+    <string name="cargahoraria">Carga Horária</string>
+    <string name="inicioDemanda">Início das aulas</string>
+    <string name="turnoDemanda">Turno escolhido</string>
 
 
     <!-- Menu Principal-->
