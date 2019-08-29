@@ -11,11 +11,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".AlunoMainActivity"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
             android:name=".CategoriasActivity"
             android:label="@string/title_activity_categoria"
             android:parentActivityName=".AdministradorMainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="senac.ensineme.AdministradorMainActivity" />
@@ -64,11 +69,6 @@
                 android:windowSoftInputMode="adjustResize" />
         </activity>
         <activity
-            android:name=".AlunoMainActivity"
-            android:label="@string/title_activity_aluno_main"
-            android:screenOrientation="portrait"
-            android:theme="@style/temaAluno"/>
-        <activity
             android:name=".UsuarioActivity"
             android:label="@string/title_activity_cadastro"
             android:parentActivityName=".LoginActivity"
@@ -103,7 +103,6 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

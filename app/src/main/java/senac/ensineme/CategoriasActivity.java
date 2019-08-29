@@ -142,39 +142,27 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
             public void onClick(View arg0) {
                 nomeCategoria = txtCategoria.getText().toString();
 
-                if (alterar){
-                    if (nomeCategoria.isEmpty()) {
-                        txtCategoria.setError(getString(R.string.msg_erro_campo_empty));
-                        txtCategoria.requestFocus();
-                    } else {
-                        categoria = new Categoria();
+                if (nomeCategoria.isEmpty()) {
+                    txtCategoria.setError(getString(R.string.msg_erro_campo_empty));
+                    txtCategoria.requestFocus();
+                } else {
+                    categoria = new Categoria();
+                    if (alterar){
                         categoria.setCategoria(nomeCategoria);
                         categoria.setCodigo(categoriaSelecionada.getCodigo());
-                        btnCadastrarCategoria.setEnabled(false);
-                        btnCancelar.setEnabled(false);
-                        progressBar.setFocusable(true);
-                        openProgressBar();
-                        categoria.salvaCategoriaDB(CategoriasActivity.this);
-                    }
-
-                } else {
-
-                    if (nomeCategoria.isEmpty()) {
-                        txtCategoria.setError(getString(R.string.msg_erro_campo_empty));
-                        txtCategoria.requestFocus();
                     } else {
                         DatabaseReference database = FirebaseDB.getFirebase();
                         codCategoria = database.child("categorias").push().getKey();
-                        categoria = new Categoria();
                         categoria.setCategoria(nomeCategoria);
                         categoria.setCodigo(codCategoria);
-                        btnCadastrarCategoria.setEnabled(false);
-                        btnCancelar.setEnabled(false);
-                        progressBar.setFocusable(true);
-                        openProgressBar();
-                        categoria.salvaCategoriaDB(CategoriasActivity.this);
                     }
+                    btnCadastrarCategoria.setEnabled(false);
+                    btnCancelar.setEnabled(false);
+                    progressBar.setFocusable(true);
+                    openProgressBar();
+                    categoria.salvaCategoriaDB(CategoriasActivity.this);
                 }
+
             }
         });
 

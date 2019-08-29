@@ -23,7 +23,7 @@ import senac.ensineme.models.Usuario;
 
 public class AdministradorMainActivity extends AppCompatActivity {
 
-    private Button btnAluno, btnProfessor, btnCategorias;
+    private Button btnAluno, btnProfessor, btnCategorias, btnTeste;
     private TextView mTextMessage;
     private TextView txtNome;
     Usuario usuario,usuariologado;
@@ -60,6 +60,15 @@ public class AdministradorMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), CategoriasActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnTeste = (Button) findViewById(R.id.btnTeste);
+        btnTeste.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getBaseContext(), AlunoMainActivity.class);
                 startActivity(intent);
             }
         });
