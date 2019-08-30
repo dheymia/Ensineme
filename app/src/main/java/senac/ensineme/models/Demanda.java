@@ -11,7 +11,7 @@ public class Demanda {
 
     DatabaseReference firebase;
     private String aluno, codigo, descricao , turno, status, categoria, inicio, data, expiracao,CEP, logradouro, bairro, complemento, localidade, estado;
-    private int horasaula, validade;
+    private int horasaula, validade, numero;
     private Boolean encerrada;
 
     public Demanda() {
@@ -152,6 +152,14 @@ public class Demanda {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
     }
 
     public Boolean getEncerrada() {

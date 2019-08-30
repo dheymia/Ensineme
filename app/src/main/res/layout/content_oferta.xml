@@ -41,7 +41,7 @@
                     android:text="@string/descricaodemanda" />
 
                 <TextView
-                    android:id="@+id/txtCategoria"
+                    android:id="@+id/txtCatDemanda"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/categoria" />
