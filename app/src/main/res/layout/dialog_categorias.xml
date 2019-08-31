@@ -33,7 +33,7 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtCategoria">
+                app:layout_constraintTop_toBottomOf="@+id/txtCatDemanda">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     style="@style/metadetela"
@@ -70,7 +70,7 @@
 
 
             <EditText
-                android:id="@+id/txtRotuloCat"
+                android:id="@+id/txtCatDemanda"
                 style="@style/inserirtexto"
                 android:layout_marginTop="24dp"
 

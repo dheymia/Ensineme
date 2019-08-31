@@ -16,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +24,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -34,8 +32,6 @@ import java.util.List;
 import senac.ensineme.adapters.CategoriaAdapter;
 import senac.ensineme.models.Categoria;
 import senac.ensineme.models.FirebaseDB;
-
-import static androidx.recyclerview.widget.DividerItemDecoration.*;
 
 public class CategoriasActivity extends AppCompatActivity implements DatabaseReference.CompletionListener {
 
@@ -130,7 +126,7 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
         btnCadastrarCategoria = view.findViewById(R.id.btnCadastrarCategoria);
         btnCancelar = view.findViewById(R.id.btnCancelar);
         progressBar = view.findViewById(R.id.loading);
-        txtCategoria = view.findViewById(R.id.txtCategoria);
+        txtCategoria = view.findViewById(R.id.txtCatDemanda);
 
         if(alterar){
             txtCategoria.setText(String.valueOf(categoriaSelecionada.getCategoria()));

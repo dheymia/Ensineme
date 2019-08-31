@@ -2,7 +2,6 @@ package senac.ensineme;
 
 import android.app.DatePickerDialog;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import com.android.volley.Cache;
@@ -30,7 +29,6 @@ import com.google.firebase.database.ValueEventListener;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 
 import android.util.Log;
@@ -45,7 +43,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -60,22 +57,20 @@ import java.util.List;
 import java.util.Locale;
 
 
-import senac.ensineme.adapters.CategoriaAdapter;
 import senac.ensineme.models.Categoria;
 import senac.ensineme.models.Demanda;
 
 import senac.ensineme.models.FirebaseDB;
-
-import static android.R.layout.simple_dropdown_item_1line;
+import senac.ensineme.ui.aluno_demanda.AlunoDemandaFragment;
 
 
 public class DemandaActivity extends ComumActivity implements DatabaseReference.CompletionListener, View.OnClickListener {
 
     private Button btnCadastrar;
-    private EditText txtDescDemanda, txtCEPDemanda, txtLogradouroDemanda, txtBairroDemanda, txtComplementoDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtInicioDemanda;
+    private EditText txtDescDemanda, txtCEPDemanda, txtLogradouroDemanda, txtBairroDemanda, txtComplementoDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtInicioDemanda, txtNumero;
     private Spinner spnCatDemanda, spnTurnoDemanda, spnValidadeDemanda, spnHorasaulaDemanda;
-    private String aluno, codDemanda, descricao,  turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado, inicioDemanda, validadeDemanda, data;
-    private int horasaula, validade,categoria;
+    private String status, aluno, codDemanda, descricao,  turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado, inicioDemanda, validadeDemanda, data,categoria;
+    private int horasaula, validade, numero;
     private ArrayAdapter<String> adapter;
     private List<Categoria> categoriaList = new ArrayList<Categoria>();
     private ArrayList<String> arrayCategoria = new ArrayList<String>();;
@@ -110,6 +105,32 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
 
         inicializaViews();
         addDadosSpinnerCategoria();
+
+        if (AlunoDemandaFragment.alterar){
+            getSupportActionBar().setTitle("Alterar demanda");
+            //btnCadastrar.setText("Alterar");
+            codDemanda = AlunoDemandaFragment.demandaSelecionada.getCodigo();
+            data = AlunoDemandaFragment.demandaSelecionada.getData();
+            aluno = AlunoDemandaFragment.demandaSelecionada.getAluno();
+            status = AlunoDemandaFragment.demandaSelecionada.getStatus();
+
+            txtDescDemanda.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getDescricao()));
+            txtNumero.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getNumero()));
+            txtCEPDemanda.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getCEP()));
+            txtLogradouroDemanda.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getLogradouro()));
+            txtBairroDemanda.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getBairro()));
+            txtComplementoDemanda.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getComplemento()));
+            txtLocalidadeDemanda.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getLocalidade()));
+            txtEstadoDemanda.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getEstado()));
+            txtInicioDemanda.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getInicio()));
+            //spnCatDemanda
+            //spnTurnoDemanda.
+            //spnValidadeDemanda
+            //spnHorasaulaDemanda
+
+        }
+
+
 
         txtCEPDemanda.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -177,6 +198,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         txtLocalidadeDemanda = findViewById(R.id.txtCidade);
         txtEstadoDemanda = findViewById(R.id.txtEstado);
         txtInicioDemanda = findViewById(R.id.txtInicioDemanda);
+        txtNumero = findViewById(R.id.txtNumero);
         spnCatDemanda = findViewById(R.id.spCategoria);
         spnTurnoDemanda = findViewById(R.id.spTurno);
         spnValidadeDemanda = findViewById(R.id.spValidadeDemanda);
@@ -186,9 +208,10 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     @Override
     protected void inicializaConteudo() {
         descricao = txtDescDemanda.getText().toString();
-        categoria = spnCatDemanda.getSelectedItemPosition();
+        categoria = spnCatDemanda.getSelectedItem().toString();
         turno = spnTurnoDemanda.getSelectedItem().toString();
         CEP = txtCEPDemanda.getText().toString();
+        numero = Integer.parseInt(txtNumero.getText().toString());
         logradouro = txtLogradouroDemanda.getText().toString();
         bairro = txtBairroDemanda.getText().toString();
         complemento = txtComplementoDemanda.getText().toString();
@@ -197,6 +220,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         cargaHoraria = spnHorasaulaDemanda.getSelectedItem().toString();
         inicioDemanda = txtInicioDemanda.getText().toString();
         validadeDemanda = spnValidadeDemanda.getSelectedItem().toString();
+        status = "Aguardando proposta";
 
         switch (cargaHoraria) {
             case "4 horas/aula":
@@ -257,17 +281,25 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         demanda.setHorasaula(horasaula);
         demanda.setValidade(validade);
         demanda.setTurno(turno);
-        demanda.setStatus("Aguardando proposta");
-        demanda.setCategoria(arrayCategoria.get(categoria));
-        demanda.setData((formatoData.format(new Date())));
+        demanda.setStatus(status);
+        demanda.setCategoria(categoria);
         demanda.setInicio(inicioDemanda);
         demanda.setExpiracao(expiraDemanda());
         demanda.setCEP(CEP);
+        demanda.setNumero(numero);
         demanda.setLogradouro(logradouro);
         demanda.setBairro(bairro);
         demanda.setComplemento(complemento);
         demanda.setLocalidade(localidade);
         demanda.setEstado(estado);
+        if (AlunoDemandaFragment.alterar){
+            if (data != null){
+                demanda.setData(data);
+            }
+            demanda.setData(formatoData.format(new Date()));
+        }else{
+            demanda.setData(formatoData.format(new Date()));
+        }
     }
 
     @Override
@@ -339,9 +371,17 @@ private void addDadosSpinnerCategoria() {
     categoriaRef.orderByChild("categoria").addValueEventListener(ListenerGeral);
     adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, arrayCategoria);
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    spnCatDemanda.setAdapter(adapter);
+    //spnCatDemanda.setAdapter(adapter);
 
-    //spnCatDemanda.setSelection(adapter.getPosition("Culinária"));
+    spnCatDemanda.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView parent, View arg1,
+                                   int arg2, long arg3) {
+        }
+        @Override
+        public void onNothingSelected(AdapterView arg0) {
+        }
+    });
 }
 
     @Override

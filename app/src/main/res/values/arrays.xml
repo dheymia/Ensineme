@@ -39,5 +39,9 @@
         <item>15 dias</item>
         <item>30 dias</item>
     </string-array>
+    <string-array name="statusDemanda">
+        <item>Aguardando proposta</item>
+        <item>Todas</item>
+    </string-array>
 
 </resources>
