@@ -43,6 +43,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -53,7 +54,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 
@@ -64,16 +64,16 @@ import senac.ensineme.models.FirebaseDB;
 import senac.ensineme.ui.aluno_demanda.AlunoDemandaFragment;
 
 
-public class DemandaActivity extends ComumActivity implements DatabaseReference.CompletionListener, View.OnClickListener {
+public class DemandaActivity extends ComumActivity implements DatabaseReference.CompletionListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private Button btnCadastrar;
     private EditText txtDescDemanda, txtCEPDemanda, txtLogradouroDemanda, txtBairroDemanda, txtComplementoDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtInicioDemanda, txtNumero;
     private Spinner spnCatDemanda, spnTurnoDemanda, spnValidadeDemanda, spnHorasaulaDemanda;
     private String status, aluno, codDemanda, descricao,  turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado, inicioDemanda, validadeDemanda, data,categoria;
     private int horasaula, validade, numero;
-    private ArrayAdapter<String> adapter;
-    private List<Categoria> categoriaList = new ArrayList<Categoria>();
-    private ArrayList<String> arrayCategoria = new ArrayList<String>();;
+    private SpinnerAdapter adapter;
+    private ArrayList<String> arrayCategoria = new ArrayList<String>();
+    private ArrayList<Categoria> categoriaList = new ArrayList<>();
     private Calendar myCalendar;
     private Demanda demanda;
     private Categoria catDemanda;
@@ -104,7 +104,18 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         }
 
         inicializaViews();
-        addDadosSpinnerCategoria();
+        FirebaseDatabase datacategoria = FirebaseDatabase.getInstance();
+        DatabaseReference categoriaRef = datacategoria.getReference("categorias");
+        categoriaRef.orderByChild("categoria").addValueEventListener(ListenerGeral);
+
+        //arrayCategoria.add(catDemanda.getNome());
+
+
+
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,arrayCategoria);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnCatDemanda.setAdapter(adapter);
+        spnCatDemanda.setOnItemSelectedListener(this);
 
         if (AlunoDemandaFragment.alterar){
             getSupportActionBar().setTitle("Alterar demanda");
@@ -346,20 +357,13 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         }
         return true;
     }
-private void addDadosSpinnerCategoria() {
-    FirebaseDatabase data = FirebaseDatabase.getInstance();
-    DatabaseReference categoriaRef = data.getReference("categorias");
 
     ValueEventListener ListenerGeral = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            categoriaList.clear();
             arrayCategoria.clear();
             for (DataSnapshot ds : dataSnapshot.getChildren()) {
                 catDemanda = ds.getValue(Categoria.class);
-                categoriaList.add(catDemanda);
-                arrayCategoria.add(catDemanda.getCategoria());
-
             }
         }
 
@@ -368,21 +372,21 @@ private void addDadosSpinnerCategoria() {
 
         }
     };
-    categoriaRef.orderByChild("categoria").addValueEventListener(ListenerGeral);
-    adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, arrayCategoria);
-    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    //spnCatDemanda.setAdapter(adapter);
 
-    spnCatDemanda.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView parent, View arg1,
-                                   int arg2, long arg3) {
-        }
-        @Override
-        public void onNothingSelected(AdapterView arg0) {
-        }
-    });
-}
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        //String item = parent.getItemAtPosition(position).toString();
+        int posicao = spnCatDemanda.getSelectedItemPosition();
+        Toast.makeText(parent.getContext(), "Selected: " + posicao, Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+
+    }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {

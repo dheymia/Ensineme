@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Demanda {
 
-    DatabaseReference firebase;
+    DatabaseReference firebase, firebaseUser, firebaseCat;
     private String aluno, codigo, descricao , turno, status, categoria, inicio, data, expiracao,CEP, logradouro, bairro, complemento, localidade, estado;
     private int horasaula, validade, numero;
     private Boolean encerrada;
@@ -180,10 +180,16 @@ public class Demanda {
 
     public void salvaDemandaDB(DatabaseReference.CompletionListener... completionListener) {
         firebase = FirebaseDB.getFirebase().child("demandas").child(getCodigo());
+        firebaseUser = FirebaseDB.getFirebase().child("usuarios").child(aluno).child("demandas").child(getCodigo());
+        firebaseCat = FirebaseDB.getFirebase().child("categorias").child(categoria).child("demandas").child(getCodigo());
         if (completionListener.length == 0) {
             firebase.setValue(this);
+            firebaseUser.setValue(this);
+            firebaseCat.setValue(this);
         } else {
             firebase.setValue(this, completionListener[0]);
+            firebaseUser.setValue(this, completionListener[0]);
+            firebaseCat.setValue(this, completionListener[0]);
         }
 
     }

@@ -63,7 +63,7 @@ public class AlunoDemandaFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         dashboardViewModel =
-                ViewModelProviders.of(this).get(AlunoDemandaViewModel.class);
+        ViewModelProviders.of(this).get(AlunoDemandaViewModel.class);
         View root = inflater.inflate(R.layout.fragment_aluno_demanda, container, false);
         textView = root.findViewById(R.id.text_dashboard);
         fab = root.findViewById(R.id.fab);
@@ -96,7 +96,10 @@ public class AlunoDemandaFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (consulta == "Todas") {
-                    ref.limitToFirst(100).orderByChild("aluno").equalTo(aluno).addValueEventListener(ListenerGeral);
+                    ref
+                            .limitToFirst(100)
+                            .orderByChild("aluno").equalTo(aluno)
+                            .addValueEventListener(ListenerGeral);
                 } else {
                     ref.limitToFirst(100).orderByChild("aluno").equalTo(aluno).addValueEventListener(ListenerGeral);
                 }

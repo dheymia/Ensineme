@@ -2,16 +2,12 @@ package senac.ensineme.models;
 
 import com.google.firebase.database.DatabaseReference;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import senac.ensineme.CategoriasActivity;
 import senac.ensineme.R;
 
 public class Categoria {
     DatabaseReference firebase;
     private String codigo;
-    private String categoria;
+    private String nome;
     private int imagem;
 
     public Categoria() {
@@ -25,12 +21,12 @@ public class Categoria {
         this.codigo = codigo;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public String getNome() {
+        return nome;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setNome(String categoria) {
+        this.nome = categoria;
     }
 
     public int getImagem() {
@@ -42,7 +38,7 @@ public class Categoria {
     }
 
     public int Foto() {
-        switch (categoria){
+        switch (nome){
             case "Dança":
                 imagem = R.drawable.danca;
                 break;

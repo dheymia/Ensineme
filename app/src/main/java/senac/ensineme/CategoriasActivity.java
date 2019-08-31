@@ -86,7 +86,7 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
             int position = viewHolder.getAdapterPosition();
 
             categoriaSelecionada = categoriaList.get(position);
-            Toast.makeText(CategoriasActivity.this, "Categoria selecionada: " + categoriaSelecionada.getCategoria(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(CategoriasActivity.this, "Categoria selecionada: " + categoriaSelecionada.getNome(), Toast.LENGTH_SHORT).show();
 
             alterar = true;
 
@@ -129,7 +129,7 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
         txtCategoria = view.findViewById(R.id.txtCatDemanda);
 
         if(alterar){
-            txtCategoria.setText(String.valueOf(categoriaSelecionada.getCategoria()));
+            txtCategoria.setText(String.valueOf(categoriaSelecionada.getNome()));
             btnCadastrarCategoria.setText("alterar");
         }
 
@@ -144,12 +144,12 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
                 } else {
                     categoria = new Categoria();
                     if (alterar){
-                        categoria.setCategoria(nomeCategoria);
+                        categoria.setNome(nomeCategoria);
                         categoria.setCodigo(categoriaSelecionada.getCodigo());
                     } else {
                         DatabaseReference database = FirebaseDB.getFirebase();
                         codCategoria = database.child("categorias").push().getKey();
-                        categoria.setCategoria(nomeCategoria);
+                        categoria.setNome(nomeCategoria);
                         categoria.setCodigo(codCategoria);
                     }
                     btnCadastrarCategoria.setEnabled(false);

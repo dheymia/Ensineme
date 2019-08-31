@@ -40,7 +40,7 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.Cate
         CategoriaViewHolder viewHolder = (CategoriaViewHolder) holder;
         final Categoria categoria = categoriaList.get(position);
 
-        viewHolder.categoria.setText(categoria.getCategoria());
+        viewHolder.categoria.setText(categoria.getNome());
 
     }
 
