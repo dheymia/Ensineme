@@ -5,16 +5,26 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Demanda {
 
     DatabaseReference firebase, firebaseUser, firebaseCat;
-    private String aluno, codigo, descricao , turno, status, categoria, inicio, data, expiracao,CEP, logradouro, bairro, complemento, localidade, estado;
+    private String aluno, codigo, descricao , turno, status, categoria, categoriaCod, inicio, data, expiracao,CEP, logradouro, bairro, complemento, localidade, estado;
     private int horasaula, validade, numero;
     private Boolean encerrada;
 
     public Demanda() {
+    }
+
+    public String getCategoriaCod() {
+        return categoriaCod;
+    }
+
+    public void setCategoriaCod(String categoriaCod) {
+        this.categoriaCod = categoriaCod;
     }
 
     public String getAluno() {
@@ -181,18 +191,77 @@ public class Demanda {
     public void salvaDemandaDB(DatabaseReference.CompletionListener... completionListener) {
         firebase = FirebaseDB.getFirebase().child("demandas").child(getCodigo());
         firebaseUser = FirebaseDB.getFirebase().child("usuarios").child(aluno).child("demandas").child(getCodigo());
-        firebaseCat = FirebaseDB.getFirebase().child("categorias").child(categoria).child("demandas").child(getCodigo());
+        firebaseCat = FirebaseDB.getFirebase().child("categorias").child(categoriaCod).child("demandas").child(getCodigo());
         if (completionListener.length == 0) {
             firebase.setValue(this);
-            firebaseUser.setValue(this);
-            firebaseCat.setValue(this);
         } else {
             firebase.setValue(this, completionListener[0]);
-            firebaseUser.setValue(this, completionListener[0]);
-            firebaseCat.setValue(this, completionListener[0]);
+
+            Map<String, Object> demandaUserUpdates = new HashMap<>();
+            demandaUserUpdates.put("descricao", getDescricao());
+            demandaUserUpdates.put("status", getStatus());
+            demandaUserUpdates.put("categoria", getCategoria());
+            demandaUserUpdates.put("categoriaCod", getCategoriaCod());
+            demandaUserUpdates.put("data", getData());
+            demandaUserUpdates.put("expiracao", getExpiracao());
+            firebaseUser.setValue(demandaUserUpdates, completionListener[0]);
+
+            Map<String, Object> demandaCatUpdates = new HashMap<>();
+            demandaCatUpdates.put("aluno", getAluno());
+            demandaCatUpdates.put("descricao", getDescricao());
+            demandaCatUpdates.put("status", getStatus());
+            demandaCatUpdates.put("data", getData());
+            demandaCatUpdates.put("expiracao", getExpiracao());
+            firebaseCat.setValue(demandaCatUpdates, completionListener[0]);
+
         }
 
     }
+
+    public void atualizademandaDB(DatabaseReference.CompletionListener... completionListener) {
+        firebase = FirebaseDB.getFirebase().child("demandas").child(getCodigo());
+        firebaseUser = FirebaseDB.getFirebase().child("usuarios").child(aluno).child("demandas").child(getCodigo());
+        firebaseCat = FirebaseDB.getFirebase().child("categorias").child(categoriaCod).child("demandas").child(getCodigo());
+        Map<String, Object> demandaUpdates = new HashMap<>();
+        demandaUpdates.put("aluno", getAluno());
+        demandaUpdates.put("codigo", getCodigo());
+        demandaUpdates.put("descricao", getDescricao());
+        demandaUpdates.put("turno", getTurno());
+        demandaUpdates.put("status", getStatus());
+        demandaUpdates.put("categoria", getCategoria());
+        demandaUpdates.put("categoriaCod", getCategoriaCod());
+        demandaUpdates.put("inicio", getInicio());
+        demandaUpdates.put("data", getData());
+        demandaUpdates.put("expiracao", getExpiracao());
+        demandaUpdates.put("CEP", getCEP());
+        demandaUpdates.put("logradouro", getLogradouro());
+        demandaUpdates.put("bairro", getBairro());
+        demandaUpdates.put("complemento", getComplemento());
+        demandaUpdates.put("localidade", getLocalidade());
+        demandaUpdates.put("estado", getEstado());
+        demandaUpdates.put("horasaula", getHorasaula());
+        demandaUpdates.put("validade", getValidade());
+        demandaUpdates.put("numero", getNumero());
+        firebase.updateChildren(demandaUpdates, completionListener[0]);
+
+        Map<String, Object> demandaUserUpdates = new HashMap<>();
+        demandaUserUpdates.put("descricao", getDescricao());
+        demandaUserUpdates.put("status", getStatus());
+        demandaUserUpdates.put("categoria", getCategoria());
+        demandaUserUpdates.put("categoriaCod", getCategoriaCod());
+        demandaUserUpdates.put("data", getData());
+        demandaUserUpdates.put("expiracao", getExpiracao());
+        firebaseUser.updateChildren(demandaUserUpdates, completionListener[0]);
+
+        Map<String, Object> demandaCatUpdates = new HashMap<>();
+        demandaCatUpdates.put("aluno", getAluno());
+        demandaCatUpdates.put("descricao", getDescricao());
+        demandaCatUpdates.put("status", getStatus());
+        demandaCatUpdates.put("data", getData());
+        demandaCatUpdates.put("expiracao", getExpiracao());
+        firebaseCat.updateChildren(demandaCatUpdates, completionListener[0]);
+    }
+
 
 
 }

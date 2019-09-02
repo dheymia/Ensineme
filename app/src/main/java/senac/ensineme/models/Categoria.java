@@ -2,6 +2,9 @@ package senac.ensineme.models;
 
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import senac.ensineme.R;
 
 public class Categoria {
@@ -67,6 +70,14 @@ public class Categoria {
             firebase.setValue(this, completionListener[0]);
         }
 
+    }
+
+    public void atualizacategoriaDB(DatabaseReference.CompletionListener... completionListener){
+        firebase = FirebaseDB.getFirebase().child("categorias").child(getCodigo());
+        Map<String, Object> categoriaUpdates = new HashMap<>();
+        categoriaUpdates.put("nome", getNome());
+        categoriaUpdates.put("codigo", getCodigo());
+        firebase.updateChildren(categoriaUpdates, completionListener[0]);
     }
 
 }

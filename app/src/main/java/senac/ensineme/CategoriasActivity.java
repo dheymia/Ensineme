@@ -66,7 +66,7 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Carregando...");
         progressDialog.show();
-        ref.limitToFirst(100).orderByChild("categoria").addValueEventListener(ListenerGeral);
+        ref.limitToFirst(100).orderByChild("nome").addValueEventListener(ListenerGeral);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -142,21 +142,24 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
                     txtCategoria.setError(getString(R.string.msg_erro_campo_empty));
                     txtCategoria.requestFocus();
                 } else {
+                    btnCadastrarCategoria.setEnabled(false);
+                    btnCancelar.setEnabled(false);
+                    progressBar.setFocusable(true);
+                    openProgressBar();
                     categoria = new Categoria();
                     if (alterar){
                         categoria.setNome(nomeCategoria);
                         categoria.setCodigo(categoriaSelecionada.getCodigo());
+                        categoria.atualizacategoriaDB(CategoriasActivity.this);
                     } else {
                         DatabaseReference database = FirebaseDB.getFirebase();
                         codCategoria = database.child("categorias").push().getKey();
                         categoria.setNome(nomeCategoria);
                         categoria.setCodigo(codCategoria);
+                        categoria.salvaCategoriaDB(CategoriasActivity.this);
                     }
-                    btnCadastrarCategoria.setEnabled(false);
-                    btnCancelar.setEnabled(false);
-                    progressBar.setFocusable(true);
-                    openProgressBar();
-                    categoria.salvaCategoriaDB(CategoriasActivity.this);
+
+
                 }
 
             }

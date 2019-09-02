@@ -8,7 +8,7 @@
     <string name="title_activity_professor_main">Professor</string>
     <string name="title_activity_aluno_main">Aluno</string>
     <string name="title_activity_settings">Configurações</string>
-    <string name="title_activity_demanda">Cadastrar nova demanda</string>
+    <string name="title_activity_demanda">Nova demanda</string>
     <string name="title_activity_oferta">Oferta</string>
     <string name="title_activity_fullscreen">ensine-me</string>
     <string name="title_activity_principal">Seja bem vindo</string>

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -41,7 +42,7 @@ import senac.ensineme.adapters.DemandaAdapter;
 import senac.ensineme.models.Categoria;
 import senac.ensineme.models.Demanda;
 
-public class AlunoDemandaFragment extends Fragment {
+public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private AlunoDemandaViewModel dashboardViewModel;
     private FloatingActionButton fab;
@@ -50,6 +51,7 @@ public class AlunoDemandaFragment extends Fragment {
     private Spinner spConsulta;
     private String consulta, aluno;
     private ProgressBar progressBar;
+    private ArrayAdapter<CharSequence> statusAdapter;
     public static DemandaAdapter adapter;
     private List<Demanda> demandasList = new ArrayList<>();
     public static Demanda demandaSelecionada;
@@ -78,41 +80,22 @@ public class AlunoDemandaFragment extends Fragment {
         });
 
         firebase = FirebaseDatabase.getInstance();
-        ref = firebase.getReference("demandas");
-
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
             aluno = firebaseUser.getUid();
         }
+        ref = firebase.getReference("usuarios/" + aluno + "/demandas");
 
+        statusAdapter = ArrayAdapter.createFromResource(getContext(),R.array.statusDemanda, android.R.layout.simple_spinner_item);
+        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spConsulta.setAdapter(statusAdapter);
+        spConsulta.setOnItemSelectedListener(this);
+
+        consulta = spConsulta.getSelectedItem().toString();
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         progressBar.setVisibility( View.VISIBLE );
-
-        consulta = spConsulta.getSelectedItem().toString();
-
-        AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (consulta == "Todas") {
-                    ref
-                            .limitToFirst(100)
-                            .orderByChild("aluno").equalTo(aluno)
-                            .addValueEventListener(ListenerGeral);
-                } else {
-                    ref.limitToFirst(100).orderByChild("aluno").equalTo(aluno).addValueEventListener(ListenerGeral);
-                }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        };
-        spConsulta.setOnItemSelectedListener(onItemSelectedListener);
-
 
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -172,4 +155,21 @@ public class AlunoDemandaFragment extends Fragment {
                 .show();
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        Object item = parent.getItemAtPosition(pos);
+        consulta = item.toString();
+        showToast( "OnItemSelectedListener : " + item.toString());
+
+        if (consulta != "Todas") {
+            ref.limitToFirst(100).orderByChild("status").equalTo(consulta).addValueEventListener(ListenerGeral);
+        } else {
+            ref.limitToFirst(100).orderByChild("data").addValueEventListener(ListenerGeral);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }

@@ -43,8 +43,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,10 +55,12 @@ import java.util.Date;
 import java.util.Locale;
 
 
+import senac.ensineme.adapters.CategoriaAdapter;
 import senac.ensineme.models.Categoria;
 import senac.ensineme.models.Demanda;
 
 import senac.ensineme.models.FirebaseDB;
+import senac.ensineme.models.Usuario;
 import senac.ensineme.ui.aluno_demanda.AlunoDemandaFragment;
 
 
@@ -69,19 +69,21 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     private Button btnCadastrar;
     private EditText txtDescDemanda, txtCEPDemanda, txtLogradouroDemanda, txtBairroDemanda, txtComplementoDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtInicioDemanda, txtNumero;
     private Spinner spnCatDemanda, spnTurnoDemanda, spnValidadeDemanda, spnHorasaulaDemanda;
-    private String status, aluno, codDemanda, descricao,  turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado, inicioDemanda, validadeDemanda, data,categoria;
+    private String status, aluno, codDemanda, descricao,  turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado, inicioDemanda, validadeDemanda, data,nomeCategoria, codCategoria;
     private int horasaula, validade, numero;
-    private SpinnerAdapter adapter;
-    private ArrayList<String> arrayCategoria = new ArrayList<String>();
-    private ArrayList<Categoria> categoriaList = new ArrayList<>();
+    private ArrayAdapter<CharSequence> turnoAdapter, validadeAdapter, horasAulaAdapter;
+    private ArrayAdapter<String> categoriaAdapter;
+    private ArrayList<String> categoriaList;
     private Calendar myCalendar;
-    private Demanda demanda;
-    private Categoria catDemanda;
-    private DatabaseReference firebase;
+    private Categoria categoria;
+    private Demanda demanda, demandaSelecionada;
+    private Date dataatual = new Date();
+    private FirebaseDatabase categoriaFB;
+    private DatabaseReference firebase, refCat,refDem;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private String myFormat = "dd/MM/yyyy";
-    SimpleDateFormat formatoData;
+    private SimpleDateFormat formatoData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,63 +93,48 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Nova demanda");
+
 
         myCalendar = Calendar.getInstance();
         firebase = FirebaseDB.getFirebase();
         firebaseAuth = FirebaseAuth.getInstance();
-        codDemanda = firebase.child("demandas").push().getKey();
         firebaseUser = firebaseAuth.getCurrentUser();
+        categoriaFB = FirebaseDatabase.getInstance();
+        refCat = categoriaFB.getReference("categorias");
+        refCat.orderByChild("nome").addValueEventListener(CategoriaListenerGeral);
+        refDem = categoriaFB.getReference("demandas/" + AlunoDemandaFragment.demandaSelecionada.getCodigo());
+        refDem.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                demandaSelecionada = dataSnapshot.getValue(Demanda.class);
+            }
 
-        if (firebaseUser != null) {
-            aluno = firebaseUser.getUid();
-        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
         inicializaViews();
-        FirebaseDatabase datacategoria = FirebaseDatabase.getInstance();
-        DatabaseReference categoriaRef = datacategoria.getReference("categorias");
-        categoriaRef.orderByChild("categoria").addValueEventListener(ListenerGeral);
-
-        //arrayCategoria.add(catDemanda.getNome());
-
-
-
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,arrayCategoria);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnCatDemanda.setAdapter(adapter);
-        spnCatDemanda.setOnItemSelectedListener(this);
+        inicializaSpinners();
 
         if (AlunoDemandaFragment.alterar){
             getSupportActionBar().setTitle("Alterar demanda");
             //btnCadastrar.setText("Alterar");
+            inicializaCamposPreenchidos();
             codDemanda = AlunoDemandaFragment.demandaSelecionada.getCodigo();
-            data = AlunoDemandaFragment.demandaSelecionada.getData();
-            aluno = AlunoDemandaFragment.demandaSelecionada.getAluno();
-            status = AlunoDemandaFragment.demandaSelecionada.getStatus();
-
-            txtDescDemanda.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getDescricao()));
-            txtNumero.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getNumero()));
-            txtCEPDemanda.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getCEP()));
-            txtLogradouroDemanda.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getLogradouro()));
-            txtBairroDemanda.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getBairro()));
-            txtComplementoDemanda.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getComplemento()));
-            txtLocalidadeDemanda.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getLocalidade()));
-            txtEstadoDemanda.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getEstado()));
-            txtInicioDemanda.setText(String.valueOf(AlunoDemandaFragment.demandaSelecionada.getInicio()));
-            //spnCatDemanda
-            //spnTurnoDemanda.
-            //spnValidadeDemanda
-            //spnHorasaulaDemanda
-
+            aluno = demandaSelecionada.getAluno();
+        } else {
+            codDemanda = firebase.child("demandas").push().getKey();
+            if (firebaseUser != null) {
+                aluno = firebaseUser.getUid();
+            }
         }
-
-
 
         txtCEPDemanda.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    Toast.makeText(getApplicationContext(), "unfocus", Toast.LENGTH_SHORT).show();
+                    showToast("consultando CEP");
                     consultaCEP();
                 }
             }
@@ -156,16 +143,39 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    Toast.makeText(getApplicationContext(), "Escolha a data", Toast.LENGTH_SHORT).show();
+                    showToast("escolha a data");
                     chamaCalendario();
                 }
             }
         });
 
         progressBar = (ProgressBar) findViewById(R.id.loading);
-        btnCadastrar = (Button) findViewById(R.id.btnCadastrarCategoria);
+        btnCadastrar = (Button) findViewById(R.id.btnCadastrarDemanda);
         btnCadastrar.setOnClickListener((View.OnClickListener) this);
 
+    }
+
+    private void inicializaSpinners() {
+
+        //categoriaAdapter = new ArrayAdapter<> (this, android.R.layout.simple_spinner_item, categoriaList);
+        //categoriaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+       //spnCatDemanda.setAdapter(categoriaAdapter);
+       // spnCatDemanda.setOnItemSelectedListener(this);
+
+        turnoAdapter = ArrayAdapter.createFromResource(this,R.array.turnoDemanda, android.R.layout.simple_spinner_item);
+        turnoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnTurnoDemanda.setAdapter(turnoAdapter);
+        spnTurnoDemanda.setOnItemSelectedListener(this);
+
+        validadeAdapter = ArrayAdapter.createFromResource(this,R.array.validadeDemanda, android.R.layout.simple_spinner_item);
+        validadeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnValidadeDemanda.setAdapter(validadeAdapter);
+        spnValidadeDemanda.setOnItemSelectedListener(this);
+
+        horasAulaAdapter = ArrayAdapter.createFromResource(this,R.array.cargaHoraria, android.R.layout.simple_spinner_item);
+        horasAulaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnHorasaulaDemanda.setAdapter(horasAulaAdapter);
+        spnHorasaulaDemanda.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -178,7 +188,12 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
             progressBar.setFocusable(true);
             openProgressBar();
             inicializaObjeto();
-            demanda.salvaDemandaDB(DemandaActivity.this);
+            if(AlunoDemandaFragment.alterar){
+                demanda.atualizademandaDB(DemandaActivity.this);
+            } else{
+                demanda.salvaDemandaDB(DemandaActivity.this);
+            }
+
         } else {
             closeProgressBar();
         }
@@ -193,11 +208,34 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
             closeProgressBar();
             btnCadastrar.setEnabled(true);
         } else {
-            showToast("Demanda criada com sucesso!");
+            if(AlunoDemandaFragment.alterar){
+                showToast("Demanda atualizada com sucesso!");
+            } else{
+                showToast("Demanda criada com sucesso!");
+            }
             closeProgressBar();
             finish();
         }
     }
+
+    private ValueEventListener CategoriaListenerGeral = new ValueEventListener() {
+
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//            categoriaList.clear();
+
+            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                categoria = ds.getValue(Categoria.class);
+//                categoriaList.add(categoria.getNome());
+            }
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+        }
+    };
 
     @Override
     protected void inicializaViews() {
@@ -216,10 +254,74 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         spnHorasaulaDemanda = findViewById(R.id.spCargaHoraria);
     }
 
+    protected void inicializaCamposPreenchidos(){
+
+        txtDescDemanda.setText(String.valueOf(demandaSelecionada.getDescricao()));
+        txtNumero.setText(String.valueOf(demandaSelecionada.getNumero()));
+        txtCEPDemanda.setText(String.valueOf(demandaSelecionada.getCEP()));
+        txtLogradouroDemanda.setText(String.valueOf(demandaSelecionada.getLogradouro()));
+        txtBairroDemanda.setText(String.valueOf(demandaSelecionada.getBairro()));
+        txtComplementoDemanda.setText(String.valueOf(demandaSelecionada.getComplemento()));
+        txtLocalidadeDemanda.setText(String.valueOf(demandaSelecionada.getLocalidade()));
+        txtEstadoDemanda.setText(String.valueOf(demandaSelecionada.getEstado()));
+        txtInicioDemanda.setText(String.valueOf(demandaSelecionada.getInicio()));
+        spnTurnoDemanda.setSelection(turnoAdapter.getPosition(String.valueOf(demandaSelecionada.getTurno())));
+        //spnCatDemanda
+        horasaula = demandaSelecionada.getHorasaula();
+        validade = demandaSelecionada.getValidade();
+        switch (horasaula) {
+            case 4:
+                cargaHoraria = "4 horas/aula";
+                break;
+            case 8:
+                cargaHoraria = "8 horas/aula";
+                break;
+            case 12:
+                cargaHoraria = "12 horas/aula";
+                break;
+            case 16:
+                cargaHoraria = "16 horas/aula";
+                break;
+            case 24:
+                cargaHoraria = "24 horas/aula";
+                break;
+            case 28:
+                cargaHoraria = "28 horas/aula";
+                break;
+            case 32:
+                cargaHoraria = "32 horas/aula";
+                break;
+        }
+
+        switch (validade) {
+            case 1:
+                validadeDemanda = "1 dia";
+                break;
+            case 3:
+                validadeDemanda = "3 dias";
+                break;
+            case 5:
+                validadeDemanda = "5 dias";
+                break;
+            case 7:
+                validadeDemanda = "7 dias";
+                break;
+            case 15:
+                validadeDemanda = "15 dias";
+                break;
+            case 30:
+                validadeDemanda = "30 dias";
+                break;
+
+        }
+        spnValidadeDemanda.setSelection(validadeAdapter.getPosition(String.valueOf(validadeDemanda)));
+        spnHorasaulaDemanda.setSelection(horasAulaAdapter.getPosition(String.valueOf(cargaHoraria)));
+    }
+
     @Override
     protected void inicializaConteudo() {
         descricao = txtDescDemanda.getText().toString();
-        categoria = spnCatDemanda.getSelectedItem().toString();
+        nomeCategoria = spnCatDemanda.getSelectedItem().toString();
         turno = spnTurnoDemanda.getSelectedItem().toString();
         CEP = txtCEPDemanda.getText().toString();
         numero = Integer.parseInt(txtNumero.getText().toString());
@@ -231,7 +333,18 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         cargaHoraria = spnHorasaulaDemanda.getSelectedItem().toString();
         inicioDemanda = txtInicioDemanda.getText().toString();
         validadeDemanda = spnValidadeDemanda.getSelectedItem().toString();
-        status = "Aguardando proposta";
+
+        if(AlunoDemandaFragment.alterar){
+            status = demandaSelecionada.getStatus();
+            data = demandaSelecionada.getData();
+            codCategoria = "";
+            //codCategoria = AlunoDemandaFragment.demandaSelecionada.getCategoriaCod();
+        } else{
+            status = "Aguardando proposta";
+            data = formatoData.format(dataatual);
+            codCategoria = "";
+            //codCategoria = categoriaSelecionada.getCodigo();
+        }
 
         switch (cargaHoraria) {
             case "4 horas/aula":
@@ -256,7 +369,6 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
                 horasaula = 32;
                 break;
         }
-
 
         switch (validadeDemanda) {
             case "1 dia":
@@ -293,7 +405,8 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         demanda.setValidade(validade);
         demanda.setTurno(turno);
         demanda.setStatus(status);
-        demanda.setCategoria(categoria);
+        demanda.setCategoria(nomeCategoria);
+        demanda.setCategoriaCod(codCategoria);
         demanda.setInicio(inicioDemanda);
         demanda.setExpiracao(expiraDemanda());
         demanda.setCEP(CEP);
@@ -303,14 +416,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         demanda.setComplemento(complemento);
         demanda.setLocalidade(localidade);
         demanda.setEstado(estado);
-        if (AlunoDemandaFragment.alterar){
-            if (data != null){
-                demanda.setData(data);
-            }
-            demanda.setData(formatoData.format(new Date()));
-        }else{
-            demanda.setData(formatoData.format(new Date()));
-        }
+        demanda.setData(data);
     }
 
     @Override
@@ -358,36 +464,6 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         return true;
     }
 
-    ValueEventListener ListenerGeral = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            arrayCategoria.clear();
-            for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                catDemanda = ds.getValue(Categoria.class);
-            }
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-        }
-    };
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        //String item = parent.getItemAtPosition(position).toString();
-        int posicao = spnCatDemanda.getSelectedItemPosition();
-        Toast.makeText(parent.getContext(), "Selected: " + posicao, Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-
-    }
-
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
@@ -431,19 +507,12 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
 
     private void consultaCEP() {
         RequestQueue requestQueue;
-
         Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
-
         BasicNetwork network = new BasicNetwork(new HurlStack());
-
         requestQueue = new RequestQueue(cache, (com.android.volley.Network) network);
-
         requestQueue.start();
-
         String cep = txtCEPDemanda.getText().toString();
-
         String url = "https://viacep.com.br/ws/" + cep + "/json/";
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
             @Override
@@ -472,8 +541,17 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
                 txtCEPDemanda.setError("Digite um CEP Válido!");
             }
         });
-
         requestQueue.add(jsonObjectRequest);
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        final Object item = parent.getItemAtPosition(pos);
+        showToast( "você selecionou: " + item.toString());
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }
