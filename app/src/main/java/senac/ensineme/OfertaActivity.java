@@ -27,7 +27,7 @@ import senac.ensineme.models.Oferta;
 public class OfertaActivity extends ComumActivity implements DatabaseReference.CompletionListener, View.OnClickListener {
 
     private Button btnCadastrar;
-    private TextView txtDadosdaDemanda;
+    private TextView txtDescDemanda, txtCatDemanda, txtTurnoDemanda, txtInicioDemanda, txtnHorasaulaDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtLogradouroDemanda, txtComplementoDemanda, txtNumeroDemanda, txtCEPDemanda, txtBairroDemanda;
     private EditText txtValorOferta;
     private String dadosdemanda, professor, codOferta, status, data, valor;
     private Oferta oferta;
@@ -96,7 +96,18 @@ public class OfertaActivity extends ComumActivity implements DatabaseReference.C
 
     @Override
     protected void inicializaViews() {
-        txtDadosdaDemanda = findViewById(R.id.txtDescricao);
+        txtDescDemanda = findViewById(R.id.txtDescricao);
+        txtCatDemanda = findViewById(R.id.txtCatDemanda);
+        txtTurnoDemanda = findViewById(R.id.txtTurno);
+        txtInicioDemanda = findViewById(R.id.txtInicio);
+        txtnHorasaulaDemanda = findViewById(R.id.txtCH);
+        txtLocalidadeDemanda = findViewById(R.id.txtCidade);
+        txtEstadoDemanda = findViewById(R.id.txtEstado);
+        txtLogradouroDemanda = findViewById(R.id.txtLogradouro);
+        txtComplementoDemanda = findViewById(R.id.txtComplemento);
+        txtNumeroDemanda = findViewById(R.id.txtNumero);
+        txtCEPDemanda = findViewById(R.id.txtCep);
+        txtBairroDemanda = findViewById(R.id.txtBairro);;
         txtValorOferta = findViewById(R.id.txtValor);
     }
 
