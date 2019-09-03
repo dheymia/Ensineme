@@ -134,7 +134,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    showToast("consultando CEP");
+                    showToast("Consultando CEP");
                     consultaCEP();
                 }
             }
@@ -143,7 +143,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    showToast("escolha a data");
+                    showToast("Escolha a data");
                     chamaCalendario();
                 }
             }
