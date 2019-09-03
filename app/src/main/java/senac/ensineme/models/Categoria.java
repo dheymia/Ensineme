@@ -80,6 +80,12 @@ public class Categoria {
         firebase.updateChildren(categoriaUpdates, completionListener[0]);
     }
 
+    @Override
+    public String toString()
+    {
+        return nome;
+    }
+
 }
 
 

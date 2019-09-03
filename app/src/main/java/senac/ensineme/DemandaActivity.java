@@ -17,6 +17,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.common.ConnectionResult;
 
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -43,11 +44,13 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,12 +58,10 @@ import java.util.Date;
 import java.util.Locale;
 
 
-import senac.ensineme.adapters.CategoriaAdapter;
 import senac.ensineme.models.Categoria;
 import senac.ensineme.models.Demanda;
 
 import senac.ensineme.models.FirebaseDB;
-import senac.ensineme.models.Usuario;
 import senac.ensineme.ui.aluno_demanda.AlunoDemandaFragment;
 
 
@@ -69,21 +70,21 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     private Button btnCadastrar;
     private EditText txtDescDemanda, txtCEPDemanda, txtLogradouroDemanda, txtBairroDemanda, txtComplementoDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtInicioDemanda, txtNumero;
     private Spinner spnCatDemanda, spnTurnoDemanda, spnValidadeDemanda, spnHorasaulaDemanda;
-    private String status, aluno, codDemanda, descricao,  turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado, inicioDemanda, validadeDemanda, data,nomeCategoria, codCategoria;
-    private int horasaula, validade, numero;
+    private String status, aluno, codDemanda, descricao,  turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado, inicioDemanda, validadeDemanda, data,nomeCategoria, codCategoria, numero;
+    private int horasaula, validade;
     private ArrayAdapter<CharSequence> turnoAdapter, validadeAdapter, horasAulaAdapter;
-    private ArrayAdapter<String> categoriaAdapter;
-    private ArrayList<String> categoriaList;
+    private ArrayAdapter<Categoria> categoriaAdapter;
+    private ArrayList<Categoria> categoriaList = new ArrayList<>();
     private Calendar myCalendar;
     private Categoria categoria;
     private Demanda demanda, demandaSelecionada;
     private Date dataatual = new Date();
-    private FirebaseDatabase categoriaFB;
-    private DatabaseReference firebase, refCat,refDem;
+    private DatabaseReference firebase;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private String myFormat = "dd/MM/yyyy";
     private SimpleDateFormat formatoData;
+    private TextView txtCategoria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,31 +100,22 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         firebase = FirebaseDB.getFirebase();
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-        categoriaFB = FirebaseDatabase.getInstance();
-        refCat = categoriaFB.getReference("categorias");
-        refCat.orderByChild("nome").addValueEventListener(CategoriaListenerGeral);
-        refDem = categoriaFB.getReference("demandas/" + AlunoDemandaFragment.demandaSelecionada.getCodigo());
-        refDem.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                demandaSelecionada = dataSnapshot.getValue(Demanda.class);
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
         inicializaViews();
         inicializaSpinners();
+        progressBar = (ProgressBar) findViewById(R.id.loading);
+        btnCadastrar = (Button) findViewById(R.id.btnCadastrarDemanda);
+        btnCadastrar.setOnClickListener((View.OnClickListener) this);
 
         if (AlunoDemandaFragment.alterar){
             getSupportActionBar().setTitle("Alterar demanda");
-            //btnCadastrar.setText("Alterar");
-            inicializaCamposPreenchidos();
+            spnCatDemanda.setVisibility( View.GONE );
+            btnCadastrar.setText("Alterar");
             codDemanda = AlunoDemandaFragment.demandaSelecionada.getCodigo();
-            aluno = demandaSelecionada.getAluno();
+            codCategoria = AlunoDemandaFragment.demandaSelecionada.getCategoriaCod();
+            inicializaCamposPreenchidos();
         } else {
+            txtCategoria.setVisibility(View.GONE);
             codDemanda = firebase.child("demandas").push().getKey();
             if (firebaseUser != null) {
                 aluno = firebaseUser.getUid();
@@ -149,18 +141,11 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
             }
         });
 
-        progressBar = (ProgressBar) findViewById(R.id.loading);
-        btnCadastrar = (Button) findViewById(R.id.btnCadastrarDemanda);
-        btnCadastrar.setOnClickListener((View.OnClickListener) this);
-
     }
 
     private void inicializaSpinners() {
 
-        //categoriaAdapter = new ArrayAdapter<> (this, android.R.layout.simple_spinner_item, categoriaList);
-        //categoriaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-       //spnCatDemanda.setAdapter(categoriaAdapter);
-       // spnCatDemanda.setOnItemSelectedListener(this);
+        categoriaSpinner();
 
         turnoAdapter = ArrayAdapter.createFromResource(this,R.array.turnoDemanda, android.R.layout.simple_spinner_item);
         turnoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -218,25 +203,39 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         }
     }
 
-    private ValueEventListener CategoriaListenerGeral = new ValueEventListener() {
+   protected void categoriaSpinner() {
+
+       categoriaList.clear();
+
+       final FirebaseDatabase database = FirebaseDatabase.getInstance();
+       DatabaseReference ref = database.getReference("categorias");
+
+       ref.orderByChild("nome").addValueEventListener(new ValueEventListener() {
+           @Override
+           public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//            categoriaList.clear();
+               for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                   categoria = ds.getValue(Categoria.class);
+                   categoriaList.add(categoria);
+               }
 
-            for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                categoria = ds.getValue(Categoria.class);
-//                categoriaList.add(categoria.getNome());
-            }
+               categoriaAdapter = new ArrayAdapter<Categoria> (DemandaActivity.this, android.R.layout.simple_spinner_item, categoriaList);
+               categoriaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+               spnCatDemanda.setAdapter(categoriaAdapter);
+               spnCatDemanda.setOnItemSelectedListener(DemandaActivity.this);
+           }
 
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-        }
-    };
-
+           @Override
+           public void onCancelled(@NonNull DatabaseError databaseError) {
+               ProgressBar progressBar = (ProgressBar) findViewById(R.id.loading);
+               Snackbar.make(progressBar,
+                       "Erro de leitura: " + databaseError.getCode(),
+                       Snackbar.LENGTH_LONG)
+                       .setAction("Action", null).show();
+           }
+       });
+   }
     @Override
     protected void inicializaViews() {
         txtDescDemanda = findViewById(R.id.txtDescricaoDemanda);
@@ -252,79 +251,101 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         spnTurnoDemanda = findViewById(R.id.spTurno);
         spnValidadeDemanda = findViewById(R.id.spValidadeDemanda);
         spnHorasaulaDemanda = findViewById(R.id.spCargaHoraria);
+        txtCategoria = findViewById(R.id.txtCategoria);
     }
 
     protected void inicializaCamposPreenchidos(){
 
-        txtDescDemanda.setText(String.valueOf(demandaSelecionada.getDescricao()));
-        txtNumero.setText(String.valueOf(demandaSelecionada.getNumero()));
-        txtCEPDemanda.setText(String.valueOf(demandaSelecionada.getCEP()));
-        txtLogradouroDemanda.setText(String.valueOf(demandaSelecionada.getLogradouro()));
-        txtBairroDemanda.setText(String.valueOf(demandaSelecionada.getBairro()));
-        txtComplementoDemanda.setText(String.valueOf(demandaSelecionada.getComplemento()));
-        txtLocalidadeDemanda.setText(String.valueOf(demandaSelecionada.getLocalidade()));
-        txtEstadoDemanda.setText(String.valueOf(demandaSelecionada.getEstado()));
-        txtInicioDemanda.setText(String.valueOf(demandaSelecionada.getInicio()));
-        spnTurnoDemanda.setSelection(turnoAdapter.getPosition(String.valueOf(demandaSelecionada.getTurno())));
-        //spnCatDemanda
-        horasaula = demandaSelecionada.getHorasaula();
-        validade = demandaSelecionada.getValidade();
-        switch (horasaula) {
-            case 4:
-                cargaHoraria = "4 horas/aula";
-                break;
-            case 8:
-                cargaHoraria = "8 horas/aula";
-                break;
-            case 12:
-                cargaHoraria = "12 horas/aula";
-                break;
-            case 16:
-                cargaHoraria = "16 horas/aula";
-                break;
-            case 24:
-                cargaHoraria = "24 horas/aula";
-                break;
-            case 28:
-                cargaHoraria = "28 horas/aula";
-                break;
-            case 32:
-                cargaHoraria = "32 horas/aula";
-                break;
-        }
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("demandas/" + codDemanda);
 
-        switch (validade) {
-            case 1:
-                validadeDemanda = "1 dia";
-                break;
-            case 3:
-                validadeDemanda = "3 dias";
-                break;
-            case 5:
-                validadeDemanda = "5 dias";
-                break;
-            case 7:
-                validadeDemanda = "7 dias";
-                break;
-            case 15:
-                validadeDemanda = "15 dias";
-                break;
-            case 30:
-                validadeDemanda = "30 dias";
-                break;
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-        }
-        spnValidadeDemanda.setSelection(validadeAdapter.getPosition(String.valueOf(validadeDemanda)));
-        spnHorasaulaDemanda.setSelection(horasAulaAdapter.getPosition(String.valueOf(cargaHoraria)));
+                demandaSelecionada = dataSnapshot.getValue(Demanda.class);
+
+                txtDescDemanda.setText(String.valueOf(demandaSelecionada.getDescricao()));
+                txtNumero.setText(String.valueOf(demandaSelecionada.getNumero()));
+                txtCEPDemanda.setText(String.valueOf(demandaSelecionada.getCEP()));
+                txtLogradouroDemanda.setText(String.valueOf(demandaSelecionada.getLogradouro()));
+                txtBairroDemanda.setText(String.valueOf(demandaSelecionada.getBairro()));
+                txtComplementoDemanda.setText(String.valueOf(demandaSelecionada.getComplemento()));
+                txtLocalidadeDemanda.setText(String.valueOf(demandaSelecionada.getLocalidade()));
+                txtEstadoDemanda.setText(String.valueOf(demandaSelecionada.getEstado()));
+                txtInicioDemanda.setText(String.valueOf(demandaSelecionada.getInicio()));
+                spnTurnoDemanda.setSelection(turnoAdapter.getPosition(String.valueOf(demandaSelecionada.getTurno())));
+                txtCategoria.setText(String.valueOf(demandaSelecionada.getCategoria()));
+                aluno = demandaSelecionada.getAluno();
+                horasaula = demandaSelecionada.getHorasaula();
+                validade = demandaSelecionada.getValidade();
+                switch (horasaula) {
+                    case 4:
+                        cargaHoraria = "4 horas/aula";
+                        break;
+                    case 8:
+                        cargaHoraria = "8 horas/aula";
+                        break;
+                    case 12:
+                        cargaHoraria = "12 horas/aula";
+                        break;
+                    case 16:
+                        cargaHoraria = "16 horas/aula";
+                        break;
+                    case 24:
+                        cargaHoraria = "24 horas/aula";
+                        break;
+                    case 28:
+                        cargaHoraria = "28 horas/aula";
+                        break;
+                    case 32:
+                        cargaHoraria = "32 horas/aula";
+                        break;
+                }
+
+                switch (validade) {
+                    case 1:
+                        validadeDemanda = "1 dia";
+                        break;
+                    case 3:
+                        validadeDemanda = "3 dias";
+                        break;
+                    case 5:
+                        validadeDemanda = "5 dias";
+                        break;
+                    case 7:
+                        validadeDemanda = "7 dias";
+                        break;
+                    case 15:
+                        validadeDemanda = "15 dias";
+                        break;
+                    case 30:
+                        validadeDemanda = "30 dias";
+                        break;
+
+                }
+                spnValidadeDemanda.setSelection(validadeAdapter.getPosition(String.valueOf(validadeDemanda)));
+                spnHorasaulaDemanda.setSelection(horasAulaAdapter.getPosition(String.valueOf(cargaHoraria)));
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                ProgressBar progressBar = (ProgressBar) findViewById(R.id.loading);
+                Snackbar.make(progressBar,
+                        "Erro de leitura: " + databaseError.getCode(),
+                        Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
     }
 
     @Override
     protected void inicializaConteudo() {
         descricao = txtDescDemanda.getText().toString();
-        nomeCategoria = spnCatDemanda.getSelectedItem().toString();
         turno = spnTurnoDemanda.getSelectedItem().toString();
         CEP = txtCEPDemanda.getText().toString();
-        numero = Integer.parseInt(txtNumero.getText().toString());
+        numero = txtNumero.getText().toString();
         logradouro = txtLogradouroDemanda.getText().toString();
         bairro = txtBairroDemanda.getText().toString();
         complemento = txtComplementoDemanda.getText().toString();
@@ -333,18 +354,6 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         cargaHoraria = spnHorasaulaDemanda.getSelectedItem().toString();
         inicioDemanda = txtInicioDemanda.getText().toString();
         validadeDemanda = spnValidadeDemanda.getSelectedItem().toString();
-
-        if(AlunoDemandaFragment.alterar){
-            status = demandaSelecionada.getStatus();
-            data = demandaSelecionada.getData();
-            codCategoria = "";
-            //codCategoria = AlunoDemandaFragment.demandaSelecionada.getCategoriaCod();
-        } else{
-            status = "Aguardando proposta";
-            data = formatoData.format(dataatual);
-            codCategoria = "";
-            //codCategoria = categoriaSelecionada.getCodigo();
-        }
 
         switch (cargaHoraria) {
             case "4 horas/aula":
@@ -397,6 +406,16 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     @Override
     protected void inicializaObjeto() {
 
+        if(AlunoDemandaFragment.alterar){
+            status = demandaSelecionada.getStatus();
+            data = demandaSelecionada.getData();
+        } else{
+            status = "Aguardando proposta";
+            data = formatoData.format(dataatual);
+            nomeCategoria = spnCatDemanda.getSelectedItem().toString();
+            codCategoria = ((Categoria)spnCatDemanda.getSelectedItem()).getCodigo();
+        }
+
         demanda = new Demanda();
         demanda.setAluno(aluno);
         demanda.setCodigo(codDemanda);
@@ -410,7 +429,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         demanda.setInicio(inicioDemanda);
         demanda.setExpiracao(expiraDemanda());
         demanda.setCEP(CEP);
-        demanda.setNumero(numero);
+        demanda.setNumero(Integer.parseInt(numero));
         demanda.setLogradouro(logradouro);
         demanda.setBairro(bairro);
         demanda.setComplemento(complemento);
@@ -439,6 +458,11 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         if (logradouro.isEmpty()) {
             txtLogradouroDemanda.setError(getString(R.string.msg_erro_campo_empty));
             txtLogradouroDemanda.requestFocus();
+            return false;
+        }
+        if (numero.isEmpty()) {
+            txtNumero.setError(getString(R.string.msg_erro_campo_empty));
+            txtNumero.requestFocus();
             return false;
         }
         if (bairro.isEmpty()) {
@@ -477,15 +501,16 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         return diaFormat;
     }
 
-    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+    final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-            myCalendar.set(Calendar.YEAR, year);
-            myCalendar.set(Calendar.MONTH, monthOfYear);
-            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            updateLabel();
+
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
         }
 
     };
@@ -547,7 +572,6 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         final Object item = parent.getItemAtPosition(pos);
-        showToast( "você selecionou: " + item.toString());
     }
 
     @Override

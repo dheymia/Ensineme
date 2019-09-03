@@ -66,19 +66,41 @@
                         android:layout_marginTop="1dp"
                         android:hint="@string/data"
                         android:inputType="date"
+                        android:textAlignment="center"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-                    <Spinner
-                        android:id="@+id/spCategoria"
-                        style="@style/spinner"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layoutCategoria"
                         android:layout_width="0dp"
-                        android:layout_marginTop="1dp"
-                        android:entries="@array/categoriaDemanda"
+                        android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                        app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+                        <Spinner
+                            android:id="@+id/spCategoria"
+                            style="@style/spinner"
+                            android:layout_width="0dp"
+                            android:layout_marginTop="1dp"
+                            android:entries="@array/categoriaDemanda"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/txtCategoria"
+                            style="@style/inserirtexto"
+                            android:layout_width="0dp"
+                            android:layout_marginTop="1dp"
+                            android:text="@string/acaoVerCategorias"
+                            android:textColor="@android:color/primary_text_light"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
 
@@ -97,7 +119,7 @@
                         android:text="@string/inicioDemanda"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/spCategoria" />
+                        app:layout_constraintTop_toBottomOf="@id/layoutCategoria"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -41,9 +42,11 @@ import senac.ensineme.adapters.CategoriaAdapter;
 import senac.ensineme.adapters.DemandaAdapter;
 import senac.ensineme.models.Categoria;
 import senac.ensineme.models.Demanda;
+import senac.ensineme.models.FirebaseDB;
 
 public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
+    private AlertDialog alerta;
     private AlunoDemandaViewModel dashboardViewModel;
     private FloatingActionButton fab;
     private TextView textView;
@@ -90,6 +93,7 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
         statusAdapter = ArrayAdapter.createFromResource(getContext(),R.array.statusDemanda, android.R.layout.simple_spinner_item);
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spConsulta.setAdapter(statusAdapter);
+        spConsulta.setSelection(statusAdapter.getPosition("Aguardando proposta"));
         spConsulta.setOnItemSelectedListener(this);
 
         consulta = spConsulta.getSelectedItem().toString();
@@ -161,15 +165,28 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
         consulta = item.toString();
         showToast( "OnItemSelectedListener : " + item.toString());
 
-        if (consulta != "Todas") {
-            ref.limitToFirst(100).orderByChild("status").equalTo(consulta).addValueEventListener(ListenerGeral);
-        } else {
+        if (consulta.equals("Todas")) {
             ref.limitToFirst(100).orderByChild("data").addValueEventListener(ListenerGeral);
+        } else {
+            ref.limitToFirst(100).orderByChild("status").equalTo(consulta).addValueEventListener(ListenerGeral);
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    public void dialogDetalhesDemanda() {
+        LayoutInflater li = getLayoutInflater();
+        View view = li.inflate(R.layout.dialog_detalhes_demanda, null);
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Detalhes da demanda");
+
+        builder.setView(view);
+        alerta = builder.create();
+        alerta.show();
     }
 }

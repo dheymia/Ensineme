@@ -5,19 +5,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import senac.ensineme.CategoriasActivity;
+import senac.ensineme.DemandaActivity;
 import senac.ensineme.R;
 import senac.ensineme.models.Categoria;
 import senac.ensineme.models.Demanda;
+import senac.ensineme.ui.aluno_demanda.AlunoDemandaFragment;
 
 public class DemandaAdapter extends RecyclerView.Adapter<DemandaAdapter.DemandaViewHolder> {
 
     List<Demanda> demandaList;
+    private AlertDialog alerta;
     private Context context;
     public View.OnClickListener mOnItemClickListener;
 
@@ -47,6 +53,7 @@ public class DemandaAdapter extends RecyclerView.Adapter<DemandaAdapter.DemandaV
         viewHolder.detalhes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(context, "Demanda selecionada: " + demanda.getCodigo(), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -68,6 +75,7 @@ public class DemandaAdapter extends RecyclerView.Adapter<DemandaAdapter.DemandaV
     public int getItemCount() {
         return demandaList.size();
     }
+
 
     public class DemandaViewHolder extends RecyclerView.ViewHolder{
 
