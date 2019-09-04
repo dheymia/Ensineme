@@ -23,6 +23,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/inserirtexto</item>
         <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="inserirEmail">
@@ -33,6 +34,7 @@
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:hint">@string/email</item>
         <item name="android:inputType">textEmailAddress|textAutoCorrect|textAutoComplete</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="inserirSenha">
@@ -45,6 +47,7 @@
         <item name="android:imeActionLabel">@string/acaoEntrarCurta</item>
         <item name="android:imeOptions">actionDone</item>
         <item name="android:inputType">textPassword</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="layoutTelasInserir">
@@ -100,6 +103,7 @@
         <item name="android:spinnerMode">dropdown</item>
         <item name="android:foreground">@drawable/spinnerdrop</item>
         <item name="android:foregroundGravity">center|right</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="metadetela">
