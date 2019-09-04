@@ -40,11 +40,18 @@
         <item>30 dias</item>
     </string-array>
     <string-array name="statusDemanda">
-        <item>Aguardando proposta</item> <!-- Reply PreferenceQuando a demanda estiver no prazo de validade E não houver proposta OU todas proposta tenham sido rejeitadas -->
+        <item>Aguardando proposta</item> <!-- Quando a demanda estiver no prazo de validade E não houver proposta OU todas proposta tenham sido rejeitadas -->
         <item>Aguardando validação</item> <!-- Quando a demanda estiver no prazo de validade E houver pelo menos uma proposta para avaliação -->
         <item>Encerrada com aceite</item> <!-- Quando o prazo de validade da demanda estiver expirado E houve prorposta aceita -->
         <item>Encerrada com rejeite</item> <!-- Quando o prazo de validade da demanda estiver expirado E houve porposta rejeitada -->
         <item>Encerrada sem proposta</item> <!-- Quando o prazo de validade da demanda estiver expirado E não houve nenhuma proposta -->
+        <item>Todas</item>
+    </string-array>
+
+    <string-array name="statusOferta">
+        <item>Aguardando avaliação</item> <!-- Quando a demanda estiver no prazo de validade E oferta não tiver sido avaliada -->
+        <item>Rejeitada</item> <!-- Quando a demanda estiver expirado sem avaliação ou a oferta não for aceita -->
+        <item>Aceita</item> <!-- Quando a oferta for aceita -->
         <item>Todas</item>
     </string-array>
 

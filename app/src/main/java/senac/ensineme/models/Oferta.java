@@ -5,7 +5,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.Date;
 
 public class Oferta {
-    private String codOferta, professorOferta, statusOferta, dataOferta, valorOferta;
+    private String codOferta, codDemanda, professorOferta, statusOferta, dataOferta, valorOferta;
 
 
     public Oferta(Usuario professor, String valorOferta, String dataOferta) {
@@ -15,6 +15,14 @@ public class Oferta {
     }
 
     public Oferta() {
+    }
+
+    public String getCodDemanda() {
+        return codDemanda;
+    }
+
+    public void setCodDemanda(String codDemanda) {
+        this.codDemanda = codDemanda;
     }
 
     public String getCodOferta() {
