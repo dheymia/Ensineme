@@ -42,8 +42,8 @@
     <string-array name="statusDemanda">
         <item>Aguardando proposta</item> <!-- Reply PreferenceQuando a demanda estiver no prazo de validade E não houver proposta OU todas proposta tenham sido rejeitadas -->
         <item>Aguardando validação</item> <!-- Quando a demanda estiver no prazo de validade E houver pelo menos uma proposta para avaliação -->
-        <item>Encerrada com aceitação</item> <!-- Quando o prazo de validade da demanda estiver expirado E houve prorposta aceita -->
-        <item>Encerrada com rejeição</item> <!-- Quando o prazo de validade da demanda estiver expirado E houve porposta rejeitada -->
+        <item>Encerrada com aceite</item> <!-- Quando o prazo de validade da demanda estiver expirado E houve prorposta aceita -->
+        <item>Encerrada com rejeite</item> <!-- Quando o prazo de validade da demanda estiver expirado E houve porposta rejeitada -->
         <item>Encerrada sem proposta</item> <!-- Quando o prazo de validade da demanda estiver expirado E não houve nenhuma proposta -->
         <item>Todas</item>
     </string-array>
