@@ -1,14 +1,14 @@
-package senac.ensineme.ui.home;
+package senac.ensineme.ui.aluno_inicio;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+public class AlunoInicioViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public HomeViewModel() {
+    public AlunoInicioViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is home fragment");
     }

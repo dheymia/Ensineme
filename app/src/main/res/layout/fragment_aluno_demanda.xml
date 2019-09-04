@@ -28,6 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/fab"
             app:layout_constraintTop_toBottomOf="@+id/spConsulta">
 
             <ScrollView
@@ -42,7 +43,7 @@
                     android:layout_height="match_parent">
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/listAlunoDemanda"
+                        android:id="@+id/listAlunoDemandas"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"

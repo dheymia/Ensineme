@@ -11,10 +11,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ProfessorMainActivity"
+            android:label="@string/title_activity_main"
+            android:parentActivityName=".LoginActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="senac.ensineme.LoginActivity" />
+        </activity>
+        <activity
             android:name=".AlunoMainActivity"
             android:label="@string/title_activity_main"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".CategoriasActivity"
             android:label="@string/title_activity_categoria"
@@ -40,10 +47,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ProfessorMainActivity"
-            android:label="@string/title_activity_professor_main"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".RecuperaSenhaActivity"
             android:parentActivityName=".LoginActivity"

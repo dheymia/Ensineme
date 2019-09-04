@@ -29,7 +29,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import senac.ensineme.adapters.CategoriaAdapter;
+import senac.ensineme.adapters.CategoriaAdmAdapter;
 import senac.ensineme.models.Categoria;
 import senac.ensineme.models.FirebaseDB;
 
@@ -40,7 +40,7 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
     private ProgressDialog progressDialog;
     private EditText txtCategoria;
     private RecyclerView recyclerView;
-    private CategoriaAdapter adapter;
+    private CategoriaAdmAdapter adapter;
     private List<Categoria> categoriaList = new ArrayList<>();
     private Button btnCadastrarCategoria, btnCancelar;
     private String nomeCategoria, codCategoria;
@@ -104,7 +104,7 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
                 categoriaList.add(categoria);
             }
 
-            adapter = new CategoriaAdapter(categoriaList, CategoriasActivity.this);
+            adapter = new CategoriaAdmAdapter(categoriaList, CategoriasActivity.this);
             adapter.setOnItemClickListener(onItemClickListener);
             recyclerView.setAdapter(adapter);
 

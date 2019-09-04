@@ -1,6 +1,5 @@
 package senac.ensineme.ui.aluno_demanda;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -34,15 +33,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import senac.ensineme.AlunoMainActivity;
-import senac.ensineme.CategoriasActivity;
 import senac.ensineme.DemandaActivity;
 import senac.ensineme.R;
-import senac.ensineme.adapters.CategoriaAdapter;
 import senac.ensineme.adapters.DemandaAdapter;
-import senac.ensineme.models.Categoria;
 import senac.ensineme.models.Demanda;
-import senac.ensineme.models.FirebaseDB;
 
 public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
@@ -72,7 +66,7 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
         View root = inflater.inflate(R.layout.fragment_aluno_demanda, container, false);
         textView = root.findViewById(R.id.text_dashboard);
         fab = root.findViewById(R.id.fab);
-        recyclerView = root.findViewById(R.id.listAlunoDemanda);
+        recyclerView = root.findViewById(R.id.listAlunoDemandas);
         progressBar = root.findViewById(R.id.loading);
         spConsulta = root.findViewById(R.id.spConsulta);
         dashboardViewModel.getText().observe(this, new Observer<String>() {

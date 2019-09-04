@@ -14,13 +14,13 @@ import java.util.List;
 import senac.ensineme.R;
 import senac.ensineme.models.Categoria;
 
-public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.CategoriaViewHolder> {
+public class CategoriaProfAdapter extends RecyclerView.Adapter<CategoriaProfAdapter.CategoriaProfViewHolder> {
 
     List<Categoria> categoriaList;
     private Context context;
     public View.OnClickListener mOnItemClickListener;
 
-    public CategoriaAdapter(List<Categoria> categoriaList, Context context) {
+    public CategoriaProfAdapter(List<Categoria> categoriaList, Context context) {
         this.categoriaList = categoriaList;
         this.context = context;
     }
@@ -28,16 +28,16 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.Cate
 
     @NonNull
     @Override
-    public CategoriaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_categorias,parent,false);
-        CategoriaViewHolder holder = new CategoriaViewHolder(view);
+    public CategoriaProfAdapter.CategoriaProfViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_prof_categorias,parent,false);
+        CategoriaProfAdapter.CategoriaProfViewHolder holder = new CategoriaProfAdapter.CategoriaProfViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategoriaViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CategoriaProfAdapter.CategoriaProfViewHolder holder, int position) {
 
-        CategoriaViewHolder viewHolder = (CategoriaViewHolder) holder;
+        CategoriaProfAdapter.CategoriaProfViewHolder viewHolder = (CategoriaProfAdapter.CategoriaProfViewHolder) holder;
         final Categoria categoria = categoriaList.get(position);
 
         viewHolder.categoria.setText(categoria.getNome());
@@ -54,11 +54,11 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.Cate
         return categoriaList.size();
     }
 
-    public class CategoriaViewHolder extends RecyclerView.ViewHolder {
+    public class CategoriaProfViewHolder extends RecyclerView.ViewHolder {
 
         final TextView categoria;
 
-        public CategoriaViewHolder(@NonNull View itemView) {
+        public CategoriaProfViewHolder(@NonNull View itemView) {
 
             super(itemView);
 

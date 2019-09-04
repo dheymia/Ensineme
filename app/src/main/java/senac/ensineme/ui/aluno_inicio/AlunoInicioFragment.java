@@ -1,4 +1,4 @@
-package senac.ensineme.ui.home;
+package senac.ensineme.ui.aluno_inicio;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,15 +14,15 @@ import androidx.lifecycle.ViewModelProviders;
 
 import senac.ensineme.R;
 
-public class HomeFragment extends Fragment {
+public class AlunoInicioFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
+    private AlunoInicioViewModel homeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+                ViewModelProviders.of(this).get(AlunoInicioViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_aluno_inicio, container, false);
         final TextView textView = root.findViewById(R.id.text_home);
         homeViewModel.getText().observe(this, new Observer<String>() {
             @Override
