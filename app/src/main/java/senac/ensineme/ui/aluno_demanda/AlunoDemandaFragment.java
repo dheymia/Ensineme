@@ -35,7 +35,7 @@ import java.util.List;
 
 import senac.ensineme.DemandaActivity;
 import senac.ensineme.R;
-import senac.ensineme.adapters.DemandaAdapter;
+import senac.ensineme.adapters.DemandaAluAdapter;
 import senac.ensineme.models.Demanda;
 
 public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItemSelectedListener {
@@ -49,7 +49,7 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
     private String consulta, aluno;
     private ProgressBar progressBar;
     private ArrayAdapter<CharSequence> statusAdapter;
-    public static DemandaAdapter adapter;
+    public static DemandaAluAdapter adapter;
     private List<Demanda> demandasList = new ArrayList<>();
     public static Demanda demandaSelecionada;
     private FirebaseDatabase firebase;
@@ -72,7 +72,7 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
         dashboardViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                textView.setText(s);
+//                textView.setText(s);
             }
         });
 
@@ -119,8 +119,10 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
 
             alterar = true;
 
-            Intent demanda = new Intent(getContext(), DemandaActivity.class);
-            startActivity(demanda);
+            dialogDetalhesDemanda();
+
+            //Intent demanda = new Intent(getContext(), DemandaActivity.class);
+            //startActivity(demanda);
         }
     };
 
@@ -134,7 +136,7 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
                 demandasList.add(demanda);
             }
 
-            adapter = new DemandaAdapter(demandasList, getContext());
+            adapter = new DemandaAluAdapter(demandasList, getContext());
             adapter.setOnItemClickListener(onItemClickListener);
             recyclerView.setAdapter(adapter);
             progressBar.setVisibility( View.GONE );

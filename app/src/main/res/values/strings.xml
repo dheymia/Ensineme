@@ -50,6 +50,7 @@
     <string name="expiraDemanda">Data de Expiração da Demanda</string>
     <string name="desejaaprender">O que deseja aprender?</string>
     <string name="localaulas">Onde serão as aulas?</string>
+    <string name="exploracaegorias">Explore as categorias</string>
 
     <!-- Títulos campos -->
     <string name="categoria">Categoria</string>

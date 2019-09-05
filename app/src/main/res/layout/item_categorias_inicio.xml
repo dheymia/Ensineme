@@ -17,7 +17,9 @@
             android:id="@+id/txtNomeCategoria"
             style="@style/titulo_item"
             android:layout_width="match_parent"
-            android:text="TextView"
+            android:layout_height="60dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/categoria"
             android:textAlignment="center" />
     </LinearLayout>
 

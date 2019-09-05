@@ -13,42 +13,38 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import senac.ensineme.CategoriasActivity;
-import senac.ensineme.DemandaActivity;
 import senac.ensineme.R;
-import senac.ensineme.models.Categoria;
 import senac.ensineme.models.Demanda;
-import senac.ensineme.ui.aluno_demanda.AlunoDemandaFragment;
 
-public class DemandaAdapter extends RecyclerView.Adapter<DemandaAdapter.DemandaViewHolder> {
+public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.DemandaViewHolder> {
 
     List<Demanda> demandaList;
     private AlertDialog alerta;
     private Context context;
     public View.OnClickListener mOnItemClickListener;
 
-    public DemandaAdapter(List<Demanda> demandaList, Context context) {
+    public DemandaAluAdapter(List<Demanda> demandaList, Context context) {
         this.demandaList = demandaList;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public DemandaAdapter.DemandaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DemandaAluAdapter.DemandaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_aluno_demanda,parent,false);
-        DemandaAdapter.DemandaViewHolder holder = new DemandaAdapter.DemandaViewHolder(view);
+        DemandaAluAdapter.DemandaViewHolder holder = new DemandaAluAdapter.DemandaViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DemandaAdapter.DemandaViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull DemandaAluAdapter.DemandaViewHolder holder, int position) {
 
 
-        DemandaAdapter.DemandaViewHolder viewHolder = (DemandaAdapter.DemandaViewHolder) holder;
+        DemandaAluAdapter.DemandaViewHolder viewHolder = (DemandaAluAdapter.DemandaViewHolder) holder;
         final Demanda demanda = demandaList.get(position);
 
         viewHolder.categoria.setText(demanda.getCategoria());
-        viewHolder.data.setText(demanda.getData());
+        viewHolder.data.setText(demanda.getExpiracao());
         viewHolder.descricao.setText(demanda.getDescricao());
         viewHolder.detalhes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,13 +53,6 @@ public class DemandaAdapter extends RecyclerView.Adapter<DemandaAdapter.DemandaV
 
             }
         });
-        viewHolder.propostas.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
 
     }
 
@@ -83,7 +72,6 @@ public class DemandaAdapter extends RecyclerView.Adapter<DemandaAdapter.DemandaV
         final TextView data;
         final TextView descricao;
         final TextView detalhes;
-        final TextView propostas;
 
         public DemandaViewHolder(@NonNull View itemView) {
 
@@ -93,7 +81,6 @@ public class DemandaAdapter extends RecyclerView.Adapter<DemandaAdapter.DemandaV
             data = itemView.findViewById(R.id.txtDataDemanda);
             descricao = itemView.findViewById(R.id.txtDescDemanda);
             detalhes = itemView.findViewById(R.id.txtDetalhesDemanda);
-            propostas = itemView.findViewById(R.id.txtVerPropostas);
 
             itemView.setTag(this);
             itemView.setOnClickListener(mOnItemClickListener);

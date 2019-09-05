@@ -29,7 +29,7 @@ public class CategoriaProfAdapter extends RecyclerView.Adapter<CategoriaProfAdap
     @NonNull
     @Override
     public CategoriaProfAdapter.CategoriaProfViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_prof_categorias,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_categorias_inicio,parent,false);
         CategoriaProfAdapter.CategoriaProfViewHolder holder = new CategoriaProfAdapter.CategoriaProfViewHolder(view);
         return holder;
     }

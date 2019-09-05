@@ -82,7 +82,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     private DatabaseReference firebase;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
-    private String myFormat = "dd/MM/yyyy";
+    private String myFormat = "yyyy/MM/dd";
     private SimpleDateFormat formatoData;
     private TextView txtCategoria;
 
