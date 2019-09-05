@@ -1,5 +1,7 @@
 package senac.ensineme;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -35,7 +37,7 @@ public class AlunoMainActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
-    private String idUsuario, nomeUsuario;
+    private String idUsuario, nomeUsuario, tipoUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,7 @@ public class AlunoMainActivity extends AppCompatActivity {
                 usuariologado = dataSnapshot.getValue(Usuario.class);
                 if (usuariologado.getTipo() != null) {
                     nomeUsuario = usuariologado.getNome();
+                    tipoUsuario = usuariologado.getTipo();
                     txtNome.setText("Olá " + nomeUsuario);
                 }
             }
@@ -117,6 +120,37 @@ public class AlunoMainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    public void onBackPressed()    {
 
+        if (tipoUsuario.equals("administrador")) {
+            Intent administrador = new Intent(AlunoMainActivity.this, AdministradorMainActivity.class);
+            startActivity(administrador);
+            finish();
+
+        } else {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder
+                    .setMessage("Deseja sair?")
+                    .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            finish();
+
+                        }
+                    })
+
+                    .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    })
+                    .show();
+        }
+    }
 
 }

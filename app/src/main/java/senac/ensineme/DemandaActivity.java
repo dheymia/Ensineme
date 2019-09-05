@@ -110,7 +110,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         if (AlunoDemandaFragment.alterar){
             getSupportActionBar().setTitle("Alterar demanda");
             spnCatDemanda.setVisibility( View.GONE );
-            btnCadastrar.setText("Alterar");
+            btnCadastrar.setText(getString(R.string.acaoAlterar));
             codDemanda = AlunoDemandaFragment.demandaSelecionada.getCodigo();
             codCategoria = AlunoDemandaFragment.demandaSelecionada.getCategoriaCod();
             inicializaCamposPreenchidos();

@@ -86,6 +86,17 @@ public class Categoria {
         return nome;
     }
 
+    public void excluiCategoriaDB(DatabaseReference.CompletionListener... completionListener) {
+        firebase = FirebaseDB.getFirebase().child("categorias").child(getCodigo());
+        if (completionListener.length == 0) {
+            firebase.removeValue();
+        } else {
+            firebase.removeValue((DatabaseReference.CompletionListener) this);
+        }
+
+    }
+
+
 }
 
 

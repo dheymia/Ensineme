@@ -3,6 +3,8 @@ package senac.ensineme;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -44,6 +46,7 @@ public class AdministradorMainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), AlunoMainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
         btnProfessor = (Button) findViewById(R.id.btnProfessor);
@@ -52,6 +55,7 @@ public class AdministradorMainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), ProfessorMainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -61,6 +65,7 @@ public class AdministradorMainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), CategoriasActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -68,8 +73,9 @@ public class AdministradorMainActivity extends AppCompatActivity {
         btnTeste.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getBaseContext(), AlunoMainActivity.class);
+                Intent intent = new Intent(getBaseContext(), OfertaActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -134,4 +140,30 @@ public class AdministradorMainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed()    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder
+                .setMessage("Deseja sair?")
+                .setPositiveButton("Confirmar",  new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+
+                    }
+                })
+
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog,int id) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
+    }
+
+
 }

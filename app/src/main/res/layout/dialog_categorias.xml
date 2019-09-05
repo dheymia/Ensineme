@@ -1,86 +1,84 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" >
 
-        <androidx.constraintlayout.widget.ConstraintLayout style="@style/layoutTelasInserir">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-            <ProgressBar
-                android:id="@+id/loading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="8dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/layoutBotoes"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <EditText
+            android:id="@+id/txtCatDemanda"
+            style="@style/inserirtexto"
+            android:layout_marginStart="16dp"
+
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="Nome da categoria"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-            <LinearLayout
-                android:id="@+id/layoutBotoes"
+        <LinearLayout
+            android:id="@+id/layoutBotoes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtCatDemanda">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                style="@style/metadetela"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="100dp">
 
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtCatDemanda">
+                <Button
+                    android:id="@+id/btnCancelar"
+                    style="@style/botao"
+                    android:layout_width="130dp"
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    style="@style/metadetela"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp">
+                    android:text="@string/acaoCancelar"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <Button
-                        android:id="@+id/btnCancelar"
-                        style="@style/botao"
-                        android:layout_width="110dp"
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        android:text="@string/acaoCancelar"
-                        android:textSize="10sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                style="@style/metadetela"
+                android:layout_width="match_parent"
+                android:layout_height="100dp">
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    style="@style/metadetela"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp">
-
-                    <Button
-                        android:id="@+id/btnCadastrarCategoria"
-                        style="@style/botao"
-                        android:layout_width="110dp"
-                        android:text="@string/acaoCadastrar"
-                        android:textSize="10sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </LinearLayout>
+                <Button
+                    android:id="@+id/btnCadastrarCategoria"
+                    style="@style/botao"
+                    android:layout_width="130dp"
+                    android:text="@string/acaoCadastrar"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
 
-            <EditText
-                android:id="@+id/txtCatDemanda"
-                style="@style/inserirtexto"
-                android:layout_marginTop="24dp"
+        <ProgressBar
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/layoutBotoes"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-                android:ems="10"
-                android:hint="Nome da categoria"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-</LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

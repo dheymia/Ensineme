@@ -1,10 +1,16 @@
 package senac.ensineme.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +47,31 @@ public class CategoriaAdmAdapter extends RecyclerView.Adapter<CategoriaAdmAdapte
         final Categoria categoria = categoriaList.get(position);
 
         viewHolder.categoria.setText(categoria.getNome());
+        viewHolder.excluir.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder
+                        .setMessage("Deseja excluir esta categoria?")
+                        .setPositiveButton("Confirmar",  new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                categoria.excluiCategoriaDB();
+
+                            }
+                        })
+
+                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();            }
+        });
 
     }
 
@@ -54,15 +85,19 @@ public class CategoriaAdmAdapter extends RecyclerView.Adapter<CategoriaAdmAdapte
         return categoriaList.size();
     }
 
+
+
     public class CategoriaAdmViewHolder extends RecyclerView.ViewHolder {
 
         final TextView categoria;
+        final Button excluir;
 
         public CategoriaAdmViewHolder(@NonNull View itemView) {
 
             super(itemView);
 
             categoria = itemView.findViewById(R.id.txtNomeCategoria);
+            excluir = itemView.findViewById(R.id.btnExcluirCategoria);
 
             itemView.setTag(this);
             itemView.setOnClickListener(mOnItemClickListener);

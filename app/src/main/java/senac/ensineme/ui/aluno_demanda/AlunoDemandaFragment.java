@@ -1,5 +1,6 @@
 package senac.ensineme.ui.aluno_demanda;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -43,15 +46,17 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
     private AlertDialog alerta;
     private AlunoDemandaViewModel dashboardViewModel;
     private FloatingActionButton fab;
-    private TextView textView;
+    private TextView textView, txtExpiracao, txtDescDemanda, txtCatDemanda, txtTurnoDemanda, txtInicioDemanda, txtnHorasaulaDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtLogradouroDemanda, txtComplementoDemanda, txtNumeroDemanda, txtCEPDemanda, txtBairroDemanda;
+    private Button btnExcluir, btnAlterar, btnInserirProposta;
     private RecyclerView recyclerView;
     private Spinner spConsulta;
-    private String consulta, aluno;
+    private String consulta, aluno, codDemanda;
     private ProgressBar progressBar;
     private ArrayAdapter<CharSequence> statusAdapter;
     public static DemandaAluAdapter adapter;
     private List<Demanda> demandasList = new ArrayList<>();
     public static Demanda demandaSelecionada;
+    private Demanda demandadetalhe;
     private FirebaseDatabase firebase;
     private DatabaseReference ref;
     public static boolean alterar = false;
@@ -115,14 +120,10 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
             int position = viewHolder.getAdapterPosition();
 
             demandaSelecionada = demandasList.get(position);
+            codDemanda = demandaSelecionada.getCodigo();
             showToast("Demanda selecionada: " + demandaSelecionada.getCodigo());
 
-            alterar = true;
-
             dialogDetalhesDemanda();
-
-            //Intent demanda = new Intent(getContext(), DemandaActivity.class);
-            //startActivity(demanda);
         }
     };
 
@@ -175,7 +176,98 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
 
     public void dialogDetalhesDemanda() {
         LayoutInflater li = getLayoutInflater();
-        View view = li.inflate(R.layout.dialog_detalhes_demanda, null);
+        final View view = li.inflate(R.layout.dialog_detalhes_demanda, null);
+
+        btnAlterar = view.findViewById(R.id.btnAlterar);
+        btnExcluir  = view.findViewById(R.id.btnExcluir);
+        btnInserirProposta  = view.findViewById(R.id.btnInserirProposta);
+
+        btnInserirProposta.setVisibility(View.GONE);
+
+        txtDescDemanda = view.findViewById(R.id.txtDescricao);
+        txtCatDemanda = view.findViewById(R.id.txtCatDemanda);
+        txtTurnoDemanda = view.findViewById(R.id.txtTurno);
+        txtInicioDemanda = view.findViewById(R.id.txtInicio);
+        txtnHorasaulaDemanda = view.findViewById(R.id.txtCH);
+        txtLocalidadeDemanda = view.findViewById(R.id.txtCidade);
+        txtEstadoDemanda = view.findViewById(R.id.txtEstado);
+        txtLogradouroDemanda = view.findViewById(R.id.txtLogradouro);
+        txtComplementoDemanda = view.findViewById(R.id.txtComplemento);
+        txtNumeroDemanda = view.findViewById(R.id.txtnumero);
+        txtCEPDemanda = view.findViewById(R.id.txtCEP);
+        txtBairroDemanda = view.findViewById(R.id.txtBairro);
+        txtExpiracao = view.findViewById(R.id.textExpiracao);
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference refDem = database.getReference("demandas/" + codDemanda);
+
+        refDem.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                demandadetalhe = dataSnapshot.getValue(Demanda.class);
+
+                txtDescDemanda.setText(String.valueOf(demandadetalhe.getDescricao()));
+                txtCatDemanda.setText(String.valueOf(demandadetalhe.getCategoria()));
+                txtTurnoDemanda.setText(String.valueOf(demandadetalhe.getTurno()));
+                txtInicioDemanda.setText(String.valueOf(demandadetalhe.getInicio()));
+                txtnHorasaulaDemanda.setText(String.valueOf(demandadetalhe.getHorasaula()) + " horas");
+                txtLocalidadeDemanda.setText(String.valueOf(demandadetalhe.getLocalidade()));
+                txtEstadoDemanda.setText(String.valueOf(demandadetalhe.getEstado()));
+                txtLogradouroDemanda.setText(String.valueOf(demandadetalhe.getLogradouro()));
+                txtComplementoDemanda.setText(String.valueOf(demandadetalhe.getComplemento()));
+                txtNumeroDemanda.setText(String.valueOf(demandadetalhe.getNumero()));
+                txtCEPDemanda.setText(String.valueOf(demandadetalhe.getCEP()));
+                txtBairroDemanda.setText(String.valueOf(demandadetalhe.getBairro()));
+                txtExpiracao.setText(String.valueOf(demandadetalhe.getExpiracao()));
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.loading);
+                Snackbar.make(progressBar,
+                        "Erro de leitura: " + databaseError.getCode(),
+                        Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
+        view.findViewById(R.id.btnExcluir).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
+                builder
+                        .setMessage("Deseja excluir esta solicitação?")
+                        .setPositiveButton("Confirmar",  new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                demandadetalhe.excluiDemandaDB();
+                                alerta.dismiss();
+
+                            }
+                        })
+
+                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();            }
+        });
+
+
+        view.findViewById(R.id.btnAlterar).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                alerta.dismiss();
+                alterar = true;
+                Intent demanda = new Intent(getContext(), DemandaActivity.class);
+                startActivity(demanda);
+            }
+        });
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());

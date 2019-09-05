@@ -1,15 +1,18 @@
 package senac.ensineme.ui.professor_inicio;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -26,6 +29,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import senac.ensineme.DemandaActivity;
+import senac.ensineme.OfertaActivity;
 import senac.ensineme.R;
 import senac.ensineme.adapters.CategoriaProfAdapter;
 import senac.ensineme.adapters.DemandaAluAdapter;
@@ -34,7 +39,10 @@ import senac.ensineme.models.Demanda;
 
 public class ProfessorInicioFragment extends Fragment {
 
+    private AlertDialog alerta;
     private HomeViewModel homeViewModel;
+    private TextView textView, txtExpiracao, txtDescDemanda, txtCatDemanda, txtTurnoDemanda, txtInicioDemanda, txtnHorasaulaDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtLogradouroDemanda, txtComplementoDemanda, txtNumeroDemanda, txtCEPDemanda, txtBairroDemanda;
+    private Button btnExcluir, btnAlterar,btnInserirProposta;
     private ProgressBar progressBar;
     private RecyclerView recyclerDemandas,recyclerCategorias;
     private CategoriaProfAdapter adapter;
@@ -42,7 +50,8 @@ public class ProfessorInicioFragment extends Fragment {
     private List<Categoria> categoriaList = new ArrayList<>();
     private List<Demanda> demandasList = new ArrayList<>();
     public static Demanda demandaSelecionada;
-    private String nomeCategoria, codCategoria;
+    private Demanda demandadetalhe;
+    private String codDemanda;;
     private Categoria categoria, categoriaSelecionada;
     private FirebaseDatabase firebase;
     private DatabaseReference ref, refDem;
@@ -52,7 +61,7 @@ public class ProfessorInicioFragment extends Fragment {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_professor_inicio, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
+        textView = root.findViewById(R.id.text_home);
         recyclerDemandas = root.findViewById(R.id.listDemandas);
         recyclerCategorias = root.findViewById(R.id.listCategorias);
         progressBar = root.findViewById(R.id.loading);
@@ -76,7 +85,7 @@ public class ProfessorInicioFragment extends Fragment {
         recyclerDemandas.setHasFixedSize(true);
         recyclerDemandas.setLayoutManager(new LinearLayoutManager(getContext()));
         progressBar.setVisibility( View.VISIBLE );
-        refDem.limitToFirst(10).orderByChild("expiracao").addValueEventListener(ListenerGeralDemandas);
+        refDem.limitToFirst(10).orderByChild("status").equalTo("Aguardando proposta").addValueEventListener(ListenerGeralDemandas);
 
         return root;
     }
@@ -90,9 +99,6 @@ public class ProfessorInicioFragment extends Fragment {
             categoriaSelecionada = categoriaList.get(position);
             Toast.makeText(getContext(), "Categoria selecionada: " + categoriaSelecionada.getNome(), Toast.LENGTH_SHORT).show();
 
-            //alterar = true;
-
-            //dialogCategorias();
         }
     };
 
@@ -127,11 +133,8 @@ public class ProfessorInicioFragment extends Fragment {
 
             demandaSelecionada = demandasList.get(position);
             showToast("Demanda selecionada: " + demandaSelecionada.getCodigo());
-
-            //alterar = true;
-
-            //Intent demanda = new Intent(getContext(), DemandaActivity.class);
-            //startActivity(demanda);
+            codDemanda = demandaSelecionada.getCodigo();
+            dialogDetalhesDemanda();
         }
     };
 
@@ -177,5 +180,81 @@ public class ProfessorInicioFragment extends Fragment {
                 message,
                 Toast.LENGTH_LONG)
                 .show();
+    }
+
+    public void dialogDetalhesDemanda() {
+        LayoutInflater li = getLayoutInflater();
+        final View view = li.inflate(R.layout.dialog_detalhes_demanda, null);
+
+        btnAlterar = view.findViewById(R.id.btnAlterar);
+        btnExcluir  = view.findViewById(R.id.btnExcluir);
+        btnInserirProposta  = view.findViewById(R.id.btnInserirProposta);
+
+        btnAlterar.setVisibility(View.GONE);
+        btnExcluir.setVisibility(View.GONE);
+
+        txtDescDemanda = view.findViewById(R.id.txtDescricao);
+        txtCatDemanda = view.findViewById(R.id.txtCatDemanda);
+        txtTurnoDemanda = view.findViewById(R.id.txtTurno);
+        txtInicioDemanda = view.findViewById(R.id.txtInicio);
+        txtnHorasaulaDemanda = view.findViewById(R.id.txtCH);
+        txtLocalidadeDemanda = view.findViewById(R.id.txtCidade);
+        txtEstadoDemanda = view.findViewById(R.id.txtEstado);
+        txtLogradouroDemanda = view.findViewById(R.id.txtLogradouro);
+        txtComplementoDemanda = view.findViewById(R.id.txtComplemento);
+        txtNumeroDemanda = view.findViewById(R.id.txtnumero);
+        txtCEPDemanda = view.findViewById(R.id.txtCEP);
+        txtBairroDemanda = view.findViewById(R.id.txtBairro);
+        txtExpiracao = view.findViewById(R.id.textExpiracao);
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference refDem = database.getReference("demandas/" + codDemanda);
+
+        refDem.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                demandadetalhe = dataSnapshot.getValue(Demanda.class);
+
+                txtDescDemanda.setText(String.valueOf(demandadetalhe.getDescricao()));
+                txtCatDemanda.setText(String.valueOf(demandadetalhe.getCategoria()));
+                txtTurnoDemanda.setText(String.valueOf(demandadetalhe.getTurno()));
+                txtInicioDemanda.setText(String.valueOf(demandadetalhe.getInicio()));
+                txtnHorasaulaDemanda.setText(String.valueOf(demandadetalhe.getHorasaula()) + " horas");
+                txtLocalidadeDemanda.setText(String.valueOf(demandadetalhe.getLocalidade()));
+                txtEstadoDemanda.setText(String.valueOf(demandadetalhe.getEstado()));
+                txtLogradouroDemanda.setText(String.valueOf(demandadetalhe.getLogradouro()));
+                txtComplementoDemanda.setText(String.valueOf(demandadetalhe.getComplemento()));
+                txtNumeroDemanda.setText(String.valueOf(demandadetalhe.getNumero()));
+                txtCEPDemanda.setText(String.valueOf(demandadetalhe.getCEP()));
+                txtBairroDemanda.setText(String.valueOf(demandadetalhe.getBairro()));
+                txtExpiracao.setText(String.valueOf(demandadetalhe.getExpiracao()));
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.loading);
+                Snackbar.make(progressBar,
+                        "Erro de leitura: " + databaseError.getCode(),
+                        Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
+        view.findViewById(R.id.btnInserirProposta).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                alerta.dismiss();
+                Intent oferta = new Intent(getContext(), OfertaActivity.class);
+                startActivity(oferta);
+            }
+        });
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Detalhes da demanda");
+
+        builder.setView(view);
+        alerta = builder.create();
+        alerta.show();
     }
 }
