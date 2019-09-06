@@ -18,8 +18,13 @@
         <item>A combinar</item>
     </string-array>
     <string-array name="categoriaDemanda">
-        <item>Dança</item>
-        <item>Outras</item>
+        <item>Danças</item>
+        <item>Esportes</item>
+        <item>Culinária</item>
+        <item>Instrumentos musicais</item>
+        <item>Disciplinas Escolares</item>
+        <item>Artesanato</item>
+        <item>Artes</item>
     </string-array>
     <string-array name="cargaHoraria">
         <item>4 horas/aula</item>
