@@ -79,11 +79,14 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     private Categoria categoria;
     private Demanda demanda, demandaSelecionada;
     private Date dataatual = new Date();
+    private Date dataformatada;
     private DatabaseReference firebase;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
-    private String myFormat = "yyyy/MM/dd";
-    private SimpleDateFormat formatoData;
+    private String myFormat = "dd/MM/yyyy";
+    private String format = "yyyy/MM/dd";
+    private SimpleDateFormat formatoData =  new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
+    private SimpleDateFormat formatoDataDemanda = new SimpleDateFormat(format, new Locale("pt", "BR"));
     private TextView txtCategoria;
 
     @Override
@@ -172,7 +175,11 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
             btnCadastrar.setEnabled(false);
             progressBar.setFocusable(true);
             openProgressBar();
-            inicializaObjeto();
+            try {
+                inicializaObjeto();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             if(AlunoDemandaFragment.alterar){
                 demanda.atualizademandaDB(DemandaActivity.this);
             } else{
@@ -404,14 +411,15 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     }
 
     @Override
-    protected void inicializaObjeto() {
+    protected void inicializaObjeto() throws ParseException {
 
         if(AlunoDemandaFragment.alterar){
             status = demandaSelecionada.getStatus();
-            data = demandaSelecionada.getData();
+            dataformatada = formatoDataDemanda.parse(demandaSelecionada.getData());
+            data = formatoData.format(dataformatada);
         } else{
             status = "Aguardando proposta";
-            data = formatoData.format(dataatual);
+            data = formatoDataDemanda.format(dataatual);
             nomeCategoria = spnCatDemanda.getSelectedItem().toString();
             codCategoria = ((Categoria)spnCatDemanda.getSelectedItem()).getCodigo();
         }
@@ -526,7 +534,6 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
 
     private void updateLabel() {
 
-        formatoData = new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
         txtInicioDemanda.setText(formatoData.format(myCalendar.getTime()));
     }
 

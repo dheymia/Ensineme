@@ -238,18 +238,5 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
         startActivity(intent);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
-
 }
 

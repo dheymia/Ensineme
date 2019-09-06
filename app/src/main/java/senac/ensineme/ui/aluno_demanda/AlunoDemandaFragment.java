@@ -3,12 +3,14 @@ package senac.ensineme.ui.aluno_demanda;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -49,6 +51,7 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
     private TextView textView, txtExpiracao, txtDescDemanda, txtCatDemanda, txtTurnoDemanda, txtInicioDemanda, txtnHorasaulaDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtLogradouroDemanda, txtComplementoDemanda, txtNumeroDemanda, txtCEPDemanda, txtBairroDemanda;
     private Button btnExcluir, btnAlterar, btnInserirProposta;
     private RecyclerView recyclerView;
+    private LinearLayout voltar;
     private Spinner spConsulta;
     private String consulta, aluno, codDemanda;
     private ProgressBar progressBar;
@@ -180,6 +183,7 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
 
         btnAlterar = view.findViewById(R.id.btnAlterar);
         btnExcluir  = view.findViewById(R.id.btnExcluir);
+        voltar = view.findViewById(R.id.dialogVoltar);
         btnInserirProposta  = view.findViewById(R.id.btnInserirProposta);
 
         btnInserirProposta.setVisibility(View.GONE);
@@ -233,31 +237,39 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
             }
         });
 
-        view.findViewById(R.id.btnExcluir).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
-                builder
-                        .setMessage("Deseja excluir esta solicitação?")
-                        .setPositiveButton("Confirmar",  new DialogInterface.OnClickListener() {
+        voltar.setOnClickListener(new View.OnClickListener() {
+                                      @Override
+                                      public void onClick(View view) {
+                                          alerta.dismiss();
+                                      }
+                                  });
 
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                demandadetalhe.excluiDemandaDB();
-                                alerta.dismiss();
+                view.findViewById(R.id.btnExcluir).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
+                        builder
+                                .setMessage("Deseja excluir esta solicitação?")
+                                .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
 
-                            }
-                        })
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        demandadetalhe.excluiDemandaDB();
+                                        alerta.dismiss();
 
-                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                                    }
+                                })
 
-                            @Override
-                            public void onClick(DialogInterface dialog,int id) {
-                                dialog.cancel();
-                            }
-                        })
-                        .show();            }
-        });
+                                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                })
+                                .show();
+                    }
+                });
 
 
         view.findViewById(R.id.btnAlterar).setOnClickListener(new View.OnClickListener() {

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +44,7 @@ public class ProfessorInicioFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private TextView textView, txtExpiracao, txtDescDemanda, txtCatDemanda, txtTurnoDemanda, txtInicioDemanda, txtnHorasaulaDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtLogradouroDemanda, txtComplementoDemanda, txtNumeroDemanda, txtCEPDemanda, txtBairroDemanda;
     private Button btnExcluir, btnAlterar,btnInserirProposta;
+    private LinearLayout voltar;
     private ProgressBar progressBar;
     private RecyclerView recyclerDemandas,recyclerCategorias;
     private CategoriaProfAdapter adapter;
@@ -188,6 +190,7 @@ public class ProfessorInicioFragment extends Fragment {
 
         btnAlterar = view.findViewById(R.id.btnAlterar);
         btnExcluir  = view.findViewById(R.id.btnExcluir);
+        voltar = view.findViewById(R.id.dialogVoltar);
         btnInserirProposta  = view.findViewById(R.id.btnInserirProposta);
 
         btnAlterar.setVisibility(View.GONE);
@@ -239,6 +242,13 @@ public class ProfessorInicioFragment extends Fragment {
                         "Erro de leitura: " + databaseError.getCode(),
                         Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+        });
+
+        voltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alerta.dismiss();
             }
         });
 

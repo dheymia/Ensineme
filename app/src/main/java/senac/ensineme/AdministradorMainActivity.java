@@ -46,7 +46,6 @@ public class AdministradorMainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), AlunoMainActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
         btnProfessor = (Button) findViewById(R.id.btnProfessor);
@@ -55,7 +54,6 @@ public class AdministradorMainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), ProfessorMainActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -65,7 +63,6 @@ public class AdministradorMainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), CategoriasActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
