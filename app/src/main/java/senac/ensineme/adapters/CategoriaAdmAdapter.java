@@ -47,6 +47,23 @@ public class CategoriaAdmAdapter extends RecyclerView.Adapter<CategoriaAdmAdapte
         final Categoria categoria = categoriaList.get(position);
 
         viewHolder.categoria.setText(categoria.getNome());
+
+        if ("Danças".equals(categoria.getNome())) {
+            viewHolder.imagem.setImageResource(R.drawable.dancas);
+        } else if ("Esportes".equals(categoria.getNome())) {
+            viewHolder.imagem.setImageResource(R.drawable.esporte);
+        } else if ("Culinária".equals(categoria.getNome())) {
+            viewHolder.imagem.setImageResource(R.drawable.culinaria);
+        } else if ("Instrumentos musicais".equals(categoria.getNome())) {
+            viewHolder.imagem.setImageResource(R.drawable.instrumentos);
+        } else if ("Disciplinas escolares".equals(categoria.getNome())) {
+            viewHolder.imagem.setImageResource(R.drawable.escolares);
+        } else if ("Artesanato".equals(categoria.getNome())) {
+            viewHolder.imagem.setImageResource(R.drawable.artesanato);
+        } else if ("Artes".equals(categoria.getNome())) {
+            viewHolder.imagem.setImageResource(R.drawable.arte);
+        }
+
         viewHolder.excluir.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -91,6 +108,7 @@ public class CategoriaAdmAdapter extends RecyclerView.Adapter<CategoriaAdmAdapte
 
         final TextView categoria;
         final Button excluir;
+        final ImageView imagem;
 
         public CategoriaAdmViewHolder(@NonNull View itemView) {
 
@@ -98,6 +116,8 @@ public class CategoriaAdmAdapter extends RecyclerView.Adapter<CategoriaAdmAdapte
 
             categoria = itemView.findViewById(R.id.txtNomeCategoria);
             excluir = itemView.findViewById(R.id.btnExcluirCategoria);
+            imagem = itemView.findViewById(R.id.imgCategoria);
+
 
             itemView.setTag(this);
             itemView.setOnClickListener(mOnItemClickListener);

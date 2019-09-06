@@ -144,6 +144,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/cabin_condensed_regular</item>
         <item name="android:textSize">10sp</item>
+        <item name="android:layout_marginRight">4dp</item>
     </style>
 
     <style name="texto_item">

@@ -11,7 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import senac.ensineme.R;
 import senac.ensineme.models.Demanda;
@@ -22,6 +26,13 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
     private AlertDialog alerta;
     private Context context;
     public View.OnClickListener mOnItemClickListener;
+    private String expiracao;
+    private Date  expiracaoformatada;
+    private String myFormat = "dd/MM/yyyy";
+    private String format = "yyyy/MM/dd";
+    private SimpleDateFormat formatoData =  new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
+    private SimpleDateFormat formatoDataDemanda = new SimpleDateFormat(format, new Locale("pt", "BR"));
+
 
     public DemandaAluAdapter(List<Demanda> demandaList, Context context) {
         this.demandaList = demandaList;
@@ -44,7 +55,15 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
         final Demanda demanda = demandaList.get(position);
 
         viewHolder.categoria.setText(demanda.getCategoria());
-        viewHolder.data.setText(demanda.getExpiracao());
+        try {
+            expiracaoformatada = formatoDataDemanda.parse(demanda.getExpiracao());
+            expiracao = formatoData.format(expiracaoformatada);
+            viewHolder.data.setText(expiracao);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         viewHolder.descricao.setText(demanda.getDescricao());
         viewHolder.detalhes.setOnClickListener(new View.OnClickListener() {
             @Override

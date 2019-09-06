@@ -25,6 +25,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
 import senac.ensineme.models.Usuario;
+import senac.ensineme.ui.professor_pesquisa.ProfessorPesquisaFragment;
 
 public class ProfessorMainActivity extends AppCompatActivity {
 
@@ -114,6 +115,11 @@ public class ProfessorMainActivity extends AppCompatActivity {
         if (id == R.id.acaoConfigurar) {
             Intent novaConfig = new Intent(getBaseContext(), ConfiguracaoActivity.class);
             startActivity(novaConfig);
+        }
+
+        if (id == R.id.app_bar_search) {
+            Intent pesquisa = new Intent(getBaseContext(), ProfessorPesquisaFragment.class);
+            startActivity(pesquisa);
         }
 
         return super.onOptionsItemSelected(item);

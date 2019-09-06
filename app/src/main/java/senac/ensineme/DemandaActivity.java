@@ -70,7 +70,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     private Button btnCadastrar;
     private EditText txtDescDemanda, txtCEPDemanda, txtLogradouroDemanda, txtBairroDemanda, txtComplementoDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtInicioDemanda, txtNumero;
     private Spinner spnCatDemanda, spnTurnoDemanda, spnValidadeDemanda, spnHorasaulaDemanda;
-    private String status, aluno, codDemanda, descricao,  turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado, inicioDemanda, validadeDemanda, data,nomeCategoria, codCategoria, numero;
+    private String status, aluno, codDemanda, descricao,  turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado, inicioDemanda, validadeDemanda, data,nomeCategoria, codCategoria, numero, inicio;
     private int horasaula, validade;
     private ArrayAdapter<CharSequence> turnoAdapter, validadeAdapter, horasAulaAdapter;
     private ArrayAdapter<Categoria> categoriaAdapter;
@@ -79,7 +79,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     private Categoria categoria;
     private Demanda demanda, demandaSelecionada;
     private Date dataatual = new Date();
-    private Date dataformatada;
+    private Date dataformatada, inicioformatado;
     private DatabaseReference firebase;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -169,28 +169,27 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     @Override
     public void onClick(View view) {
 
-        inicializaConteudo();
+        try {
+            inicializaConteudo();
 
-        if (validaCampo()) {
-            btnCadastrar.setEnabled(false);
-            progressBar.setFocusable(true);
-            openProgressBar();
-            try {
+            if (validaCampo()) {
+                btnCadastrar.setEnabled(false);
+                progressBar.setFocusable(true);
+                openProgressBar();
                 inicializaObjeto();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            if(AlunoDemandaFragment.alterar){
-                demanda.atualizademandaDB(DemandaActivity.this);
-            } else{
-                demanda.salvaDemandaDB(DemandaActivity.this);
-            }
+                if(AlunoDemandaFragment.alterar){
+                    demanda.atualizademandaDB(DemandaActivity.this);
+                } else{
+                    demanda.salvaDemandaDB(DemandaActivity.this);
+                }
 
-        } else {
-            closeProgressBar();
+            } else {
+                closeProgressBar();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-
-    }
+            }
 
     @Override
     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
@@ -280,9 +279,15 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
                 txtComplementoDemanda.setText(String.valueOf(demandaSelecionada.getComplemento()));
                 txtLocalidadeDemanda.setText(String.valueOf(demandaSelecionada.getLocalidade()));
                 txtEstadoDemanda.setText(String.valueOf(demandaSelecionada.getEstado()));
-                txtInicioDemanda.setText(String.valueOf(demandaSelecionada.getInicio()));
                 spnTurnoDemanda.setSelection(turnoAdapter.getPosition(String.valueOf(demandaSelecionada.getTurno())));
                 txtCategoria.setText(String.valueOf(demandaSelecionada.getCategoria()));
+                try {
+                    inicioformatado = formatoDataDemanda.parse(demandaSelecionada.getInicio());
+                    inicio = formatoData.format(inicioformatado);
+                    txtInicioDemanda.setText(inicio);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 aluno = demandaSelecionada.getAluno();
                 horasaula = demandaSelecionada.getHorasaula();
                 validade = demandaSelecionada.getValidade();
@@ -348,7 +353,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     }
 
     @Override
-    protected void inicializaConteudo() {
+    protected void inicializaConteudo() throws ParseException {
         descricao = txtDescDemanda.getText().toString();
         turno = spnTurnoDemanda.getSelectedItem().toString();
         CEP = txtCEPDemanda.getText().toString();
@@ -360,7 +365,10 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         estado = txtEstadoDemanda.getText().toString();
         cargaHoraria = spnHorasaulaDemanda.getSelectedItem().toString();
         inicioDemanda = txtInicioDemanda.getText().toString();
+        inicioformatado = formatoData.parse(inicioDemanda);
+        inicio = formatoDataDemanda.format(inicioformatado);
         validadeDemanda = spnValidadeDemanda.getSelectedItem().toString();
+
 
         switch (cargaHoraria) {
             case "4 horas/aula":
@@ -415,8 +423,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
 
         if(AlunoDemandaFragment.alterar){
             status = demandaSelecionada.getStatus();
-            dataformatada = formatoDataDemanda.parse(demandaSelecionada.getData());
-            data = formatoData.format(dataformatada);
+            data = demandaSelecionada.getData();
         } else{
             status = "Aguardando proposta";
             data = formatoDataDemanda.format(dataatual);
@@ -434,7 +441,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         demanda.setStatus(status);
         demanda.setCategoria(nomeCategoria);
         demanda.setCategoriaCod(codCategoria);
-        demanda.setInicio(inicioDemanda);
+        demanda.setInicio(inicio);
         demanda.setExpiracao(expiraDemanda());
         demanda.setCEP(CEP);
         demanda.setNumero(Integer.parseInt(numero));
@@ -505,7 +512,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new java.util.Date());
         calendar.add (Calendar.DAY_OF_MONTH, validade);
-        String diaFormat = new SimpleDateFormat("dd/MM/yyyy").format(calendar.getTime());
+        String diaFormat = formatoDataDemanda.format(calendar.getTime());
         return diaFormat;
     }
 

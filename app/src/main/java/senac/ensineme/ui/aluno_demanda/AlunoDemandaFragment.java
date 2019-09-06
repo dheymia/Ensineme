@@ -35,8 +35,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import senac.ensineme.DemandaActivity;
 import senac.ensineme.R;
@@ -53,7 +59,6 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
     private RecyclerView recyclerView;
     private LinearLayout voltar;
     private Spinner spConsulta;
-    private String consulta, aluno, codDemanda;
     private ProgressBar progressBar;
     private ArrayAdapter<CharSequence> statusAdapter;
     public static DemandaAluAdapter adapter;
@@ -65,6 +70,12 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
     public static boolean alterar = false;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
+    private String consulta, aluno, codDemanda, inicio, expiracao;
+    private Date inicioformatado, expiracaoformatada;
+    private String myFormat = "dd/MM/yyyy";
+    private String format = "yyyy/MM/dd";
+    private SimpleDateFormat formatoData =  new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
+    private SimpleDateFormat formatoDataDemanda = new SimpleDateFormat(format, new Locale("pt", "BR"));
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -101,7 +112,6 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
         consulta = spConsulta.getSelectedItem().toString();
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        progressBar.setVisibility( View.VISIBLE );
 
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +148,15 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
             for (DataSnapshot ds : dataSnapshot.getChildren()) {
                 Demanda demanda = ds.getValue(Demanda.class);
                 demandasList.add(demanda);
+
+                Collections.sort(demandasList, new Comparator<Demanda>() {
+                    @Override
+                    public int compare(Demanda demanda, Demanda t1) {
+                        if (demanda.getExpiracao() == null || t1.getExpiracao() == null)
+                            return 0;
+                        return demanda.getExpiracao().compareTo(t1.getExpiracao());
+                    }
+                });
             }
 
             adapter = new DemandaAluAdapter(demandasList, getContext());
@@ -152,12 +171,6 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
         }
     };
 
-    protected void showToast(String message){
-        Toast.makeText(getContext(),
-                message,
-                Toast.LENGTH_LONG)
-                .show();
-    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -166,8 +179,10 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
         showToast( "OnItemSelectedListener : " + item.toString());
 
         if (consulta.equals("Todas")) {
-            ref.limitToFirst(100).orderByChild("data").addValueEventListener(ListenerGeral);
+            openProgressBar();
+            ref.limitToFirst(100).addValueEventListener(ListenerGeral);
         } else {
+            openProgressBar();
             ref.limitToFirst(100).orderByChild("status").equalTo(consulta).addValueEventListener(ListenerGeral);
         }
     }
@@ -205,6 +220,7 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference refDem = database.getReference("demandas/" + codDemanda);
 
+        openProgressBar();
         refDem.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -214,8 +230,19 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
                 txtDescDemanda.setText(String.valueOf(demandadetalhe.getDescricao()));
                 txtCatDemanda.setText(String.valueOf(demandadetalhe.getCategoria()));
                 txtTurnoDemanda.setText(String.valueOf(demandadetalhe.getTurno()));
-                txtInicioDemanda.setText(String.valueOf(demandadetalhe.getInicio()));
-                txtnHorasaulaDemanda.setText(String.valueOf(demandadetalhe.getHorasaula()) + " horas");
+                try {
+                    inicioformatado = formatoDataDemanda.parse(demandadetalhe.getInicio());
+                    inicio = formatoData.format(inicioformatado);
+                    txtInicioDemanda.setText(inicio);
+
+                    expiracaoformatada = formatoDataDemanda.parse(demandadetalhe.getExpiracao());
+                    expiracao = formatoData.format(expiracaoformatada);
+                    txtExpiracao.setText(expiracao);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                txtnHorasaulaDemanda.setText(String.valueOf(demandadetalhe.getHorasaula()) + " horas/aula");
                 txtLocalidadeDemanda.setText(String.valueOf(demandadetalhe.getLocalidade()));
                 txtEstadoDemanda.setText(String.valueOf(demandadetalhe.getEstado()));
                 txtLogradouroDemanda.setText(String.valueOf(demandadetalhe.getLogradouro()));
@@ -223,7 +250,9 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
                 txtNumeroDemanda.setText(String.valueOf(demandadetalhe.getNumero()));
                 txtCEPDemanda.setText(String.valueOf(demandadetalhe.getCEP()));
                 txtBairroDemanda.setText(String.valueOf(demandadetalhe.getBairro()));
-                txtExpiracao.setText(String.valueOf(demandadetalhe.getExpiracao()));
+
+                closeProgressBar();
+
 
             }
 
@@ -288,5 +317,27 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
         builder.setView(view);
         alerta = builder.create();
         alerta.show();
+    }
+
+    protected void openProgressBar(){
+        progressBar.setVisibility( View.VISIBLE );
+    }
+
+    protected void closeProgressBar(){
+        progressBar.setVisibility( View.GONE );
+    }
+
+    protected void showSnackbar(String message){
+        Snackbar.make(progressBar,
+                message,
+                Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+    }
+
+    protected void showToast(String message){
+        Toast.makeText(getContext(),
+                message,
+                Toast.LENGTH_LONG)
+                .show();
     }
 }

@@ -27,8 +27,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import senac.ensineme.DemandaActivity;
 import senac.ensineme.OfertaActivity;
@@ -53,10 +59,15 @@ public class ProfessorInicioFragment extends Fragment {
     private List<Demanda> demandasList = new ArrayList<>();
     public static Demanda demandaSelecionada;
     private Demanda demandadetalhe;
-    private String codDemanda;;
+    private String codDemanda, inicio, expiracao;
+    private Date inicioformatado, expiracaoformatada;
     private Categoria categoria, categoriaSelecionada;
     private FirebaseDatabase firebase;
     private DatabaseReference ref, refDem;
+    private String myFormat = "dd/MM/yyyy";
+    private String format = "yyyy/MM/dd";
+    private SimpleDateFormat formatoData =  new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
+    private SimpleDateFormat formatoDataDemanda = new SimpleDateFormat(format, new Locale("pt", "BR"));
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -86,7 +97,7 @@ public class ProfessorInicioFragment extends Fragment {
 
         recyclerDemandas.setHasFixedSize(true);
         recyclerDemandas.setLayoutManager(new LinearLayoutManager(getContext()));
-        progressBar.setVisibility( View.VISIBLE );
+        openProgressBar();
         refDem.limitToFirst(10).orderByChild("status").equalTo("Aguardando proposta").addValueEventListener(ListenerGeralDemandas);
 
         return root;
@@ -148,6 +159,17 @@ public class ProfessorInicioFragment extends Fragment {
             for (DataSnapshot ds : dataSnapshot.getChildren()) {
                 Demanda demanda = ds.getValue(Demanda.class);
                 demandasList.add(demanda);
+
+                Collections.sort(demandasList, new Comparator<Demanda>() {
+                    @Override
+                    public int compare(Demanda demanda, Demanda t1) {
+                        if (demanda.getExpiracao() == null || t1.getExpiracao() == null)
+                            return 0;
+                        return demanda.getExpiracao().compareTo(t1.getExpiracao());
+                    }
+                });
+
+
             }
 
             adapterDemandas = new DemandaAluAdapter(demandasList, getContext());
@@ -222,8 +244,19 @@ public class ProfessorInicioFragment extends Fragment {
                 txtDescDemanda.setText(String.valueOf(demandadetalhe.getDescricao()));
                 txtCatDemanda.setText(String.valueOf(demandadetalhe.getCategoria()));
                 txtTurnoDemanda.setText(String.valueOf(demandadetalhe.getTurno()));
-                txtInicioDemanda.setText(String.valueOf(demandadetalhe.getInicio()));
-                txtnHorasaulaDemanda.setText(String.valueOf(demandadetalhe.getHorasaula()) + " horas");
+                try {
+                    inicioformatado = formatoDataDemanda.parse(demandadetalhe.getInicio());
+                    inicio = formatoData.format(inicioformatado);
+                    txtInicioDemanda.setText(inicio);
+
+                    expiracaoformatada = formatoDataDemanda.parse(demandadetalhe.getExpiracao());
+                    expiracao = formatoData.format(expiracaoformatada);
+                    txtExpiracao.setText(expiracao);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                txtnHorasaulaDemanda.setText(String.valueOf(demandadetalhe.getHorasaula()) + " horas/aula");
                 txtLocalidadeDemanda.setText(String.valueOf(demandadetalhe.getLocalidade()));
                 txtEstadoDemanda.setText(String.valueOf(demandadetalhe.getEstado()));
                 txtLogradouroDemanda.setText(String.valueOf(demandadetalhe.getLogradouro()));
@@ -231,8 +264,6 @@ public class ProfessorInicioFragment extends Fragment {
                 txtNumeroDemanda.setText(String.valueOf(demandadetalhe.getNumero()));
                 txtCEPDemanda.setText(String.valueOf(demandadetalhe.getCEP()));
                 txtBairroDemanda.setText(String.valueOf(demandadetalhe.getBairro()));
-                txtExpiracao.setText(String.valueOf(demandadetalhe.getExpiracao()));
-
             }
 
             @Override

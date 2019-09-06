@@ -60,9 +60,10 @@
 
 
     <!-- Menu Principal-->
-    <string name="title_home">Início</string>
-    <string name="title_dashboard">Demandas</string>
-    <string name="title_notifications">Pesquisar</string>
+    <string name="title_inicio">Início</string>
+    <string name="title_solicitações">Solicitações</string>
+    <string name="title_propostas">Propostas</string>
+    <string name="title_pesquisa">Pesquisar</string>
 
     <!-- Ações-->
     <string name="acaoEntrar">Entrar</string>
