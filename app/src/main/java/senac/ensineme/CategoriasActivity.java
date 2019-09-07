@@ -40,7 +40,6 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
 
     private AlertDialog alerta;
     private ProgressBar progressBar;
-    private ProgressDialog progressDialog;
     private EditText txtCategoria;
     private RecyclerView recyclerView;
     private CategoriaAdmAdapter adapter;
@@ -66,9 +65,7 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Carregando...");
-        progressDialog.show();
+        openProgressBar();
         ref.limitToFirst(100).orderByChild("nome").addValueEventListener(ListenerGeral);
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -111,12 +108,12 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
             adapter.setOnItemClickListener(onItemClickListener);
             recyclerView.setAdapter(adapter);
 
-            progressDialog.dismiss();
+            closeProgressBar();
         }
 
           @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
-            progressDialog.dismiss();
+            closeProgressBar();
         }
     };
 

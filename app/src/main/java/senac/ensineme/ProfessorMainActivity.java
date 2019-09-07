@@ -43,6 +43,7 @@ public class ProfessorMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_professor_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
+        getSupportActionBar().hide();
 
         mTextMessage = findViewById(R.id.message);
         txtNome = findViewById(R.id.txtNome);
@@ -71,7 +72,7 @@ public class ProfessorMainActivity extends AppCompatActivity {
                 usuariologado = dataSnapshot.getValue(Usuario.class);
                 if (usuariologado.getTipo() != null) {
                     nomeUsuario = usuariologado.getNome();
-                    txtNome.setText("Olá " + nomeUsuario);
+//                    txtNome.setText("Olá " + nomeUsuario);
                 }
             }
 
@@ -89,6 +90,12 @@ public class ProfessorMainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+
+
+
+        getSupportActionBar().hide();
+
     }
 
     @Override
@@ -124,7 +131,6 @@ public class ProfessorMainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
 }

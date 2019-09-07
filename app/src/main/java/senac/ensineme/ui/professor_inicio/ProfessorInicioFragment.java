@@ -3,9 +3,13 @@ package senac.ensineme.ui.professor_inicio;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -14,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -21,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,6 +42,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import senac.ensineme.ConfiguracaoActivity;
+import senac.ensineme.DemandaActivity;
+import senac.ensineme.FullscreenActivity;
 import senac.ensineme.OfertaActivity;
 import senac.ensineme.R;
 import senac.ensineme.adapters.CategoriaProfAdapter;
@@ -51,6 +60,8 @@ public class ProfessorInicioFragment extends Fragment {
     private Button btnExcluir, btnAlterar,btnInserirProposta;
     private LinearLayout voltar;
     private ProgressBar progressBar;
+    private ImageView imagemtoolbar;
+    private Toolbar toolbar;
     private RecyclerView recyclerDemandas,recyclerCategorias;
     private CategoriaProfAdapter adapter;
     public static DemandaAluAdapter adapterDemandas;
@@ -77,12 +88,16 @@ public class ProfessorInicioFragment extends Fragment {
         recyclerDemandas = root.findViewById(R.id.listDemandas);
         recyclerCategorias = root.findViewById(R.id.listCategorias);
         progressBar = root.findViewById(R.id.loading);
+        imagemtoolbar = root.findViewById(R.id.app_bar_image);
+        toolbar = root.findViewById(R.id.toolbar);
         homeViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
 //                textView.setText(s);
             }
         });
+
+        imagemtoolbar.setImageResource(R.drawable.ensinemeprincipal);
 
         firebase = FirebaseDatabase.getInstance();
         ref = firebase.getReference("categorias");
@@ -100,6 +115,13 @@ public class ProfessorInicioFragment extends Fragment {
         refDem.limitToFirst(10).orderByChild("status").equalTo("Aguardando proposta").addValueEventListener(ListenerGeralDemandas);
 
         return root;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        setHasOptionsMenu(true);
     }
 
     private View.OnClickListener onItemClickListener = new View.OnClickListener() {
@@ -296,5 +318,33 @@ public class ProfessorInicioFragment extends Fragment {
         builder.setView(view);
         alerta = builder.create();
         alerta.show();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.acaoSair) {
+            FirebaseAuth.getInstance().signOut();
+            Intent principal = new Intent(getActivity().getBaseContext(), FullscreenActivity.class);
+            startActivity(principal);
+            getActivity().finish();
+        }
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.acaoConfigurar) {
+            Intent novaConfig = new Intent(getActivity().getBaseContext(), ConfiguracaoActivity.class);
+            startActivity(novaConfig);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
