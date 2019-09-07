@@ -8,18 +8,18 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="senac.ensineme.ui.aluno_inicio.AlunoInicioFragment"
-        android:label="@string/title_home"
+        android:label="@string/title_inicio"
         tools:layout="@layout/fragment_aluno_inicio" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="senac.ensineme.ui.aluno_demanda.AlunoDemandaFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_solicitações"
         tools:layout="@layout/fragment_aluno_demanda" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="senac.ensineme.ui.aluno_pesquisa.AlunoPesquisaFragment"
-        android:label="@string/title_notifications"
+        android:label="@string/title_pesquisa"
         tools:layout="@layout/fragment_aluno_pesquisa" />
 </navigation>
