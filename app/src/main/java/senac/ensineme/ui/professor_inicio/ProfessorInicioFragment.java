@@ -36,7 +36,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import senac.ensineme.DemandaActivity;
 import senac.ensineme.OfertaActivity;
 import senac.ensineme.R;
 import senac.ensineme.adapters.CategoriaProfAdapter;
@@ -218,7 +217,7 @@ public class ProfessorInicioFragment extends Fragment {
         btnAlterar.setVisibility(View.GONE);
         btnExcluir.setVisibility(View.GONE);
 
-        txtDescDemanda = view.findViewById(R.id.txtDescricao);
+        txtDescDemanda = view.findViewById(R.id.txtAluno);
         txtCatDemanda = view.findViewById(R.id.txtCatDemanda);
         txtTurnoDemanda = view.findViewById(R.id.txtTurno);
         txtInicioDemanda = view.findViewById(R.id.txtInicio);
@@ -227,7 +226,7 @@ public class ProfessorInicioFragment extends Fragment {
         txtEstadoDemanda = view.findViewById(R.id.txtEstado);
         txtLogradouroDemanda = view.findViewById(R.id.txtLogradouro);
         txtComplementoDemanda = view.findViewById(R.id.txtComplemento);
-        txtNumeroDemanda = view.findViewById(R.id.txtnumero);
+        txtNumeroDemanda = view.findViewById(R.id.txtNumero);
         txtCEPDemanda = view.findViewById(R.id.txtCEP);
         txtBairroDemanda = view.findViewById(R.id.txtBairro);
         txtExpiracao = view.findViewById(R.id.textExpiracao);

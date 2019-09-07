@@ -51,7 +51,7 @@
                         android:textAlignment="center" />
 
                     <TextView
-                        android:id="@+id/txtDescricao"
+                        android:id="@+id/txtAluno"
                         style="@style/titulo_item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -246,7 +246,7 @@
                             android:text="Nº" />
 
                         <TextView
-                            android:id="@+id/txtnumero"
+                            android:id="@+id/txtNumero"
                             style="@style/texto_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

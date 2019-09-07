@@ -3,7 +3,6 @@ package senac.ensineme.ui.aluno_demanda;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -203,7 +202,7 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
 
         btnInserirProposta.setVisibility(View.GONE);
 
-        txtDescDemanda = view.findViewById(R.id.txtDescricao);
+        txtDescDemanda = view.findViewById(R.id.txtAluno);
         txtCatDemanda = view.findViewById(R.id.txtCatDemanda);
         txtTurnoDemanda = view.findViewById(R.id.txtTurno);
         txtInicioDemanda = view.findViewById(R.id.txtInicio);
@@ -212,7 +211,7 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
         txtEstadoDemanda = view.findViewById(R.id.txtEstado);
         txtLogradouroDemanda = view.findViewById(R.id.txtLogradouro);
         txtComplementoDemanda = view.findViewById(R.id.txtComplemento);
-        txtNumeroDemanda = view.findViewById(R.id.txtnumero);
+        txtNumeroDemanda = view.findViewById(R.id.txtNumero);
         txtCEPDemanda = view.findViewById(R.id.txtCEP);
         txtBairroDemanda = view.findViewById(R.id.txtBairro);
         txtExpiracao = view.findViewById(R.id.textExpiracao);
