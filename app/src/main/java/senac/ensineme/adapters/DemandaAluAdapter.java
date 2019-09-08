@@ -1,14 +1,16 @@
 package senac.ensineme.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.ParseException;
@@ -17,21 +19,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import senac.ensineme.DemandaActivity;
 import senac.ensineme.R;
 import senac.ensineme.models.Demanda;
+import senac.ensineme.ui.aluno_inicio.AlunoInicioFragment;
 
-public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.DemandaViewHolder> {
+public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.DemandaAluViewHolder> {
 
     List<Demanda> demandaList;
-    private AlertDialog alerta;
     private Context context;
-    public View.OnClickListener mOnItemClickListener;
-    private String expiracao;
-    private Date  expiracaoformatada;
-    private String myFormat = "dd/MM/yyyy";
-    private String format = "yyyy/MM/dd";
-    private SimpleDateFormat formatoData =  new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
-    private SimpleDateFormat formatoDataDemanda = new SimpleDateFormat(format, new Locale("pt", "BR"));
+    public View.OnClickListener mOnItemClickListener, clickConsulta;
+    public static String codDemanda, codCategoria;
 
 
     public DemandaAluAdapter(List<Demanda> demandaList, Context context) {
@@ -41,35 +39,73 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
 
     @NonNull
     @Override
-    public DemandaAluAdapter.DemandaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_aluno_demanda,parent,false);
-        DemandaAluAdapter.DemandaViewHolder holder = new DemandaAluAdapter.DemandaViewHolder(view);
+    public DemandaAluAdapter.DemandaAluViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_demandas_aluno,parent,false);
+        DemandaAluAdapter.DemandaAluViewHolder holder = new DemandaAluAdapter.DemandaAluViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DemandaAluAdapter.DemandaViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull DemandaAluAdapter.DemandaAluViewHolder holder, int position) {
 
 
-        DemandaAluAdapter.DemandaViewHolder viewHolder = (DemandaAluAdapter.DemandaViewHolder) holder;
+        DemandaAluAdapter.DemandaAluViewHolder viewHolder = (DemandaAluAdapter.DemandaAluViewHolder) holder;
         final Demanda demanda = demandaList.get(position);
 
         viewHolder.categoria.setText(demanda.getCategoria());
-        try {
-            expiracaoformatada = formatoDataDemanda.parse(demanda.getExpiracao());
-            expiracao = formatoData.format(expiracaoformatada);
-            viewHolder.data.setText(expiracao);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
         viewHolder.descricao.setText(demanda.getDescricao());
-        viewHolder.detalhes.setOnClickListener(new View.OnClickListener() {
+        viewHolder.status.setText(demanda.getStatus());
+        viewHolder.alterar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Demanda selecionada: " + demanda.getCodigo(), Toast.LENGTH_SHORT).show();
+                AlunoInicioFragment.alterar = true;
+                codDemanda = demanda.getCodigo();
+                codCategoria = demanda.getCategoriaCod();
+                Intent demanda = new Intent(context, DemandaActivity.class);
+                context.startActivity(demanda);
+            }
+        });
 
+        if(demanda.getStatus().equals("Aguardando proposta")){
+            viewHolder.excluir.setVisibility(View.VISIBLE);
+            viewHolder.alterar.setVisibility(View.VISIBLE);
+        } else{
+            viewHolder.excluir.setVisibility(View.GONE);
+            viewHolder.alterar.setVisibility(View.GONE);
+        }
+
+        viewHolder.excluir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+                builder
+                        .setMessage("Deseja excluir esta solicitação?")
+                        .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                demanda.excluiDemandaDB();
+                                dialog.cancel();
+
+                            }
+                        })
+
+                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
+            }
+        });
+
+
+        viewHolder.consulta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "Consultando " + demanda.getDescricao(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -79,30 +115,41 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
         mOnItemClickListener = itemClickListener;
     }
 
+    public void setClickConsultaPrposta(View.OnClickListener itemClickListener) {
+        clickConsulta = itemClickListener;
+    }
+
     @Override
     public int getItemCount() {
         return demandaList.size();
     }
 
 
-    public class DemandaViewHolder extends RecyclerView.ViewHolder{
+    public class DemandaAluViewHolder extends RecyclerView.ViewHolder{
 
         final TextView categoria;
-        final TextView data;
+        final TextView status;
         final TextView descricao;
-        final TextView detalhes;
+        final Button alterar;
+        final Button excluir;
+        final Button consulta;
 
-        public DemandaViewHolder(@NonNull View itemView) {
+        public DemandaAluViewHolder(@NonNull View itemView) {
 
             super(itemView);
 
             categoria = itemView.findViewById(R.id.txtCatDemanda);
-            data = itemView.findViewById(R.id.txtDataDemanda);
+            status = itemView.findViewById(R.id.txtStaDemanda);
             descricao = itemView.findViewById(R.id.txtDescDemanda);
-            detalhes = itemView.findViewById(R.id.txtDetalhesDemanda);
+            alterar = itemView.findViewById(R.id.btnAlterarDemanda);
+            excluir = itemView.findViewById(R.id.btnExcluirDemanda);
+            consulta = itemView.findViewById(R.id.btnVerPropostas);
 
             itemView.setTag(this);
             itemView.setOnClickListener(mOnItemClickListener);
+            consulta.setTag(this);
+            consulta.setOnClickListener(clickConsulta);
+
         }
 
     }

@@ -61,7 +61,7 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
     }
 
     protected void inicializaViews() {
-        txtEmail = (AutoCompleteTextView) findViewById(R.id.txtValor);
+        txtEmail = (AutoCompleteTextView) findViewById(R.id.txtValorOferta);
         txtSenha = (EditText) findViewById(R.id.txtSenha);
         progressBar = (ProgressBar) findViewById(R.id.loading);
         cadastrar = (TextView) findViewById(R.id.txtCadastrar);
@@ -238,5 +238,21 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
         startActivity(intent);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
 }
 

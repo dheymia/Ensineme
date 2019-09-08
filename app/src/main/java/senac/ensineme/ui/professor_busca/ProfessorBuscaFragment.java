@@ -1,4 +1,4 @@
-package senac.ensineme.ui.professor_pesquisa;
+package senac.ensineme.ui.professor_busca;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,20 +14,20 @@ import androidx.lifecycle.ViewModelProviders;
 
 import senac.ensineme.R;
 
-public class ProfessorPesquisaFragment extends Fragment {
+public class ProfessorBuscaFragment extends Fragment {
 
-    private NotificationsViewModel notificationsViewModel;
+    private ProfessorBuscaViewModel notificationsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         notificationsViewModel =
-                ViewModelProviders.of(this).get(NotificationsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_professor_pesquisa, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
+                ViewModelProviders.of(this).get(ProfessorBuscaViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_professor_busca, container, false);
+        //final TextView textView = root.findViewById(R.id.text_notifications);
         notificationsViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                textView.setText(s);
+         //       textView.setText(s);
             }
         });
         return root;

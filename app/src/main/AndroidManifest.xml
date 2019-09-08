@@ -11,6 +11,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".LoginActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="senac.ensineme.LoginActivity" />
+        </activity>
+        <activity
             android:name=".ProfessorMainActivity"
             android:label="@string/title_activity_main"
             android:parentActivityName=".LoginActivity"
@@ -22,13 +31,14 @@
         <activity
             android:name=".AlunoMainActivity"
             android:label="@string/title_activity_main"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/temaAluno">
+        </activity>
         <activity
             android:name=".CategoriasActivity"
             android:label="@string/title_activity_categoria"
             android:parentActivityName=".AdministradorMainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="senac.ensineme.AdministradorMainActivity" />
@@ -64,12 +74,11 @@
         <activity
             android:name=".DemandaActivity"
             android:label="@string/title_activity_demanda"
-            android:parentActivityName=".LoginActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:parentActivityName=".AlunoMainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="senac.ensineme.LoginActivity"
+                android:value="senac.ensineme.AlunoMainActivity"
                 android:windowSoftInputMode="adjustResize" />
         </activity>
         <activity
@@ -93,15 +102,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="senac.ensineme.LoginActivity"
                 android:windowSoftInputMode="adjustResize" />
-        </activity>
-        <activity
-            android:name=".ConfiguracaoActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".AlunoMainActivity"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="senac.ensineme.AlunoMainActivity" />
         </activity>
 
         <meta-data

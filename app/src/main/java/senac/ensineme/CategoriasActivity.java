@@ -1,8 +1,5 @@
 package senac.ensineme;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -36,6 +33,9 @@ import senac.ensineme.adapters.CategoriaAdmAdapter;
 import senac.ensineme.models.Categoria;
 import senac.ensineme.models.FirebaseDB;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 public class CategoriasActivity extends AppCompatActivity implements DatabaseReference.CompletionListener {
 
     private AlertDialog alerta;
@@ -55,8 +55,8 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categoria);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        progressBar = findViewById(R.id.loading);
+
 
         firebase = FirebaseDatabase.getInstance();
         ref = firebase.getReference("categorias");
@@ -204,11 +204,11 @@ public class CategoriasActivity extends AppCompatActivity implements DatabaseRef
     }
 
     protected void openProgressBar(){
-        progressBar.setVisibility( View.VISIBLE );
+        progressBar.setVisibility(VISIBLE);
     }
 
     protected void closeProgressBar(){
-        progressBar.setVisibility( View.GONE );
+        progressBar.setVisibility( GONE );
     }
 
     protected void showSnackbar(String message){

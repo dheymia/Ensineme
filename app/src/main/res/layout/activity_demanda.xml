@@ -1,25 +1,359 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DemandaActivity">
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".DemandaActivity"
+    tools:showIn="@layout/activity_demanda">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+        <androidx.constraintlayout.widget.ConstraintLayout style="@style/layoutTelasInserir">
 
-    </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_demanda" />
+            <Button
+                android:id="@+id/btnCadastrarDemanda"
+                style="@style/botao"
+                android:text="@string/acaoCadastrar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spValidadeDemanda"
+                app:layout_constraintVertical_bias="0.666" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <EditText
+                android:id="@+id/txtDescricaoDemanda"
+                style="@style/inserirtexto"
+
+                android:hint="@string/descricaodemanda"
+                android:inputType="textMultiLine"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtViewDesejaAprender" />
+
+            <EditText
+                android:id="@+id/txtLogradouro"
+                style="@style/inserirtexto"
+                android:hint="@string/logradouro"
+                android:inputType="textMultiLine|textPostalAddress"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutCEPCidade" />
+
+            <LinearLayout
+                android:id="@+id/layoutDadosDemanda"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtDescricaoDemanda">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/linearLayout"
+                    style="@style/metadetela">
+
+                    <EditText
+                        android:id="@+id/txtInicioDemanda"
+                        style="@style/inserirtexto"
+                        android:layout_marginTop="1dp"
+                        android:hint="@string/data"
+                        android:inputType="date"
+                        android:textAlignment="center"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layoutCategoria"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+                        <Spinner
+                            android:id="@+id/spCategoria"
+                            style="@style/spinner"
+                            android:layout_width="0dp"
+                            android:layout_marginTop="1dp"
+                            android:entries="@array/categoriaDemanda"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/txtCategoria"
+                            style="@style/inserirtexto"
+                            android:layout_width="0dp"
+                            android:layout_marginTop="1dp"
+                            android:text="@string/acaoVerCategorias"
+                            android:textColor="@android:color/primary_text_light"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+
+                        android:id="@+id/textView2"
+                        style="@style/titulosipinners"
+
+                        android:text="@string/categoria"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        style="@style/titulosipinners"
+
+                        android:text="@string/inicioDemanda"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/layoutCategoria"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/linearLayout2"
+                    style="@style/metadetela"
+                    android:layout_height="match_parent">
+
+                    <Spinner
+                        android:id="@+id/spTurno"
+                        style="@style/spinner"
+
+                        android:layout_marginTop="1dp"
+                        android:entries="@array/turnoDemanda"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/textView7" />
+
+                    <Spinner
+                        android:id="@+id/spCargaHoraria"
+                        style="@style/spinner"
+
+                        android:layout_marginTop="1dp"
+                        android:entries="@array/cargaHoraria"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/textView5" />
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        style="@style/titulosipinners"
+
+                        android:text="@string/cargahoraria"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/spTurno" />
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        style="@style/titulosipinners"
+
+                        android:text="@string/turnoDemanda"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutCEPCidade"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView8">
+
+                <LinearLayout
+                    style="@style/metadetela"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/txtCep"
+                        style="@style/inserirtexto"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="1dp"
+                        android:hint="@string/cep"
+                        android:inputType="textPostalAddress" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/metadetela"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/txtCidade"
+                        style="@style/inserirtexto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/cidade"
+                        android:inputType="text" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutNumComp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtLogradouro">
+
+                <LinearLayout
+                    style="@style/metadetela"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/txtNumero"
+                        style="@style/inserirtexto"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="1dp"
+                        android:hint="@string/numero"
+                        android:inputType="number" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/metadetela"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/txtComplemento"
+                        style="@style/inserirtexto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:gravity="start|top"
+                        android:hint="@string/complemento"
+                        android:inputType="textMultiLine" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutBairroEst"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutNumComp">
+
+                <LinearLayout
+                    style="@style/metadetela"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+
+                    <EditText
+                        android:id="@+id/txtBairro"
+                        style="@style/inserirtexto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/bairro"
+                        android:inputType="textPersonName" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/metadetela"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/txtEstado"
+                        style="@style/inserirtexto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="1dp"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:hint="@string/estado"
+                        android:inputType="text" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/txtDescricaoDemanda"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Spinner
+                android:id="@+id/spValidadeDemanda"
+                style="@style/spinner"
+                android:layout_height="wrap_content"
+                android:entries="@array/validadeDemanda"
+
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView9" />
+
+            <TextView
+                android:id="@+id/txtViewDesejaAprender"
+                style="@style/titulo"
+
+                android:text="@string/desejaaprender"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/textView8"
+                style="@style/titulo"
+
+                android:text="@string/localaulas"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutDadosDemanda" />
+
+            <TextView
+                android:id="@+id/textView9"
+                style="@style/titulo"
+                android:layout_height="wrap_content"
+
+
+                android:text="@string/validadeDemanda"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutBairroEst" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</LinearLayout>

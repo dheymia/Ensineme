@@ -73,7 +73,7 @@ public class UsuarioActivity extends ComumActivity implements DatabaseReference.
     @Override
     protected void inicializaViews() {
         txtNome = (AutoCompleteTextView) findViewById(R.id.txtNome);
-        txtEmail = (AutoCompleteTextView) findViewById(R.id.txtValor);
+        txtEmail = (AutoCompleteTextView) findViewById(R.id.txtValorOferta);
         txtCelular = (AutoCompleteTextView) findViewById(R.id.txtCelular);
         txtSenha = (EditText) findViewById(R.id.txtSenha);
         rbAluno = (RadioButton) findViewById(R.id.rbAprender);

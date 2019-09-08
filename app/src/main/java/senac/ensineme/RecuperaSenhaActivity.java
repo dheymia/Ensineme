@@ -34,7 +34,7 @@ public class RecuperaSenhaActivity extends ComumActivity implements View.OnClick
 
     @Override
     protected void inicializaViews() {
-        txtEmail = findViewById(R.id.txtValor);
+        txtEmail = findViewById(R.id.txtValorOferta);
 
     }
 

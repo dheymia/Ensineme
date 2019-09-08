@@ -8,9 +8,8 @@ import java.util.Map;
 import senac.ensineme.R;
 
 public class Categoria {
-    DatabaseReference firebase;
-    private String codigo;
-    private String nome;
+    private DatabaseReference firebase;
+    private String codigo, nome;
     private int imagem;
 
     public Categoria() {

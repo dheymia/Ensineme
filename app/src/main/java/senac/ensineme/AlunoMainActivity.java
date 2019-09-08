@@ -42,7 +42,7 @@ public class AlunoMainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_aluno_main);
+        setContentView(R.layout.activity_main_aluno);
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
         mTextMessage = findViewById(R.id.message);
@@ -73,7 +73,7 @@ public class AlunoMainActivity extends AppCompatActivity {
                 if (usuariologado.getTipo() != null) {
                     nomeUsuario = usuariologado.getNome();
                     tipoUsuario = usuariologado.getTipo();
-                    txtNome.setText("Olá " + nomeUsuario);
+//                    txtNome.setText("Olá " + nomeUsuario);
                 }
             }
 
@@ -85,7 +85,7 @@ public class AlunoMainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
+                R.id.navigation_inicio, R.id.navigation_busca)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -114,7 +114,7 @@ public class AlunoMainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.acaoConfigurar) {
-            Intent novaConfig = new Intent(getBaseContext(), ConfiguracaoActivity.class);
+            Intent novaConfig = new Intent(getBaseContext(), SettingsActivity.class);
             startActivity(novaConfig);
         }
 
@@ -137,7 +137,7 @@ public class AlunoMainActivity extends AppCompatActivity {
 
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
-                            finish();
+                            finishAffinity();
 
                         }
                     })

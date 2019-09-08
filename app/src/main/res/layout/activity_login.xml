@@ -39,7 +39,7 @@
                 app:srcCompat="@drawable/ensineme" />
 
     <AutoCompleteTextView
-        android:id="@+id/txtValor"
+        android:id="@+id/txtValorOferta"
         style="@style/inserirEmail"
 
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +53,7 @@
         android:hint="@string/senha"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtValor" />
+        app:layout_constraintTop_toBottomOf="@+id/txtValorOferta" />
 
             <Button
                 android:id="@+id/btnCancelar"
@@ -78,7 +78,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/txtSenha"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/txtValor" />
+                app:layout_constraintTop_toTopOf="@id/txtValorOferta" />
 
     <LinearLayout
         android:layout_width="wrap_content"

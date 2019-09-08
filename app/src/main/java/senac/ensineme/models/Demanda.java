@@ -11,10 +11,9 @@ import java.util.Map;
 
 public class Demanda {
 
-    DatabaseReference firebase, firebaseUser, firebaseCat;
+    private DatabaseReference firebase, firebaseUser, firebaseCat;
     private String aluno, codigo, descricao , turno, status, categoria, categoriaCod, inicio, data, expiracao,CEP, logradouro, bairro, complemento, localidade, estado;
     private int horasaula, validade, numero;
-    private Boolean encerrada;
 
     public Demanda() {
     }
@@ -172,22 +171,6 @@ public class Demanda {
         this.numero = numero;
     }
 
-    public Boolean getEncerrada() {
-        return encerrada;
-    }
-
-    public void setEncerrada(Boolean encerrada) {
-        this.encerrada = encerrada;
-    }
-
-    public void encerrada() {
-        encerrada = true;
-    }
-
-    public Boolean isEncerrado() {
-        return encerrada;
-    }
-
     public void salvaDemandaDB(DatabaseReference.CompletionListener... completionListener) {
         firebase = FirebaseDB.getFirebase().child("demandas").child(getCodigo());
         firebaseUser = FirebaseDB.getFirebase().child("usuarios").child(aluno).child("demandas").child(getCodigo());
@@ -281,5 +264,22 @@ public class Demanda {
 
     }
 
+
+    public void atualizaStatusDemandaDB(DatabaseReference.CompletionListener... completionListener) {
+        firebase = FirebaseDB.getFirebase().child("demandas").child(getCodigo());
+        firebaseUser = FirebaseDB.getFirebase().child("usuarios").child(aluno).child("demandas").child(getCodigo());
+        firebaseCat = FirebaseDB.getFirebase().child("categorias").child(categoriaCod).child("demandas").child(getCodigo());
+        Map<String, Object> demandaUpdates = new HashMap<>();
+        demandaUpdates.put("status", getStatus());
+        firebase.updateChildren(demandaUpdates, completionListener[0]);
+
+        Map<String, Object> demandaUserUpdates = new HashMap<>();
+        demandaUserUpdates.put("status", getStatus());
+        firebaseUser.updateChildren(demandaUserUpdates, completionListener[0]);
+
+        Map<String, Object> demandaCatUpdates = new HashMap<>();
+        demandaCatUpdates.put("status", getStatus());
+        firebaseCat.updateChildren(demandaCatUpdates, completionListener[0]);
+    }
 
 }

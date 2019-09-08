@@ -38,7 +38,7 @@ public class AdministradorMainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_administrador_main);
+        setContentView(R.layout.activity_main_administrador);
 
         btnAluno = (Button) findViewById(R.id.btnAluno);
         btnAluno.setOnClickListener(new View.OnClickListener() {
@@ -70,8 +70,6 @@ public class AdministradorMainActivity extends AppCompatActivity {
         btnTeste.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getBaseContext(), OfertaActivity.class);
-                startActivity(intent);
                 finish();
             }
         });
@@ -131,7 +129,7 @@ public class AdministradorMainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.acaoConfigurar) {
-            Intent novaConfig = new Intent(getBaseContext(), ConfiguracaoActivity.class);
+            Intent novaConfig = new Intent(getBaseContext(), SettingsActivity.class);
             startActivity(novaConfig);
         }
 

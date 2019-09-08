@@ -33,6 +33,7 @@ import androidx.appcompat.widget.Toolbar;
 
 
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 
@@ -58,11 +59,13 @@ import java.util.Date;
 import java.util.Locale;
 
 
+import senac.ensineme.adapters.DemandaAluAdapter;
 import senac.ensineme.models.Categoria;
 import senac.ensineme.models.Demanda;
 
 import senac.ensineme.models.FirebaseDB;
-import senac.ensineme.ui.aluno_demanda.AlunoDemandaFragment;
+import senac.ensineme.ui.aluno_busca.AlunoBuscaFragment;
+import senac.ensineme.ui.aluno_inicio.AlunoInicioFragment;
 
 
 public class DemandaActivity extends ComumActivity implements DatabaseReference.CompletionListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -93,8 +96,6 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demanda);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -110,12 +111,12 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         btnCadastrar = (Button) findViewById(R.id.btnCadastrarDemanda);
         btnCadastrar.setOnClickListener((View.OnClickListener) this);
 
-        if (AlunoDemandaFragment.alterar){
+        if (AlunoInicioFragment.alterar){
             getSupportActionBar().setTitle("Alterar demanda");
             spnCatDemanda.setVisibility( View.GONE );
             btnCadastrar.setText(getString(R.string.acaoAlterar));
-            codDemanda = AlunoDemandaFragment.demandaSelecionada.getCodigo();
-            codCategoria = AlunoDemandaFragment.demandaSelecionada.getCategoriaCod();
+            codDemanda = DemandaAluAdapter.codDemanda;
+            codCategoria = DemandaAluAdapter.codCategoria;
             inicializaCamposPreenchidos();
         } else {
             txtCategoria.setVisibility(View.GONE);
@@ -177,7 +178,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
                 progressBar.setFocusable(true);
                 openProgressBar();
                 inicializaObjeto();
-                if(AlunoDemandaFragment.alterar){
+                if(AlunoInicioFragment.alterar){
                     demanda.atualizademandaDB(DemandaActivity.this);
                 } else{
                     demanda.salvaDemandaDB(DemandaActivity.this);
@@ -199,7 +200,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
             closeProgressBar();
             btnCadastrar.setEnabled(true);
         } else {
-            if(AlunoDemandaFragment.alterar){
+            if(AlunoInicioFragment.alterar){
                 showToast("Demanda atualizada com sucesso!");
             } else{
                 showToast("Demanda criada com sucesso!");
@@ -421,7 +422,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     @Override
     protected void inicializaObjeto() throws ParseException {
 
-        if(AlunoDemandaFragment.alterar){
+        if(AlunoInicioFragment.alterar){
             status = demandaSelecionada.getStatus();
             data = demandaSelecionada.getData();
         } else{
@@ -592,4 +593,22 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
 }

@@ -40,6 +40,15 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/txtNomeAluno"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/cabin_bold"
+                        android:text="Nome do aluno"
+                        android:textSize="18sp" />
+
+                    <TextView
                         android:id="@+id/txtRotulo"
                         style="@style/titulo_item"
                         android:layout_width="wrap_content"
@@ -47,7 +56,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="4dp"
                         android:gravity="center"
-                        android:text="Quero aprender"
+                        android:text="Quer aprender"
                         android:textAlignment="center" />
 
                     <TextView
@@ -388,36 +397,14 @@
                 android:id="@+id/linearLayout4"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:gravity="right|center_vertical"
+                android:gravity="center|center_horizontal|left"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/LinDemanda">
 
-
-                <Button
-                    android:id="@+id/btnInserirProposta"
-                    style="@style/botao"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:gravity="right|center_vertical"
-                    android:text="@string/acaoInserirProposta"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:gravity="center|center_horizontal"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/linearLayout4">
-
                 <LinearLayout
-                    android:id="@+id/dialogVoltar"
+                    android:id="@+id/VerPropostas"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
@@ -440,41 +427,8 @@
                         android:textAlignment="textEnd" />
 
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="18"
-                    android:orientation="vertical">
-
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/btnExcluir"
-                    style="@style/botao"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_weight="3"
-                    android:foreground="@android:drawable/ic_delete"
-                    android:foregroundGravity="center"
-                    android:foregroundTint="#FFFFFF" />
-
-                <Button
-                    android:id="@+id/btnAlterar"
-                    style="@style/botao"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="2dp"
-                    android:layout_weight="3"
-                    android:foreground="@drawable/editar"
-                    android:foregroundGravity="center"
-                    android:foregroundTint="#FFFFFF" />
-
-
             </LinearLayout>
+
 
             <ProgressBar
                 android:id="@+id/loading"
@@ -484,6 +438,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/linearLayout4"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

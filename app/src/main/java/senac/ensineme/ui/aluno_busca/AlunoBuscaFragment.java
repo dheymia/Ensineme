@@ -1,7 +1,5 @@
-package senac.ensineme.ui.aluno_demanda;
+package senac.ensineme.ui.aluno_busca;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +22,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,18 +40,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import senac.ensineme.DemandaActivity;
 import senac.ensineme.R;
 import senac.ensineme.adapters.DemandaAluAdapter;
 import senac.ensineme.models.Demanda;
 
-public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class AlunoBuscaFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private AlertDialog alerta;
-    private AlunoDemandaViewModel dashboardViewModel;
-    private FloatingActionButton fab;
+    private AlunoBuscaViewModel buscaViewModel;
     private TextView textView, txtExpiracao, txtDescDemanda, txtCatDemanda, txtTurnoDemanda, txtInicioDemanda, txtnHorasaulaDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtLogradouroDemanda, txtComplementoDemanda, txtNumeroDemanda, txtCEPDemanda, txtBairroDemanda;
-    private Button btnExcluir, btnAlterar, btnInserirProposta;
     private RecyclerView recyclerView;
     private LinearLayout voltar;
     private Spinner spConsulta;
@@ -62,32 +56,30 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
     private ArrayAdapter<CharSequence> statusAdapter;
     public static DemandaAluAdapter adapter;
     private List<Demanda> demandasList = new ArrayList<>();
-    public static Demanda demandaSelecionada;
+    private Demanda demandaSelecionada;
     private Demanda demandadetalhe;
     private FirebaseDatabase firebase;
     private DatabaseReference ref;
-    public static boolean alterar = false;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private String consulta, aluno, codDemanda, inicio, expiracao;
     private Date inicioformatado, expiracaoformatada;
     private String myFormat = "dd/MM/yyyy";
     private String format = "yyyy/MM/dd";
-    private SimpleDateFormat formatoData =  new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
+    private SimpleDateFormat formatoData = new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
     private SimpleDateFormat formatoDataDemanda = new SimpleDateFormat(format, new Locale("pt", "BR"));
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-        ViewModelProviders.of(this).get(AlunoDemandaViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_aluno_demanda, container, false);
-        textView = root.findViewById(R.id.text_dashboard);
-        fab = root.findViewById(R.id.fab);
+        buscaViewModel =
+                ViewModelProviders.of(this).get(AlunoBuscaViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_aluno_busca, container, false);
+        //textView = root.findViewById(R.id.text_dashboard);
         recyclerView = root.findViewById(R.id.listAlunoDemandas);
         progressBar = root.findViewById(R.id.loading);
         spConsulta = root.findViewById(R.id.spConsulta);
-        dashboardViewModel.getText().observe(this, new Observer<String>() {
+        buscaViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
 //                textView.setText(s);
@@ -102,7 +94,7 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
         }
         ref = firebase.getReference("usuarios/" + aluno + "/demandas");
 
-        statusAdapter = ArrayAdapter.createFromResource(getContext(),R.array.statusDemanda, android.R.layout.simple_spinner_item);
+        statusAdapter = ArrayAdapter.createFromResource(getContext(), R.array.statusDemanda, android.R.layout.simple_spinner_item);
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spConsulta.setAdapter(statusAdapter);
         spConsulta.setSelection(statusAdapter.getPosition("Aguardando proposta"));
@@ -112,15 +104,6 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alterar = false;
-                Intent intent = new Intent(getContext(), DemandaActivity.class);
-                startActivity(intent);
-            }
-        });
 
         return root;
     }
@@ -133,9 +116,29 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
 
             demandaSelecionada = demandasList.get(position);
             codDemanda = demandaSelecionada.getCodigo();
-            showToast("Demanda selecionada: " + demandaSelecionada.getCodigo());
 
-            dialogDetalhesDemanda();
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference refDem = database.getReference("demandas/" + codDemanda);
+
+            openProgressBar();
+            refDem.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    demandadetalhe = dataSnapshot.getValue(Demanda.class);
+                    dialogDetalhesDemanda();
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Snackbar.make(progressBar,
+                            "Erro de leitura: " + databaseError.getCode(),
+                            Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
+
         }
     };
 
@@ -161,12 +164,12 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
             adapter = new DemandaAluAdapter(demandasList, getContext());
             adapter.setOnItemClickListener(onItemClickListener);
             recyclerView.setAdapter(adapter);
-            progressBar.setVisibility( View.GONE );
+            progressBar.setVisibility(View.GONE);
         }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
-            progressBar.setVisibility( View.GONE );
+            progressBar.setVisibility(View.GONE);
         }
     };
 
@@ -175,7 +178,7 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         Object item = parent.getItemAtPosition(pos);
         consulta = item.toString();
-        showToast( "OnItemSelectedListener : " + item.toString());
+        showToast("OnItemSelectedListener : " + item.toString());
 
         if (consulta.equals("Todas")) {
             openProgressBar();
@@ -193,14 +196,9 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
 
     public void dialogDetalhesDemanda() {
         LayoutInflater li = getLayoutInflater();
-        final View view = li.inflate(R.layout.dialog_detalhes_demanda, null);
+        final View view = li.inflate(R.layout.dialog_demanda_detalhes, null);
 
-        btnAlterar = view.findViewById(R.id.btnAlterar);
-        btnExcluir  = view.findViewById(R.id.btnExcluir);
-        voltar = view.findViewById(R.id.dialogVoltar);
-        btnInserirProposta  = view.findViewById(R.id.btnInserirProposta);
-
-        btnInserirProposta.setVisibility(View.GONE);
+        voltar = view.findViewById(R.id.VerPropostas);
 
         txtDescDemanda = view.findViewById(R.id.txtAluno);
         txtCatDemanda = view.findViewById(R.id.txtCatDemanda);
@@ -216,96 +214,38 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
         txtBairroDemanda = view.findViewById(R.id.txtBairro);
         txtExpiracao = view.findViewById(R.id.textExpiracao);
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference refDem = database.getReference("demandas/" + codDemanda);
 
-        openProgressBar();
-        refDem.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        txtDescDemanda.setText(String.valueOf(demandadetalhe.getDescricao()));
+        txtCatDemanda.setText(String.valueOf(demandadetalhe.getCategoria()));
+        txtTurnoDemanda.setText(String.valueOf(demandadetalhe.getTurno()));
+        try {
+            inicioformatado = formatoDataDemanda.parse(demandadetalhe.getInicio());
+            inicio = formatoData.format(inicioformatado);
+            txtInicioDemanda.setText(inicio);
 
-                demandadetalhe = dataSnapshot.getValue(Demanda.class);
+            expiracaoformatada = formatoDataDemanda.parse(demandadetalhe.getExpiracao());
+            expiracao = formatoData.format(expiracaoformatada);
+            txtExpiracao.setText(expiracao);
 
-                txtDescDemanda.setText(String.valueOf(demandadetalhe.getDescricao()));
-                txtCatDemanda.setText(String.valueOf(demandadetalhe.getCategoria()));
-                txtTurnoDemanda.setText(String.valueOf(demandadetalhe.getTurno()));
-                try {
-                    inicioformatado = formatoDataDemanda.parse(demandadetalhe.getInicio());
-                    inicio = formatoData.format(inicioformatado);
-                    txtInicioDemanda.setText(inicio);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        txtnHorasaulaDemanda.setText(String.valueOf(demandadetalhe.getHorasaula()) + " horas/aula");
+        txtLocalidadeDemanda.setText(String.valueOf(demandadetalhe.getLocalidade()));
+        txtEstadoDemanda.setText(String.valueOf(demandadetalhe.getEstado()));
+        txtLogradouroDemanda.setText(String.valueOf(demandadetalhe.getLogradouro()));
+        txtComplementoDemanda.setText(String.valueOf(demandadetalhe.getComplemento()));
+        txtNumeroDemanda.setText(String.valueOf(demandadetalhe.getNumero()));
+        txtCEPDemanda.setText(String.valueOf(demandadetalhe.getCEP()));
+        txtBairroDemanda.setText(String.valueOf(demandadetalhe.getBairro()));
 
-                    expiracaoformatada = formatoDataDemanda.parse(demandadetalhe.getExpiracao());
-                    expiracao = formatoData.format(expiracaoformatada);
-                    txtExpiracao.setText(expiracao);
+        closeProgressBar();
 
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                txtnHorasaulaDemanda.setText(String.valueOf(demandadetalhe.getHorasaula()) + " horas/aula");
-                txtLocalidadeDemanda.setText(String.valueOf(demandadetalhe.getLocalidade()));
-                txtEstadoDemanda.setText(String.valueOf(demandadetalhe.getEstado()));
-                txtLogradouroDemanda.setText(String.valueOf(demandadetalhe.getLogradouro()));
-                txtComplementoDemanda.setText(String.valueOf(demandadetalhe.getComplemento()));
-                txtNumeroDemanda.setText(String.valueOf(demandadetalhe.getNumero()));
-                txtCEPDemanda.setText(String.valueOf(demandadetalhe.getCEP()));
-                txtBairroDemanda.setText(String.valueOf(demandadetalhe.getBairro()));
-
-                closeProgressBar();
-
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.loading);
-                Snackbar.make(progressBar,
-                        "Erro de leitura: " + databaseError.getCode(),
-                        Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         voltar.setOnClickListener(new View.OnClickListener() {
-                                      @Override
-                                      public void onClick(View view) {
-                                          alerta.dismiss();
-                                      }
-                                  });
-
-                view.findViewById(R.id.btnExcluir).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
-                        builder
-                                .setMessage("Deseja excluir esta solicitação?")
-                                .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        demandadetalhe.excluiDemandaDB();
-                                        alerta.dismiss();
-
-                                    }
-                                })
-
-                                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                })
-                                .show();
-                    }
-                });
-
-
-        view.findViewById(R.id.btnAlterar).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
+            @Override
+            public void onClick(View view) {
                 alerta.dismiss();
-                alterar = true;
-                Intent demanda = new Intent(getContext(), DemandaActivity.class);
-                startActivity(demanda);
             }
         });
 
@@ -318,22 +258,22 @@ public class AlunoDemandaFragment extends Fragment implements AdapterView.OnItem
         alerta.show();
     }
 
-    protected void openProgressBar(){
-        progressBar.setVisibility( View.VISIBLE );
+    protected void openProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
     }
 
-    protected void closeProgressBar(){
-        progressBar.setVisibility( View.GONE );
+    protected void closeProgressBar() {
+        progressBar.setVisibility(View.GONE);
     }
 
-    protected void showSnackbar(String message){
+    protected void showSnackbar(String message) {
         Snackbar.make(progressBar,
                 message,
                 Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
 
-    protected void showToast(String message){
+    protected void showToast(String message) {
         Toast.makeText(getContext(),
                 message,
                 Toast.LENGTH_LONG)

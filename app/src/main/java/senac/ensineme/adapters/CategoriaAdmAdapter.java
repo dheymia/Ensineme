@@ -3,14 +3,12 @@ package senac.ensineme.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,7 +33,7 @@ public class CategoriaAdmAdapter extends RecyclerView.Adapter<CategoriaAdmAdapte
     @NonNull
     @Override
     public CategoriaAdmViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_adm_categorias,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_categorias_administrador,parent,false);
         CategoriaAdmViewHolder holder = new CategoriaAdmViewHolder(view);
         return holder;
     }

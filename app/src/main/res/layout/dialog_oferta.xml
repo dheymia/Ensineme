@@ -111,11 +111,19 @@
                 android:text="@string/acaoCadastrar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtValor" />
+                app:layout_constraintTop_toBottomOf="@+id/txtValorOferta" />
 
 
             <EditText
-                android:id="@+id/txtValor"
+                android:id="@+id/txtComentarioOferta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine" />
+
+            <EditText
+                android:id="@+id/txtValorOferta"
                 style="@style/inserirtexto"
 
                 android:hint="@string/valor"
@@ -133,7 +141,7 @@
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="8dp"
                 android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/txtValor"
+                app:layout_constraintBottom_toTopOf="@+id/txtValorOferta"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

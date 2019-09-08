@@ -1,5 +1,7 @@
 package senac.ensineme;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -25,7 +27,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
 import senac.ensineme.models.Usuario;
-import senac.ensineme.ui.professor_pesquisa.ProfessorPesquisaFragment;
+import senac.ensineme.ui.professor_busca.ProfessorBuscaFragment;
 
 public class ProfessorMainActivity extends AppCompatActivity {
 
@@ -36,14 +38,15 @@ public class ProfessorMainActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
-    private String idUsuario, nomeUsuario;
+    private String idUsuario, nomeUsuario, tipoUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_professor_main);
+        setContentView(R.layout.activity_main_professor);
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        getSupportActionBar().hide();
+
+       // getSupportActionBar().hide();
 
         mTextMessage = findViewById(R.id.message);
         txtNome = findViewById(R.id.txtNome);
@@ -72,6 +75,7 @@ public class ProfessorMainActivity extends AppCompatActivity {
                 usuariologado = dataSnapshot.getValue(Usuario.class);
                 if (usuariologado.getTipo() != null) {
                     nomeUsuario = usuariologado.getNome();
+                    tipoUsuario = usuariologado.getTipo();
 //                    txtNome.setText("Olá " + nomeUsuario);
                 }
             }
@@ -85,16 +89,11 @@ public class ProfessorMainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
+                R.id.navigation_inicio, R.id.navigation_busca)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-
-
-
-
-        getSupportActionBar().hide();
 
     }
 
@@ -120,17 +119,48 @@ public class ProfessorMainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.acaoConfigurar) {
-            Intent novaConfig = new Intent(getBaseContext(), ConfiguracaoActivity.class);
+            Intent novaConfig = new Intent(getBaseContext(), SettingsActivity.class);
             startActivity(novaConfig);
         }
 
         if (id == R.id.app_bar_search) {
-            Intent pesquisa = new Intent(getBaseContext(), ProfessorPesquisaFragment.class);
+            Intent pesquisa = new Intent(getBaseContext(), ProfessorBuscaFragment.class);
             startActivity(pesquisa);
         }
 
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    public void onBackPressed()    {
 
+        if (tipoUsuario.equals("administrador")) {
+            Intent administrador = new Intent(ProfessorMainActivity.this, AdministradorMainActivity.class);
+            startActivity(administrador);
+            finish();
+
+        } else {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder
+                    .setMessage("Deseja sair?")
+                    .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            finishAffinity();
+
+                        }
+                    })
+
+                    .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    })
+                    .show();
+        }
+    }
 
 }
