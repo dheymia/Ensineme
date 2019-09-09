@@ -36,7 +36,7 @@ public class OfertaProfAdapter extends RecyclerView.Adapter<OfertaProfAdapter.Of
     @NonNull
     @Override
     public OfertaProfAdapter.OfertaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_ofertas,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_ofertas_professor,parent,false);
         return new OfertaViewHolder(view);
     }
 

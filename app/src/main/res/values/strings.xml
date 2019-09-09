@@ -73,6 +73,7 @@
     <string name="acaoCadastrar">Cadastrar</string>
     <string name="acaoRecuperarSenha">Receber email</string>
     <string name="acaoVerCategorias">Categorias</string>
+    <string name="acaoVerUsuarios">Usuarios</string>
     <string name="acaoVerTelaProfessor">Professor</string>
     <string name="acaoVerTelaAluno">Aluno</string>
     <string name="acaoAlterar">Alterar</string>

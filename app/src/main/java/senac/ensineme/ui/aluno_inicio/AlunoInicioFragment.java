@@ -46,6 +46,7 @@ import java.util.Locale;
 
 import senac.ensineme.DemandaActivity;
 import senac.ensineme.FullscreenActivity;
+import senac.ensineme.OfertaActivity;
 import senac.ensineme.R;
 import senac.ensineme.SettingsActivity;
 import senac.ensineme.adapters.CategoriaProfAdapter;
@@ -70,7 +71,7 @@ public class AlunoInicioFragment extends Fragment  {
     private DemandaAluAdapter adapterDemandas;
     private List<Categoria> categoriaList = new ArrayList<>();
     private List<Demanda> demandasList = new ArrayList<>();
-    private static Demanda demandaSelecionada;
+    public static Demanda demandaSelecionada;
     private Demanda demandadetalhe;
     private String codDemanda;
     private String expiracao;
@@ -79,7 +80,6 @@ public class AlunoInicioFragment extends Fragment  {
     private String format = "yyyy/MM/dd";
     private SimpleDateFormat formatoData =  new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
     private SimpleDateFormat formatoDataDemanda = new SimpleDateFormat(format, new Locale("pt", "BR"));
-
     private String descDemanda;
 
 
@@ -334,7 +334,8 @@ public class AlunoInicioFragment extends Fragment  {
         btnSelecionaProposta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showSnackbar("Validar");
+                Intent oferta = new Intent(getContext(), OfertaActivity.class);
+                startActivity(oferta);
             }
         });
 
