@@ -29,6 +29,7 @@ public class OfertaAluAdapter extends RecyclerView.Adapter<OfertaAluAdapter.Ofer
     private Context context;
     private Usuario professorselecionado;
     private int lastSelectedPosition = -1;
+    public static String codProfessor, codOferta;
 
     public OfertaAluAdapter(List<Oferta> ofertaList, Context context) {
         this.ofertaList = ofertaList;
@@ -64,9 +65,12 @@ public class OfertaAluAdapter extends RecyclerView.Adapter<OfertaAluAdapter.Ofer
 
         ((OfertaViewHolder) holder).valorOferta.setText(oferta.getValorOferta());
         ((OfertaViewHolder) holder).comentario.setText(oferta.getComentarioOferta());
+        ((OfertaViewHolder) holder).codOfer.setText(oferta.getCodOferta());
+        ((OfertaViewHolder) holder).codProf.setText(oferta.getProfessor());
         ((OfertaViewHolder) holder).professor.setChecked(lastSelectedPosition == position);
 
     }
+
 
     @Override
     public int getItemCount() {
@@ -77,7 +81,8 @@ public class OfertaAluAdapter extends RecyclerView.Adapter<OfertaAluAdapter.Ofer
 
     class OfertaViewHolder extends RecyclerView.ViewHolder {
 
-        final TextView valorOferta, comentario;
+        final TextView valorOferta, comentario, codProf, codOfer;
+
         final RadioButton professor;
 
 
@@ -88,19 +93,22 @@ public class OfertaAluAdapter extends RecyclerView.Adapter<OfertaAluAdapter.Ofer
             professor = itemView.findViewById(R.id.rbProfessor);
             valorOferta = itemView.findViewById(R.id.txtValor);
             comentario = itemView.findViewById(R.id.txtComentario);
-
+            codProf = itemView.findViewById(R.id.txtCodProfessor);
+            codOfer = itemView.findViewById(R.id.txtCodOferta);
 
             professor.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    lastSelectedPosition = getAdapterPosition();
-                    notifyDataSetChanged();
+              @Override
+              public void onClick(View v) {
+                  lastSelectedPosition = getAdapterPosition();
+                  notifyDataSetChanged();
+                   Toast.makeText(OfertaAluAdapter.this.context,
+                          "Você selecionou a proposta no valor de " + valorOferta.getText() + " de " + professor.getText(),
+                          Toast.LENGTH_LONG).show();
 
-                    Toast.makeText(OfertaAluAdapter.this.context,
-                            "Você selecionou a proposta no valor de " + valorOferta.getText() + " de " + professor.getText(),
-                            Toast.LENGTH_LONG).show();
-                }
-            });
+                   codProfessor = (String) codProf.getText();
+                   codOferta = (String) codOfer.getText();
+             }
+        });
         }
         }
     }

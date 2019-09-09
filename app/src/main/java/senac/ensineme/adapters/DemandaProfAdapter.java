@@ -65,6 +65,14 @@ public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.
         viewHolder.categoria.setText(demanda.getCategoria());
         viewHolder.descricao.setText("Ensinar " + demanda.getDescricao());
 
+        if (demanda.getStatus().equals("Aguardando proposta")){
+            viewHolder.inserir.setVisibility(View.VISIBLE);
+        } else if (demanda.getStatus().equals("Aguardando validação")){
+            viewHolder.inserir.setVisibility(View.VISIBLE);
+        } else{
+            viewHolder.inserir.setVisibility(View.GONE);
+        }
+
         try {
             Date expiracaoformatada = formatoDataDemanda.parse(demanda.getExpiracao());
             String expiracao = formatoData.format(expiracaoformatada);

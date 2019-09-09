@@ -81,6 +81,7 @@ public class AlunoInicioFragment extends Fragment  {
     private SimpleDateFormat formatoData =  new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
     private SimpleDateFormat formatoDataDemanda = new SimpleDateFormat(format, new Locale("pt", "BR"));
     private String descDemanda;
+    private String statusDemanda;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -314,6 +315,7 @@ public class AlunoInicioFragment extends Fragment  {
             demandaSelecionada = demandasList.get(position);
             codDemanda = demandaSelecionada.getCodigo();
             descDemanda = demandaSelecionada.getDescricao();
+            statusDemanda = demandaSelecionada.getStatus();
 
             dialogconsultaOfertas();
         }
@@ -331,6 +333,13 @@ public class AlunoInicioFragment extends Fragment  {
         TextView txtTitulo = view.findViewById(R.id.txtTitulo);
 
         txtTitulo.setText("Propostas recebidas");
+
+        if (statusDemanda.equals("Aguardando validação")){
+            btnSelecionaProposta.setVisibility(View.VISIBLE);
+        } else {
+            btnSelecionaProposta.setVisibility(View.GONE);
+        }
+
         btnSelecionaProposta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -97,10 +97,10 @@ public class FullscreenActivity extends AppCompatActivity {
                 Usuario usuariologado = dataSnapshot.getValue(Usuario.class);
                 if (usuariologado.getTipo() != null) {
                     String tipoUsuario = usuariologado.getTipo();
-                    Toast.makeText(FullscreenActivity.this,
-                            idUsuario + " " + usuariologado.getTipo(),
-                            Toast.LENGTH_LONG)
-                            .show();
+                    //Toast.makeText(FullscreenActivity.this,
+                    //        idUsuario + " " + usuariologado.getTipo(),
+                    //        Toast.LENGTH_LONG)
+                    //        .show();
                     switch (tipoUsuario) {
                         case "aluno":
                             Intent aluno = new Intent(FullscreenActivity.this, AlunoMainActivity.class);

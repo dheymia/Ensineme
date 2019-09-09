@@ -88,8 +88,8 @@ public class Oferta {
     public void salvaOfertaDB(DatabaseReference.CompletionListener... completionListener) {
         firebase = FirebaseDB.getFirebase().child("propostas").child(getCodOferta());
         firebaseDem = FirebaseDB.getFirebase().child("demandas").child(getCodDemanda()).child("propostas").child(getCodOferta());
-        firebaseProf =FirebaseDB.getFirebase().child("usuarios").child(professor).child("propostas").child(getCodOferta());
-        firebaseAlu =FirebaseDB.getFirebase().child("usuarios").child(aluno).child("demandas").child(getCodDemanda()).child("propostas").child(getCodOferta());
+        firebaseProf = FirebaseDB.getFirebase().child("usuarios").child(professor).child("propostas").child(getCodOferta());
+        firebaseAlu = FirebaseDB.getFirebase().child("usuarios").child(aluno).child("demandas").child(getCodDemanda()).child("propostas").child(getCodOferta());
         firebaseCat = FirebaseDB.getFirebase().child("categorias").child(codCategoria).child("demandas").child(getCodDemanda()).child("propostas").child(getCodOferta());
 
         if (completionListener.length == 0) {
@@ -148,7 +148,7 @@ public class Oferta {
         ofertaUpdates.put("statusOferta", getStatusOferta());
         ofertaUpdates.put("dataOferta", getDataOferta());
         ofertaUpdates.put("comentarioOferta", getComentarioOferta());
-        firebase.setValue(ofertaUpdates, completionListener[0]);
+        firebase.updateChildren(ofertaUpdates, completionListener[0]);
 
         Map<String, Object> ofertaProfUpdates = new HashMap<>();
         ofertaProfUpdates.put("aluno", getAluno());
@@ -159,12 +159,12 @@ public class Oferta {
         ofertaProfUpdates.put("statusOferta", getStatusOferta());
         ofertaProfUpdates.put("dataOferta", getDataOferta());
         ofertaProfUpdates.put("comentarioOferta", getComentarioOferta());
-        firebaseProf.setValue(ofertaProfUpdates, completionListener[0]);
+        firebaseProf.updateChildren(ofertaProfUpdates, completionListener[0]);
 
         Map<String, Object> ofertaAluUpdates = new HashMap<>();
         ofertaAluUpdates.put("professor", getProfessor());
         ofertaAluUpdates.put("codOferta",getCodOferta());
-        firebaseAlu.setValue(ofertaAluUpdates, completionListener[0]);
+        firebaseAlu.updateChildren(ofertaAluUpdates, completionListener[0]);
 
         Map<String, Object> ofertaDemUpdates = new HashMap<>();
         ofertaDemUpdates.put("professor", getProfessor());
@@ -173,12 +173,12 @@ public class Oferta {
         ofertaDemUpdates.put("statusOferta", getStatusOferta());
         ofertaDemUpdates.put("dataOferta", getDataOferta());
         ofertaDemUpdates.put("comentarioOferta", getComentarioOferta());
-        firebaseDem.setValue(ofertaDemUpdates, completionListener[0]);
+        firebaseDem.updateChildren(ofertaDemUpdates, completionListener[0]);
 
         Map<String, Object> ofertaCatUpdates = new HashMap<>();
         ofertaCatUpdates.put("professor", getProfessor());
         ofertaCatUpdates.put("codOferta",getCodOferta());
-        firebaseCat.setValue(ofertaCatUpdates, completionListener[0]);
+        firebaseCat.updateChildren(ofertaCatUpdates, completionListener[0]);
 
 
     }
@@ -203,6 +203,26 @@ public class Oferta {
             firebaseAlu.removeValue((DatabaseReference.CompletionListener) this);
             firebaseProf.removeValue((DatabaseReference.CompletionListener) this);
         }
+
+    }
+
+    public void atualizaStatusOfertaDB(DatabaseReference.CompletionListener... completionListener) {
+        firebase = FirebaseDB.getFirebase().child("propostas").child(getCodOferta());
+        firebaseDem = FirebaseDB.getFirebase().child("demandas").child(getCodDemanda()).child("propostas").child(getCodOferta());
+        firebaseProf = FirebaseDB.getFirebase().child("usuarios").child(professor).child("propostas").child(getCodOferta());
+
+        Map<String, Object> ofertaUpdates = new HashMap<>();
+        ofertaUpdates.put("statusOferta", getStatusOferta());
+        firebase.updateChildren(ofertaUpdates, completionListener[0]);
+
+        Map<String, Object> ofertaProfUpdates = new HashMap<>();
+        ofertaProfUpdates.put("statusOferta", getStatusOferta());
+        firebaseProf.updateChildren(ofertaProfUpdates, completionListener[0]);
+
+
+        Map<String, Object> ofertaDemUpdates = new HashMap<>();
+        ofertaDemUpdates.put("statusOferta", getStatusOferta());
+        firebaseDem.updateChildren(ofertaDemUpdates, completionListener[0]);
 
     }
 

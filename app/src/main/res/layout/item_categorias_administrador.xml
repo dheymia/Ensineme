@@ -43,18 +43,43 @@
             android:text="TextView" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnExcluirCategoria"
-        style="@style/botao"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="4dp"
-        android:foreground="@android:drawable/ic_delete"
-        android:foregroundGravity="center"
-        android:foregroundTint="#FFFFFF" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/btnExcluirCategoria"
+            style="@style/botao"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:foreground="@android:drawable/ic_delete"
+            android:foregroundGravity="center"
+            android:foregroundTint="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnQuantCategorias"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/inserirtexto"
+            android:backgroundTintMode="src_over"
+            android:fontFamily="@font/cabin_bold"
+            android:foregroundTint="@color/verdedestaque"
+            android:text=""
+            android:textAllCaps="false"
+            android:textColor="@color/verdeescuro"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </LinearLayout>

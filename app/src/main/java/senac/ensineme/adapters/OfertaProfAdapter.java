@@ -60,6 +60,7 @@ public class OfertaProfAdapter extends RecyclerView.Adapter<OfertaProfAdapter.Of
         });
 
         ((OfertaViewHolder) holder).valorOferta.setText(oferta.getValorOferta());
+        ((OfertaViewHolder) holder).status.setText(oferta.getStatusOferta());
 
     }
 
@@ -77,7 +78,7 @@ public class OfertaProfAdapter extends RecyclerView.Adapter<OfertaProfAdapter.Of
 
     class OfertaViewHolder extends RecyclerView.ViewHolder {
 
-        final TextView professor, valorOferta;
+        final TextView professor, valorOferta, status;
 
 
         OfertaViewHolder(@NonNull View itemView) {
@@ -86,6 +87,7 @@ public class OfertaProfAdapter extends RecyclerView.Adapter<OfertaProfAdapter.Of
 
             professor = itemView.findViewById(R.id.txtProfessor);
             valorOferta = itemView.findViewById(R.id.txtValorOferta);
+            status = itemView.findViewById(R.id.txtStatusProposta);
 
 
             itemView.setTag(this);

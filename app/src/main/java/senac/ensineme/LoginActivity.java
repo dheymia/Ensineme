@@ -210,7 +210,7 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
             public void onDataChange(DataSnapshot dataSnapshot) {
                 usuariologado = dataSnapshot.getValue(Usuario.class);
                 tipoUsuario = usuariologado.getTipo();
-                showToast(idUsuario + " " + usuariologado.getTipo());
+                //showToast(idUsuario + " " + usuariologado.getTipo());
 
                 if (tipoUsuario.equals("aluno")) {
                     Intent aluno = new Intent(LoginActivity.this, AlunoMainActivity.class);

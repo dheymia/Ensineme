@@ -17,9 +17,9 @@ import senac.ensineme.models.Categoria;
 
 public class CategoriaProfAdapter extends RecyclerView.Adapter<CategoriaProfAdapter.CategoriaProfViewHolder> {
 
+    public View.OnClickListener mOnItemClickListener;
     private List<Categoria> categoriaList;
     private Context context;
-    public View.OnClickListener mOnItemClickListener;
 
     public CategoriaProfAdapter(List<Categoria> categoriaList, Context context) {
         this.categoriaList = categoriaList;
@@ -54,6 +54,8 @@ public class CategoriaProfAdapter extends RecyclerView.Adapter<CategoriaProfAdap
             ((CategoriaProfViewHolder) holder).imagem.setImageResource(R.drawable.artesanato);
         } else if ("Artes".equals(categoria.getNome())) {
             ((CategoriaProfViewHolder) holder).imagem.setImageResource(R.drawable.arte);
+        }else{
+            ((CategoriaProfViewHolder) holder).imagem.setImageResource(R.drawable.novo);
         }
         }
 

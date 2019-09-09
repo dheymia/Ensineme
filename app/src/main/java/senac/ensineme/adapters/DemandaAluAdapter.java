@@ -74,20 +74,25 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
             Date dataformatada = formatoDataDemanda.parse(demanda.getData());
             String data = formatoData.format(dataformatada);
 
-            viewHolder.resumo.setText("Solicitação cadastrada em " + data + " com expiração prevista para " + expiracao + ".");
+
+            if(demanda.getStatus().equals("Aguardando proposta")){
+                viewHolder.excluir.setVisibility(View.VISIBLE);
+                viewHolder.alterar.setVisibility(View.VISIBLE);
+                viewHolder.resumo.setText("Solicitação cadastrada em " + data + " com expiração prevista para " + expiracao + ".");
+            } else if (demanda.getStatus().equals("Aguardando validação")) {
+                viewHolder.excluir.setVisibility(View.GONE);
+                viewHolder.alterar.setVisibility(View.GONE);
+                viewHolder.resumo.setText("Solicitação cadastrada em " + data + " com expiração prevista para " + expiracao + ".");
+            } else {
+                viewHolder.excluir.setVisibility(View.GONE);
+                viewHolder.alterar.setVisibility(View.GONE);
+                viewHolder.resumo.setText("Solicitação cadastrada em " + data + ".");
+            }
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-
-        if(demanda.getStatus().equals("Aguardando proposta")){
-            viewHolder.excluir.setVisibility(View.VISIBLE);
-            viewHolder.alterar.setVisibility(View.VISIBLE);
-        } else{
-            viewHolder.excluir.setVisibility(View.GONE);
-            viewHolder.alterar.setVisibility(View.GONE);
-        }
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference refOfer = database.getReference("demandas/" + demanda.getCodigo() + "/propostas");

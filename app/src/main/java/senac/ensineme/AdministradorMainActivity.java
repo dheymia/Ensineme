@@ -145,7 +145,7 @@ public class AdministradorMainActivity extends AppCompatActivity {
 
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        finish();
+                        finishAffinity();
 
                     }
                 })
