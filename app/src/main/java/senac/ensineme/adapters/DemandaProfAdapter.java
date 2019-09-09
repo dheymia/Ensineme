@@ -32,12 +32,11 @@ import senac.ensineme.models.Oferta;
 
 public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.DemandaProfViewHolder> {
 
-    List<Demanda> demandaList;
-    List <Oferta> ofertaList = new ArrayList<>();
+    private List<Demanda> demandaList;
+    private List <Oferta> ofertaList = new ArrayList<>();
     private Context context;
     public View.OnClickListener mOnItemClickListener, clickInserir, clickConsulta;
-    private String expiracao;
-    private Date  expiracaoformatada;
+    String inicio;
     private String myFormat = "dd/MM/yyyy";
     private String format = "yyyy/MM/dd";
     private SimpleDateFormat formatoData =  new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
@@ -53,8 +52,7 @@ public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.
     @Override
     public DemandaProfAdapter.DemandaProfViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_demandas_professor,parent,false);
-        DemandaProfAdapter.DemandaProfViewHolder holder = new DemandaProfAdapter.DemandaProfViewHolder(view);
-        return holder;
+        return new DemandaProfViewHolder(view);
     }
 
     @Override
@@ -65,41 +63,48 @@ public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.
         final Demanda demanda = demandaList.get(position);
 
         viewHolder.categoria.setText(demanda.getCategoria());
-        viewHolder.descricao.setText(demanda.getDescricao());
+        viewHolder.descricao.setText("Ensinar " + demanda.getDescricao());
+
         try {
-            expiracaoformatada = formatoDataDemanda.parse(demanda.getExpiracao());
-            expiracao = formatoData.format(expiracaoformatada);
+            Date expiracaoformatada = formatoDataDemanda.parse(demanda.getExpiracao());
+            String expiracao = formatoData.format(expiracaoformatada);
             viewHolder.expiracao.setText(expiracao);
+
+            Date inicioformatada = formatoDataDemanda.parse(demanda.getInicio());
+            inicio = formatoData.format(inicioformatada);
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
+        viewHolder.resumo.setText(demanda.getHorasaula() + " horas/aula a partir de " + inicio + " em " + demanda.getLocalidade() + " (" + demanda.getEstado() + ").");
+
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference refOfer = database.getReference("demandas/" + demanda.getCodigo() + "/propostas");
         refOfer.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ofertaList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Oferta oferta = ds.getValue(Oferta.class);
                     ofertaList.add(oferta);
                 }
-                if(ofertaList.size() == 0){
+                if (ofertaList.size() == 0) {
                     viewHolder.consulta.setVisibility(View.GONE);
-                } else{
+                } else {
                     viewHolder.consulta.setVisibility(View.VISIBLE);
+                    viewHolder.consulta.setText(String.valueOf(ofertaList.size()));
                 }
 
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
 
 
-            }
+    }
 
     public void setOnItemClickListener(View.OnClickListener itemClickListener) {
         mOnItemClickListener = itemClickListener;
@@ -120,19 +125,21 @@ public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.
     }
 
 
-    public class DemandaProfViewHolder extends RecyclerView.ViewHolder{
+    class DemandaProfViewHolder extends RecyclerView.ViewHolder{
 
         final TextView categoria;
         final TextView expiracao;
         final TextView descricao;
+        final TextView resumo;
         final Button inserir;
         final Button consulta;
 
-        public DemandaProfViewHolder(@NonNull View itemView) {
+        DemandaProfViewHolder(@NonNull View itemView) {
 
             super(itemView);
 
             categoria = itemView.findViewById(R.id.txtCategoriaDemanda);
+            resumo = itemView.findViewById(R.id.txtResumoDemanda);
             expiracao = itemView.findViewById(R.id.txtExpiraDemanda);
             descricao = itemView.findViewById(R.id.txtDescricaoDemanda);
             inserir = itemView.findViewById(R.id.btnInserirProposta);

@@ -13,14 +13,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 
 import senac.ensineme.models.Usuario;
@@ -30,22 +28,16 @@ public class UsuarioActivity extends ComumActivity implements DatabaseReference.
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private Usuario usuario;
-    private AutoCompleteTextView txtNome, txtEmail, txtCelular;
+    private AutoCompleteTextView txtNome, txtSobrenome, txtEmail, txtCelular;
     private EditText txtSenha;
     private RadioButton rbAluno, rbProfessor;
     private Button btnCadastrar;
-    private String nome, email, celular, senha;
+    private String nome, sobrenome, nomecompleto, email, celular, senha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usuario);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Cadastro");
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -65,27 +57,30 @@ public class UsuarioActivity extends ComumActivity implements DatabaseReference.
 
         inicializaViews();
 
-        progressBar = (ProgressBar) findViewById(R.id.loading);
-        btnCadastrar = (Button) findViewById(R.id.btnCadastrarUsuario);
+        progressBar = findViewById(R.id.loading);
+        btnCadastrar = findViewById(R.id.btnCadastrarUsuario);
         btnCadastrar.setOnClickListener(this);
     }
 
     @Override
     protected void inicializaViews() {
-        txtNome = (AutoCompleteTextView) findViewById(R.id.txtNome);
-        txtEmail = (AutoCompleteTextView) findViewById(R.id.txtValorOferta);
-        txtCelular = (AutoCompleteTextView) findViewById(R.id.txtCelular);
-        txtSenha = (EditText) findViewById(R.id.txtSenha);
-        rbAluno = (RadioButton) findViewById(R.id.rbAprender);
-        rbProfessor = (RadioButton) findViewById(R.id.rbEnsinar);
+        txtNome = findViewById(R.id.txtNome);
+        txtSobrenome = findViewById(R.id.txtSobrenome);
+        txtEmail = findViewById(R.id.txtEmail);
+        txtCelular = findViewById(R.id.txtCelular);
+        txtSenha = findViewById(R.id.txtSenha);
+        rbAluno = findViewById(R.id.rbAprender);
+        rbProfessor = findViewById(R.id.rbEnsinar);
     }
 
     @Override
     protected void inicializaConteudo() {
         nome = txtNome.getText().toString();
+        sobrenome = txtSobrenome.getText().toString();
         email = txtEmail.getText().toString();
         celular = txtCelular.getText().toString();
         senha = txtSenha.getText().toString();
+        nomecompleto = nome + " "+ sobrenome;
     }
 
     @Override
@@ -93,6 +88,8 @@ public class UsuarioActivity extends ComumActivity implements DatabaseReference.
         inicializaConteudo();
         usuario = new Usuario();
         usuario.setNome(nome);
+        usuario.setSobrenome(sobrenome);
+        usuario.setNomecompleto(nomecompleto);
         usuario.setEmail(email);
         usuario.setCelular(celular);
         usuario.setPassword(senha);
@@ -109,6 +106,11 @@ public class UsuarioActivity extends ComumActivity implements DatabaseReference.
         if (nome.isEmpty()) {
             txtNome.setError(getString(R.string.msg_erro_nome));
             txtNome.requestFocus();
+            return false;
+        }
+        if (sobrenome.isEmpty()) {
+            txtSobrenome.setError(getString(R.string.msg_erro_campo_empty));
+            txtSobrenome.requestFocus();
             return false;
         }
 
@@ -183,7 +185,7 @@ public class UsuarioActivity extends ComumActivity implements DatabaseReference.
     }
 
     @Override
-    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+    public void onComplete(DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
         mAuth.signOut();
 
         showToast("Conta criada com sucesso!");
@@ -198,10 +200,9 @@ public class UsuarioActivity extends ComumActivity implements DatabaseReference.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

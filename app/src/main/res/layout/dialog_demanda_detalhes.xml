@@ -40,31 +40,11 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/txtNomeAluno"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="@font/cabin_bold"
-                        android:text="Nome do aluno"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/txtRotulo"
-                        style="@style/titulo_item"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="4dp"
-                        android:gravity="center"
-                        android:text="Quer aprender"
-                        android:textAlignment="center" />
-
-                    <TextView
                         android:id="@+id/txtAluno"
                         style="@style/titulo_item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
+                        android:layout_marginTop="16dp"
                         android:layout_marginBottom="4dp"
                         android:gravity="center"
                         android:text="@string/descricaodemanda"
@@ -360,7 +340,8 @@
                             android:layout_height="wrap_content"
                             android:gravity="right"
                             android:text="@string/estado"
-                            android:textAlignment="textEnd" />
+                            android:textAlignment="textEnd"
+                            tools:ignore="RtlCompat" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -371,7 +352,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="0dp"
-                    android:text="Até quando aceitarei propostas" />
+                    android:text="Propostas até" />
 
                 <View
                     android:id="@+id/divider4"
@@ -424,7 +405,8 @@
                         android:foregroundTint="@color/verdeescuro"
                         android:gravity="left"
                         android:text="Voltar"
-                        android:textAlignment="textEnd" />
+                        android:textAlignment="textEnd"
+                        tools:ignore="RtlCompat" />
 
                 </LinearLayout>
             </LinearLayout>

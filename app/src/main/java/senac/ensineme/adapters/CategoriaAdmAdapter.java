@@ -20,7 +20,7 @@ import senac.ensineme.models.Categoria;
 
 public class CategoriaAdmAdapter extends RecyclerView.Adapter<CategoriaAdmAdapter.CategoriaAdmViewHolder> {
 
-    List<Categoria> categoriaList;
+    private List<Categoria> categoriaList;
     private Context context;
     public View.OnClickListener mOnItemClickListener;
 
@@ -34,35 +34,33 @@ public class CategoriaAdmAdapter extends RecyclerView.Adapter<CategoriaAdmAdapte
     @Override
     public CategoriaAdmViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_categorias_administrador,parent,false);
-        CategoriaAdmViewHolder holder = new CategoriaAdmViewHolder(view);
-        return holder;
+        return new CategoriaAdmViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CategoriaAdmViewHolder holder, int position) {
 
-        CategoriaAdmViewHolder viewHolder = (CategoriaAdmViewHolder) holder;
         final Categoria categoria = categoriaList.get(position);
 
-        viewHolder.categoria.setText(categoria.getNome());
+        ((CategoriaAdmViewHolder) holder).categoria.setText(categoria.getNome());
 
         if ("Danças".equals(categoria.getNome())) {
-            viewHolder.imagem.setImageResource(R.drawable.dancas);
+            ((CategoriaAdmViewHolder) holder).imagem.setImageResource(R.drawable.dancas);
         } else if ("Esportes".equals(categoria.getNome())) {
-            viewHolder.imagem.setImageResource(R.drawable.esporte);
+            ((CategoriaAdmViewHolder) holder).imagem.setImageResource(R.drawable.esporte);
         } else if ("Culinária".equals(categoria.getNome())) {
-            viewHolder.imagem.setImageResource(R.drawable.culinaria);
+            ((CategoriaAdmViewHolder) holder).imagem.setImageResource(R.drawable.culinaria);
         } else if ("Instrumentos musicais".equals(categoria.getNome())) {
-            viewHolder.imagem.setImageResource(R.drawable.instrumentos);
+            ((CategoriaAdmViewHolder) holder).imagem.setImageResource(R.drawable.instrumentos);
         } else if ("Disciplinas escolares".equals(categoria.getNome())) {
-            viewHolder.imagem.setImageResource(R.drawable.escolares);
+            ((CategoriaAdmViewHolder) holder).imagem.setImageResource(R.drawable.escolares);
         } else if ("Artesanato".equals(categoria.getNome())) {
-            viewHolder.imagem.setImageResource(R.drawable.artesanato);
+            ((CategoriaAdmViewHolder) holder).imagem.setImageResource(R.drawable.artesanato);
         } else if ("Artes".equals(categoria.getNome())) {
-            viewHolder.imagem.setImageResource(R.drawable.arte);
+            ((CategoriaAdmViewHolder) holder).imagem.setImageResource(R.drawable.arte);
         }
 
-        viewHolder.excluir.setOnClickListener(new View.OnClickListener() {
+        ((CategoriaAdmViewHolder) holder).excluir.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -102,13 +100,13 @@ public class CategoriaAdmAdapter extends RecyclerView.Adapter<CategoriaAdmAdapte
 
 
 
-    public class CategoriaAdmViewHolder extends RecyclerView.ViewHolder {
+    class CategoriaAdmViewHolder extends RecyclerView.ViewHolder {
 
         final TextView categoria;
         final Button excluir;
         final ImageView imagem;
 
-        public CategoriaAdmViewHolder(@NonNull View itemView) {
+        CategoriaAdmViewHolder(@NonNull View itemView) {
 
             super(itemView);
 

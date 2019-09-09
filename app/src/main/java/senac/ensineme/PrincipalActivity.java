@@ -9,9 +9,6 @@ import android.widget.Button;
 
 public class PrincipalActivity extends AppCompatActivity {
 
-    private Button btnCadastrar, btnEntrar;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,8 +16,7 @@ public class PrincipalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_principal);
 
 
-
-        btnCadastrar = (Button) findViewById(R.id.btnCadastrarCategoria);
+        Button btnCadastrar = findViewById(R.id.btnCadastrarCategoria);
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -28,7 +24,7 @@ public class PrincipalActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        btnEntrar = (Button) findViewById(R.id.btnCancelar);
+        Button btnEntrar = findViewById(R.id.btnCancelar);
         btnEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

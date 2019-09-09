@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,8 +26,8 @@ public class RecuperaSenhaActivity extends ComumActivity implements View.OnClick
 
         inicializaViews();
 
-        progressBar = (ProgressBar) findViewById(R.id.loading);
-        btnRecuperaSenha = (Button) findViewById(R.id.btnCadastrarOferta);
+        progressBar = findViewById(R.id.loading);
+        btnRecuperaSenha = findViewById(R.id.btnCadastrarOferta);
         btnRecuperaSenha.setOnClickListener(this);
     }
 

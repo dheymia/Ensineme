@@ -5,8 +5,6 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.HashMap;
 import java.util.Map;
 
-import senac.ensineme.R;
-
 public class Categoria {
     private DatabaseReference firebase;
     private String codigo, nome;

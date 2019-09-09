@@ -36,7 +36,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ensineme" />
+                app:srcCompat="@drawable/ensineme"
+                android:contentDescription="@string/title_activity_fullscreen" />
 
     <AutoCompleteTextView
         android:id="@+id/txtValorOferta"
@@ -44,7 +45,8 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        tools:ignore="LabelFor" />
 
     <EditText
         android:id="@+id/txtSenha"
@@ -53,7 +55,8 @@
         android:hint="@string/senha"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtValorOferta" />
+        app:layout_constraintTop_toBottomOf="@+id/txtValorOferta"
+        tools:ignore="Autofill" />
 
             <Button
                 android:id="@+id/btnCancelar"

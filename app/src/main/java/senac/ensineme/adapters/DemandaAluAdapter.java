@@ -13,8 +13,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -22,14 +29,20 @@ import java.util.Locale;
 import senac.ensineme.DemandaActivity;
 import senac.ensineme.R;
 import senac.ensineme.models.Demanda;
+import senac.ensineme.models.Oferta;
 import senac.ensineme.ui.aluno_inicio.AlunoInicioFragment;
 
 public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.DemandaAluViewHolder> {
 
-    List<Demanda> demandaList;
+    private List<Demanda> demandaList;
+    private List <Oferta> ofertaList = new ArrayList<>();
     private Context context;
     public View.OnClickListener mOnItemClickListener, clickConsulta;
     public static String codDemanda, codCategoria;
+    private String myFormat = "dd/MM/yyyy";
+    private String format = "yyyy/MM/dd";
+    private SimpleDateFormat formatoData =  new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
+    private SimpleDateFormat formatoDataDemanda = new SimpleDateFormat(format, new Locale("pt", "BR"));
 
 
     public DemandaAluAdapter(List<Demanda> demandaList, Context context) {
@@ -41,20 +54,65 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
     @Override
     public DemandaAluAdapter.DemandaAluViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_demandas_aluno,parent,false);
-        DemandaAluAdapter.DemandaAluViewHolder holder = new DemandaAluAdapter.DemandaAluViewHolder(view);
-        return holder;
+        return new DemandaAluViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull DemandaAluAdapter.DemandaAluViewHolder holder, int position) {
 
 
-        DemandaAluAdapter.DemandaAluViewHolder viewHolder = (DemandaAluAdapter.DemandaAluViewHolder) holder;
+        final DemandaAluAdapter.DemandaAluViewHolder viewHolder = (DemandaAluAdapter.DemandaAluViewHolder) holder;
         final Demanda demanda = demandaList.get(position);
 
         viewHolder.categoria.setText(demanda.getCategoria());
-        viewHolder.descricao.setText(demanda.getDescricao());
+        viewHolder.descricao.setText("Aprender " + demanda.getDescricao());
         viewHolder.status.setText(demanda.getStatus());
+        try {
+            Date expiracaoformatada = formatoDataDemanda.parse(demanda.getExpiracao());
+            String expiracao = formatoData.format(expiracaoformatada);
+
+            Date dataformatada = formatoDataDemanda.parse(demanda.getData());
+            String data = formatoData.format(dataformatada);
+
+            viewHolder.resumo.setText("Solicitação cadastrada em " + data + " com expiração prevista para " + expiracao + ".");
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        if(demanda.getStatus().equals("Aguardando proposta")){
+            viewHolder.excluir.setVisibility(View.VISIBLE);
+            viewHolder.alterar.setVisibility(View.VISIBLE);
+        } else{
+            viewHolder.excluir.setVisibility(View.GONE);
+            viewHolder.alterar.setVisibility(View.GONE);
+        }
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference refOfer = database.getReference("demandas/" + demanda.getCodigo() + "/propostas");
+        refOfer.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ofertaList.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Oferta oferta = ds.getValue(Oferta.class);
+                    ofertaList.add(oferta);
+                }
+                if(ofertaList.size() == 0){
+                    viewHolder.consulta.setVisibility(View.GONE);
+                } else{
+                    viewHolder.consulta.setVisibility(View.VISIBLE);
+                    viewHolder.consulta.setText(String.valueOf(ofertaList.size()));
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
         viewHolder.alterar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,14 +123,6 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
                 context.startActivity(demanda);
             }
         });
-
-        if(demanda.getStatus().equals("Aguardando proposta")){
-            viewHolder.excluir.setVisibility(View.VISIBLE);
-            viewHolder.alterar.setVisibility(View.VISIBLE);
-        } else{
-            viewHolder.excluir.setVisibility(View.GONE);
-            viewHolder.alterar.setVisibility(View.GONE);
-        }
 
         viewHolder.excluir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,15 +150,6 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
                         .show();
             }
         });
-
-
-        viewHolder.consulta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context, "Consultando " + demanda.getDescricao(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
     }
 
     public void setOnItemClickListener(View.OnClickListener itemClickListener) {
@@ -125,7 +166,7 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
     }
 
 
-    public class DemandaAluViewHolder extends RecyclerView.ViewHolder{
+    class DemandaAluViewHolder extends RecyclerView.ViewHolder{
 
         final TextView categoria;
         final TextView status;
@@ -133,8 +174,9 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
         final Button alterar;
         final Button excluir;
         final Button consulta;
+        final TextView resumo;
 
-        public DemandaAluViewHolder(@NonNull View itemView) {
+        DemandaAluViewHolder(@NonNull View itemView) {
 
             super(itemView);
 
@@ -144,6 +186,7 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
             alterar = itemView.findViewById(R.id.btnAlterarDemanda);
             excluir = itemView.findViewById(R.id.btnExcluirDemanda);
             consulta = itemView.findViewById(R.id.btnVerPropostas);
+            resumo = itemView.findViewById(R.id.txtResDemanda);
 
             itemView.setTag(this);
             itemView.setOnClickListener(mOnItemClickListener);

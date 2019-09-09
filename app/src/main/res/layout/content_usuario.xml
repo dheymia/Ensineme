@@ -25,29 +25,56 @@
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="8dp"
                 android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/txtNome"
+                app:layout_constraintBottom_toTopOf="@+id/nomeCompleto"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <AutoCompleteTextView
-                android:id="@+id/txtNome"
-                style="@style/inserirtexto"
-
-                android:layout_marginTop="32dp"
-                android:hint="@string/nome"
-                android:inputType="textPersonName"
-                app:layout_constraintBottom_toTopOf="@+id/txtValorOferta"
+            <LinearLayout
+                android:id="@+id/nomeCompleto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <AutoCompleteTextView
+                    android:id="@+id/txtNome"
+                    style="@style/inserirtexto"
+
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="32dp"
+                    android:layout_weight="2"
+                    android:hint="@string/nome"
+                    android:inputType="textPersonName"
+                    app:layout_constraintBottom_toTopOf="@+id/txtValorOferta"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/txtSobrenome"
+                    style="@style/inserirtexto"
+
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="32dp"
+                    android:layout_weight="1"
+                    android:hint="Sobrenome"
+                    android:inputType="textPersonName"
+                    app:layout_constraintBottom_toTopOf="@+id/txtValorOferta"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </LinearLayout>
 
             <AutoCompleteTextView
-                android:id="@+id/txtValorOferta"
+                android:id="@+id/txtEmail"
                 style="@style/inserirEmail"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtNome" />
+                app:layout_constraintTop_toBottomOf="@+id/nomeCompleto" />
 
             <AutoCompleteTextView
                 android:id="@+id/txtCelular"
@@ -57,7 +84,7 @@
                 android:inputType="phone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtValorOferta" />
+                app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
 
 
             <EditText

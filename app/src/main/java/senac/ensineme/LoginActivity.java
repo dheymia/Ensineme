@@ -189,7 +189,7 @@ public class LoginActivity extends ComumActivity implements View.OnClickListener
     }
 
     private boolean isNameOk(Usuario usuario, FirebaseUser firebaseUser) {
-        return (usuario.getNome() != null || firebaseUser.getDisplayName() != null);
+        return (usuario.getNomecompleto() != null || firebaseUser.getDisplayName() != null);
     }
 
     private void chamarMainActivity() {

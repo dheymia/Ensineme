@@ -42,17 +42,24 @@ import java.util.Locale;
 
 import senac.ensineme.R;
 import senac.ensineme.adapters.DemandaAluAdapter;
+import senac.ensineme.adapters.OfertaProfAdapter;
 import senac.ensineme.models.Demanda;
+import senac.ensineme.models.Oferta;
+
+import static android.view.View.GONE;
 
 public class AlunoBuscaFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private AlertDialog alerta;
+    private AlertDialog alertapropostas;
     private AlunoBuscaViewModel buscaViewModel;
     private TextView textView, txtExpiracao, txtDescDemanda, txtCatDemanda, txtTurnoDemanda, txtInicioDemanda, txtnHorasaulaDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtLogradouroDemanda, txtComplementoDemanda, txtNumeroDemanda, txtCEPDemanda, txtBairroDemanda;
     private RecyclerView recyclerView;
     private LinearLayout voltar;
     private Spinner spConsulta;
     private ProgressBar progressBar;
+    private RecyclerView recyclerOfertas;
+    private List <Oferta> ofertaList = new ArrayList<>();
     private ArrayAdapter<CharSequence> statusAdapter;
     public static DemandaAluAdapter adapter;
     private List<Demanda> demandasList = new ArrayList<>();
@@ -64,6 +71,8 @@ public class AlunoBuscaFragment extends Fragment implements AdapterView.OnItemSe
     private FirebaseUser firebaseUser;
     private String consulta, aluno, codDemanda, inicio, expiracao;
     private Date inicioformatado, expiracaoformatada;
+    private String descDemanda;
+
     private String myFormat = "dd/MM/yyyy";
     private String format = "yyyy/MM/dd";
     private SimpleDateFormat formatoData = new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
@@ -164,6 +173,7 @@ public class AlunoBuscaFragment extends Fragment implements AdapterView.OnItemSe
             adapter = new DemandaAluAdapter(demandasList, getContext());
             adapter.setOnItemClickListener(onItemClickListener);
             recyclerView.setAdapter(adapter);
+            adapter.setClickConsultaPrposta(clickConsultar);
             progressBar.setVisibility(View.GONE);
         }
 
@@ -173,7 +183,76 @@ public class AlunoBuscaFragment extends Fragment implements AdapterView.OnItemSe
         }
     };
 
+    private View.OnClickListener clickConsultar = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+            int position = viewHolder.getAdapterPosition();
 
+            demandaSelecionada = demandasList.get(position);
+            codDemanda = demandaSelecionada.getCodigo();
+            descDemanda = demandaSelecionada.getDescricao();
+
+            dialogconsultaOfertas();
+        }
+    };
+
+    private void dialogconsultaOfertas() {
+
+        LayoutInflater li = getLayoutInflater();
+        final View view = li.inflate(R.layout.dialog_ofertas_consultar, null);
+
+        LinearLayout voltar = view.findViewById(R.id.ConsultaPropostas);
+        recyclerOfertas = view.findViewById(R.id.ListOfertas);
+        final ProgressBar progressBar = view.findViewById(R.id.loading);
+        Button btnSelecionaProposta = view.findViewById(R.id.btnEscolherProposta);
+        TextView txtTitulo = view.findViewById(R.id.txtTitulo);
+
+        txtTitulo.setText("Propostas recebidas");
+        btnSelecionaProposta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSnackbar("Validar");
+            }
+        });
+
+        recyclerOfertas.setHasFixedSize(true);
+        recyclerOfertas.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+        progressBar.setVisibility(View.VISIBLE);
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference refOfer = database.getReference("demandas/" + codDemanda + "/propostas");
+        refOfer.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ofertaList.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Oferta oferta = ds.getValue(Oferta.class);
+                    ofertaList.add(oferta);
+                }
+                OfertaProfAdapter adapterOfertas = new OfertaProfAdapter(ofertaList, getContext());
+                recyclerOfertas.setAdapter(adapterOfertas);
+                progressBar.setVisibility(GONE);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                progressBar.setVisibility(GONE);
+            }
+        });
+
+        voltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertapropostas.dismiss();
+            }
+        });
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Aprender " + descDemanda);
+        builder.setView(view);
+        alertapropostas = builder.create();
+        alertapropostas.show();
+    }
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         Object item = parent.getItemAtPosition(pos);

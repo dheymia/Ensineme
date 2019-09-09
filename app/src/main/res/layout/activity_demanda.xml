@@ -11,7 +11,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
 
         <androidx.constraintlayout.widget.ConstraintLayout style="@style/layoutTelasInserir">
 
@@ -34,7 +35,8 @@
                 android:inputType="textMultiLine"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtViewDesejaAprender" />
+                app:layout_constraintTop_toBottomOf="@+id/txtViewDesejaAprender"
+                android:importantForAutofill="no" />
 
             <EditText
                 android:id="@+id/txtLogradouro"
@@ -44,7 +46,8 @@
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutCEPCidade" />
+                app:layout_constraintTop_toBottomOf="@+id/layoutCEPCidade"
+                android:importantForAutofill="no" />
 
             <LinearLayout
                 android:id="@+id/layoutDadosDemanda"
@@ -69,7 +72,8 @@
                         android:textAlignment="center"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                        app:layout_constraintTop_toBottomOf="@+id/textView6"
+                        android:importantForAutofill="no" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/layoutCategoria"
@@ -178,7 +182,8 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView8">
+                app:layout_constraintTop_toBottomOf="@+id/textView8"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     style="@style/metadetela"
@@ -188,7 +193,7 @@
                         android:id="@+id/txtCep"
                         style="@style/inserirtexto"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="1dp"
+                        android:layout_marginEnd="1dp"
                         android:hint="@string/cep"
                         android:inputType="textPostalAddress" />
 
@@ -219,7 +224,8 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtLogradouro">
+                app:layout_constraintTop_toBottomOf="@+id/txtLogradouro"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     style="@style/metadetela"
@@ -231,7 +237,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="1dp"
                         android:hint="@string/numero"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:importantForAutofill="no" />
                 </LinearLayout>
 
                 <LinearLayout

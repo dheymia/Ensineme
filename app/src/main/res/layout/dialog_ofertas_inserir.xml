@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginStart="36dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginEnd="36dp"
+    android:layout_marginBottom="16dp"
+    android:gravity="center_horizontal">
+    tools:context=".ProfessorMainActivity">
+
+    <LinearLayout
+        style="@style/layoutTelasInserir"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/txtComentarioOferta"
+                    style="@style/inserirtexto"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:hint="Deixe um comentário sobre a proposta"
+                    android:inputType="textMultiLine"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/LinDemanda" />
+
+
+                <EditText
+                    android:id="@+id/txtValorOferta"
+                    style="@style/inserirtexto"
+
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="@string/valor"
+                    android:inputType="numberDecimal"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtComentarioOferta" />
+
+                <LinearLayout
+                    android:id="@+id/LinDemanda"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/background_listas"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+
+                    <TextView
+                        android:id="@+id/txtRotulo1"
+                        style="@style/texto_titulo_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:text="Para"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/txtAluno"
+                        style="@style/titulosipinners"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:text="Nome do Aluno"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/txtEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/cabin_semibold"
+                        android:text="Email do aluno"
+                        android:textAlignment="center"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtRotul3"
+                        style="@style/texto_titulo_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="A partir de"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/txtInicio"
+                        style="@style/titulosipinners"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="0dp"
+                        android:text="@string/inicioDemanda"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/textRotul5"
+                        style="@style/titulo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Minha proposta"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@+id/txtValorOferta"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/layout2"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="center|center_horizontal|left|end"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/inserirPropostas"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/inserirtexto"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtVoltar"
+                    style="@style/titulo_item"
+                    android:layout_width="66dp"
+                    android:layout_marginLeft="0dp"
+                    android:foreground="@drawable/voltar"
+                    android:foregroundGravity="left|center"
+                    android:foregroundTint="@color/verdeescuro"
+                    android:gravity="left"
+                    android:text="Voltar"
+                    android:textAlignment="textEnd"
+                    tools:ignore="RtlCompat" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btnInserirOferta"
+                    style="@style/botao"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="0dp"
+                    android:gravity="right|center_vertical"
+                    android:text="@string/acaoCadastrar" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

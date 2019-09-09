@@ -17,7 +17,7 @@ import senac.ensineme.models.Categoria;
 
 public class CategoriaProfAdapter extends RecyclerView.Adapter<CategoriaProfAdapter.CategoriaProfViewHolder> {
 
-    List<Categoria> categoriaList;
+    private List<Categoria> categoriaList;
     private Context context;
     public View.OnClickListener mOnItemClickListener;
 
@@ -31,31 +31,29 @@ public class CategoriaProfAdapter extends RecyclerView.Adapter<CategoriaProfAdap
     @Override
     public CategoriaProfAdapter.CategoriaProfViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_categorias_professor,parent,false);
-        CategoriaProfAdapter.CategoriaProfViewHolder holder = new CategoriaProfAdapter.CategoriaProfViewHolder(view);
-        return holder;
+        return new CategoriaProfViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CategoriaProfAdapter.CategoriaProfViewHolder holder, int position) {
 
-        CategoriaProfAdapter.CategoriaProfViewHolder viewHolder = (CategoriaProfAdapter.CategoriaProfViewHolder) holder;
         final Categoria categoria = categoriaList.get(position);
-        viewHolder.categoria.setText(categoria.getNome());
+        ((CategoriaProfViewHolder) holder).categoria.setText(categoria.getNome());
 
         if ("Danças".equals(categoria.getNome())) {
-            viewHolder.imagem.setImageResource(R.drawable.dancas);
+            ((CategoriaProfViewHolder) holder).imagem.setImageResource(R.drawable.dancas);
         } else if ("Esportes".equals(categoria.getNome())) {
-            viewHolder.imagem.setImageResource(R.drawable.esporte);
+            ((CategoriaProfViewHolder) holder).imagem.setImageResource(R.drawable.esporte);
         } else if ("Culinária".equals(categoria.getNome())) {
-            viewHolder.imagem.setImageResource(R.drawable.culinaria);
+            ((CategoriaProfViewHolder) holder).imagem.setImageResource(R.drawable.culinaria);
         } else if ("Instrumentos musicais".equals(categoria.getNome())) {
-            viewHolder.imagem.setImageResource(R.drawable.instrumentos);
+            ((CategoriaProfViewHolder) holder).imagem.setImageResource(R.drawable.instrumentos);
         } else if ("Disciplinas escolares".equals(categoria.getNome())) {
-            viewHolder.imagem.setImageResource(R.drawable.escolares);
+            ((CategoriaProfViewHolder) holder).imagem.setImageResource(R.drawable.escolares);
         } else if ("Artesanato".equals(categoria.getNome())) {
-            viewHolder.imagem.setImageResource(R.drawable.artesanato);
+            ((CategoriaProfViewHolder) holder).imagem.setImageResource(R.drawable.artesanato);
         } else if ("Artes".equals(categoria.getNome())) {
-            viewHolder.imagem.setImageResource(R.drawable.arte);
+            ((CategoriaProfViewHolder) holder).imagem.setImageResource(R.drawable.arte);
         }
         }
 
@@ -64,17 +62,16 @@ public class CategoriaProfAdapter extends RecyclerView.Adapter<CategoriaProfAdap
     }
 
 
-    @Override
     public int getItemCount() {
         return categoriaList.size();
     }
 
-    public class CategoriaProfViewHolder extends RecyclerView.ViewHolder {
+    class CategoriaProfViewHolder extends RecyclerView.ViewHolder {
 
         final TextView categoria;
         final ImageView imagem;
 
-        public CategoriaProfViewHolder(@NonNull View itemView) {
+        CategoriaProfViewHolder(@NonNull View itemView) {
 
             super(itemView);
 

@@ -30,7 +30,7 @@
     <string name="complemento">Complemento</string>
     <string name="numero">n.º</string>
     <string name="bairro">Bairro</string>
-    <string name="valor">Valor</string>
+    <string name="valor">R$ 0,00</string>
 
     <!-- Mensagens de erros-->
     <string name="emailInvalido">Email inválido</string>
@@ -98,6 +98,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="nome_do_aluno">Nome do aluno</string>
 
 
 </resources>

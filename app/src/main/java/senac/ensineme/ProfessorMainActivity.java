@@ -9,6 +9,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceManager;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,27 +26,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.preference.PreferenceManager;
-
 import senac.ensineme.models.Usuario;
 import senac.ensineme.ui.professor_busca.ProfessorBuscaFragment;
 
 public class ProfessorMainActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
-    private TextView txtNome;
-    Usuario usuario,usuariologado;
-    private DatabaseReference firebase;
-    private FirebaseUser firebaseUser;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener authStateListener;
-    private String idUsuario, nomeUsuario, tipoUsuario;
+    private Usuario usuario;
+    private Usuario usuariologado;
+    private String tipoUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,17 +43,15 @@ public class ProfessorMainActivity extends AppCompatActivity {
 
        // getSupportActionBar().hide();
 
-        mTextMessage = findViewById(R.id.message);
-        txtNome = findViewById(R.id.txtNome);
-
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String name = sharedPreferences.getString("signature", "visitante");
 
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
         usuario = new Usuario();
+        String idUsuario;
         if (firebaseUser != null) {
             usuario.setId(firebaseUser.getUid());
             idUsuario = usuario.getId();
@@ -71,10 +64,9 @@ public class ProfessorMainActivity extends AppCompatActivity {
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 usuariologado = dataSnapshot.getValue(Usuario.class);
                 if (usuariologado.getTipo() != null) {
-                    nomeUsuario = usuariologado.getNome();
                     tipoUsuario = usuariologado.getTipo();
 //                    txtNome.setText("Olá " + nomeUsuario);
                 }

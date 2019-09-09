@@ -8,20 +8,30 @@ import java.util.Map;
 public class Usuario {
     private String id;
     private String nome;
+    private String sobrenome;
+    private String nomecompleto;
     private String email;
     private String celular;
     private String password;
     private String tipo;
 
+    public String getNomecompleto() {
+        return nomecompleto;
+    }
+
+    public void setNomecompleto(String nomecompleto) {
+        this.nomecompleto = nomecompleto;
+    }
+
     public Usuario() {
     }
 
-    public Usuario(String id, String nome, String email, String celular, String tipo) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.celular = celular;
-        this.tipo = tipo;
+    public String getSobrenome() {
+        return sobrenome;
+    }
+
+    public void setSobrenome(String sobrenome) {
+        this.sobrenome = sobrenome;
     }
 
     public String getId() {

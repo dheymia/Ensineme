@@ -1,20 +1,14 @@
 package senac.ensineme;
 
-import android.annotation.SuppressLint;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,20 +18,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.ParseException;
-
 import senac.ensineme.models.FirebaseDB;
 import senac.ensineme.models.Usuario;
 
 public class FullscreenActivity extends AppCompatActivity {
 
-    private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser firebaseUser;
-    private Usuario usuario, usuariologado;
-    private String idUsuario, tipoUsuario;
-    private static int SPLASH_TIME_OUT = 3000;
+    private String idUsuario;
 
 
     @Override
@@ -48,9 +37,10 @@ public class FullscreenActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         authStateListener = getFirebaseAuthResultHandler();
-        databaseReference = FirebaseDB.getFirebase();
+        DatabaseReference databaseReference = FirebaseDB.getFirebase();
         firebaseUser = firebaseAuth.getCurrentUser();
 
+        int SPLASH_TIME_OUT = 3000;
         new Handler().postDelayed(new Runnable() {
 
             @Override
@@ -74,24 +64,23 @@ public class FullscreenActivity extends AppCompatActivity {
 
 
     private FirebaseAuth.AuthStateListener getFirebaseAuthResultHandler() {
-        FirebaseAuth.AuthStateListener callback = new FirebaseAuth.AuthStateListener() {
+        return (new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth1) {
 
-                FirebaseUser userFirebase = firebaseAuth.getCurrentUser();
+                FirebaseUser userFirebase = firebaseAuth1.getCurrentUser();
 
                 if (userFirebase == null) {
                    chamaPrincipal();
                 }
                 chamarMainActivity();
             }
-        };
-        return (callback);
+        });
 
     }
 
     private void chamarMainActivity() {
-        usuario = new Usuario();
+        Usuario usuario = new Usuario();
         if (firebaseUser != null) {
             usuario.setId(firebaseUser.getUid());
             idUsuario = usuario.getId();
@@ -104,34 +93,39 @@ public class FullscreenActivity extends AppCompatActivity {
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                usuariologado = dataSnapshot.getValue(Usuario.class);
-                if(usuariologado.getTipo() != null) {
-                    tipoUsuario = usuariologado.getTipo();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Usuario usuariologado = dataSnapshot.getValue(Usuario.class);
+                if (usuariologado.getTipo() != null) {
+                    String tipoUsuario = usuariologado.getTipo();
                     Toast.makeText(FullscreenActivity.this,
                             idUsuario + " " + usuariologado.getTipo(),
                             Toast.LENGTH_LONG)
                             .show();
-                    if (tipoUsuario.equals("aluno")) {
-                        Intent aluno = new Intent(FullscreenActivity.this, AlunoMainActivity.class);
-                        startActivity(aluno);
-                        finish();
-                    } else if (tipoUsuario.equals("professor")) {
-                        Intent professor = new Intent(FullscreenActivity.this, ProfessorMainActivity.class);
-                        startActivity(professor);
-                        finish();
-                    }else if (tipoUsuario.equals("administrador")) {
-                        Intent administrador = new Intent(FullscreenActivity.this, AdministradorMainActivity.class);
-                        startActivity(administrador);
-                        finish();
-                }
-                   return;
+                    switch (tipoUsuario) {
+                        case "aluno":
+                            Intent aluno = new Intent(FullscreenActivity.this, AlunoMainActivity.class);
+                            startActivity(aluno);
+                            finish();
+                            break;
+                        case "professor":
+                            Intent professor = new Intent(FullscreenActivity.this, ProfessorMainActivity.class);
+                            startActivity(professor);
+                            finish();
+                            break;
+                        case "administrador":
+                            Intent administrador = new Intent(FullscreenActivity.this, AdministradorMainActivity.class);
+                            startActivity(administrador);
+                            finish();
+                            break;
+                        default:
+                            throw new IllegalStateException("Tipo do usuário: " + tipoUsuario);
+                    }
                 }
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                ProgressBar progressBar = (ProgressBar) findViewById(R.id.loading);
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                ProgressBar progressBar = findViewById(R.id.loading);
                 Snackbar.make(progressBar,
                         "Erro de leitura: " + databaseError.getCode(),
                         Snackbar.LENGTH_LONG)
@@ -143,7 +137,8 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     private void chamaPrincipal(){
-        Intent principal = new Intent (FullscreenActivity.this,PrincipalActivity.class);
+        Intent principal;
+        principal = new Intent (FullscreenActivity.this,PrincipalActivity.class);
         startActivity(principal);
         finish();
     }

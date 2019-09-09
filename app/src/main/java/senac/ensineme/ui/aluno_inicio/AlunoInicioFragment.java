@@ -50,50 +50,49 @@ import senac.ensineme.R;
 import senac.ensineme.SettingsActivity;
 import senac.ensineme.adapters.CategoriaProfAdapter;
 import senac.ensineme.adapters.DemandaAluAdapter;
+import senac.ensineme.adapters.OfertaProfAdapter;
 import senac.ensineme.models.Categoria;
 import senac.ensineme.models.Demanda;
+import senac.ensineme.models.Oferta;
+
+import static android.view.View.GONE;
 
 public class AlunoInicioFragment extends Fragment  {
 
-    private AlunoInicioViewModel homeViewModel;
-    private FloatingActionButton fab;
     public static boolean alterar = false;
+    private AlertDialog alertapropostas;
     private AlertDialog alerta;
-    private TextView textView, txtExpiracao, txtDescDemanda, txtCatDemanda, txtTurnoDemanda, txtInicioDemanda, txtnHorasaulaDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtLogradouroDemanda, txtComplementoDemanda, txtNumeroDemanda, txtCEPDemanda, txtBairroDemanda;
-    private LinearLayout voltar;
     private ProgressBar progressBar;
-    private ImageView imagemtoolbar;
     private Toolbar toolbar;
+    private RecyclerView recyclerOfertas;
+    private List <Oferta> ofertaList = new ArrayList<>();
     private RecyclerView recyclerDemandas,recyclerCategorias;
-    private CategoriaProfAdapter adapter;
-    public static DemandaAluAdapter adapterDemandas;
+    private DemandaAluAdapter adapterDemandas;
     private List<Categoria> categoriaList = new ArrayList<>();
     private List<Demanda> demandasList = new ArrayList<>();
-    public static Demanda demandaSelecionada;
+    private static Demanda demandaSelecionada;
     private Demanda demandadetalhe;
-    private String codDemanda, inicio, expiracao, aluno;
-    private Date inicioformatado, expiracaoformatada;
-    private Categoria categoria, categoriaSelecionada;
-    private FirebaseDatabase firebase;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseUser firebaseUser;
-    private DatabaseReference ref, refDem;
+    private String codDemanda;
+    private String expiracao;
+    private String aluno;
     private String myFormat = "dd/MM/yyyy";
     private String format = "yyyy/MM/dd";
     private SimpleDateFormat formatoData =  new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
     private SimpleDateFormat formatoDataDemanda = new SimpleDateFormat(format, new Locale("pt", "BR"));
 
+    private String descDemanda;
+
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(AlunoInicioViewModel.class);
+        AlunoInicioViewModel homeViewModel = ViewModelProviders.of(this).get(AlunoInicioViewModel.class);
         View root = inflater.inflate(R.layout.fragment_aluno_inicio, container, false);
         //final TextView textView = root.findViewById(R.id.text_home);
-        fab = root.findViewById(R.id.fab);
+        FloatingActionButton fab = root.findViewById(R.id.fab);
         recyclerDemandas = root.findViewById(R.id.listDemandas);
         recyclerCategorias = root.findViewById(R.id.listCategorias);
         progressBar = root.findViewById(R.id.loading);
-        imagemtoolbar = root.findViewById(R.id.app_bar_image);
+        ImageView imagemtoolbar = root.findViewById(R.id.app_bar_image);
         toolbar = root.findViewById(R.id.toolbar);
         homeViewModel.getText().observe(this, new Observer<String>() {
             @Override
@@ -104,15 +103,15 @@ public class AlunoInicioFragment extends Fragment  {
 
         imagemtoolbar.setImageResource(R.drawable.ensinemeprincipal);
 
-        firebase = FirebaseDatabase.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
+        FirebaseDatabase firebase = FirebaseDatabase.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
             aluno = firebaseUser.getUid();
         }
 
-        ref = firebase.getReference("categorias");
-        refDem = firebase.getReference("usuarios/" + aluno + "/demandas");
+        DatabaseReference ref = firebase.getReference("categorias");
+        DatabaseReference refDem = firebase.getReference("usuarios/" + aluno + "/demandas");
 
         recyclerCategorias.setHasFixedSize(true);
         recyclerCategorias.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -149,7 +148,7 @@ public class AlunoInicioFragment extends Fragment  {
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int position = viewHolder.getAdapterPosition();
 
-            categoriaSelecionada = categoriaList.get(position);
+            Categoria categoriaSelecionada = categoriaList.get(position);
             Toast.makeText(getContext(), "Consultando " + categoriaSelecionada.getNome(), Toast.LENGTH_SHORT).show();
 
         }
@@ -165,7 +164,7 @@ public class AlunoInicioFragment extends Fragment  {
                 categoriaList.add(categoria);
             }
 
-            adapter = new CategoriaProfAdapter(categoriaList, getContext());
+            CategoriaProfAdapter adapter = new CategoriaProfAdapter(categoriaList, getContext());
             adapter.setOnItemClickListener(onItemClickListener);
             recyclerCategorias.setAdapter(adapter);
 
@@ -193,7 +192,7 @@ public class AlunoInicioFragment extends Fragment  {
 
             refDem.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                     demandadetalhe = dataSnapshot.getValue(Demanda.class);
 
@@ -202,7 +201,7 @@ public class AlunoInicioFragment extends Fragment  {
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
                     Snackbar.make(progressBar,
                             "Erro de leitura: " + databaseError.getCode(),
                             Snackbar.LENGTH_LONG)
@@ -211,6 +210,65 @@ public class AlunoInicioFragment extends Fragment  {
             });
         }
     };
+    public void dialogDetalhesDemanda() {
+        LayoutInflater li = getLayoutInflater();
+        final View view = li.inflate(R.layout.dialog_demanda_detalhes, null);
+
+        LinearLayout voltar = view.findViewById(R.id.VerPropostas);
+
+        TextView txtDescDemanda = view.findViewById(R.id.txtAluno);
+        TextView txtCatDemanda = view.findViewById(R.id.txtCatDemanda);
+        TextView txtTurnoDemanda = view.findViewById(R.id.txtTurno);
+        TextView txtInicioDemanda = view.findViewById(R.id.txtInicio);
+        TextView txtnHorasaulaDemanda = view.findViewById(R.id.txtCH);
+        TextView txtLocalidadeDemanda = view.findViewById(R.id.txtCidade);
+        TextView txtEstadoDemanda = view.findViewById(R.id.txtEstado);
+        TextView txtLogradouroDemanda = view.findViewById(R.id.txtLogradouro);
+        TextView txtComplementoDemanda = view.findViewById(R.id.txtComplemento);
+        TextView txtNumeroDemanda = view.findViewById(R.id.txtNumero);
+        TextView txtCEPDemanda = view.findViewById(R.id.txtCEP);
+        TextView txtBairroDemanda = view.findViewById(R.id.txtBairro);
+        TextView txtExpiracao = view.findViewById(R.id.textExpiracao);
+
+
+        txtDescDemanda.setText(String.valueOf(demandadetalhe.getDescricao()));
+        txtCatDemanda.setText(String.valueOf(demandadetalhe.getCategoria()));
+        txtTurnoDemanda.setText(String.valueOf(demandadetalhe.getTurno()));
+        try {
+            Date inicioformatado = formatoDataDemanda.parse(demandadetalhe.getInicio());
+            String inicio = formatoData.format(inicioformatado);
+            txtInicioDemanda.setText(inicio);
+
+            Date expiracaoformatada = formatoDataDemanda.parse(demandadetalhe.getExpiracao());
+            expiracao = formatoData.format(expiracaoformatada);
+            txtExpiracao.setText(expiracao);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        txtnHorasaulaDemanda.setText(String.valueOf(demandadetalhe.getHorasaula()) + " horas/aula");
+        txtLocalidadeDemanda.setText(String.valueOf(demandadetalhe.getLocalidade()));
+        txtEstadoDemanda.setText(String.valueOf(demandadetalhe.getEstado()));
+        txtLogradouroDemanda.setText(String.valueOf(demandadetalhe.getLogradouro()));
+        txtComplementoDemanda.setText(String.valueOf(demandadetalhe.getComplemento()));
+        txtNumeroDemanda.setText(String.valueOf(demandadetalhe.getNumero()));
+        txtCEPDemanda.setText(String.valueOf(demandadetalhe.getCEP()));
+        txtBairroDemanda.setText(String.valueOf(demandadetalhe.getBairro()));
+
+        voltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alerta.dismiss();
+            }
+        });
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Você quer aprender");
+        builder.setView(view);
+        alerta = builder.create();
+        alerta.show();
+    }
 
 
     private ValueEventListener ListenerGeralDemandas = new ValueEventListener() {
@@ -236,6 +294,7 @@ public class AlunoInicioFragment extends Fragment  {
 
             adapterDemandas = new DemandaAluAdapter(demandasList, getContext());
             adapterDemandas.setOnItemClickListener(onItemClickListenerDemandas);
+            adapterDemandas.setClickConsultaPrposta(clickConsultar);
             recyclerDemandas.setAdapter(adapterDemandas);
             closeProgressBar();
         }
@@ -246,15 +305,86 @@ public class AlunoInicioFragment extends Fragment  {
         }
     };
 
-    protected void openProgressBar(){
+    private View.OnClickListener clickConsultar = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+            int position = viewHolder.getAdapterPosition();
+
+            demandaSelecionada = demandasList.get(position);
+            codDemanda = demandaSelecionada.getCodigo();
+            descDemanda = demandaSelecionada.getDescricao();
+
+            dialogconsultaOfertas();
+        }
+    };
+
+    private void dialogconsultaOfertas() {
+
+        LayoutInflater li = getLayoutInflater();
+        final View view = li.inflate(R.layout.dialog_ofertas_consultar, null);
+
+        LinearLayout voltar = view.findViewById(R.id.ConsultaPropostas);
+        recyclerOfertas = view.findViewById(R.id.ListOfertas);
+        final ProgressBar progressBar = view.findViewById(R.id.loading);
+        Button btnSelecionaProposta = view.findViewById(R.id.btnEscolherProposta);
+        TextView txtTitulo = view.findViewById(R.id.txtTitulo);
+
+        txtTitulo.setText("Propostas recebidas");
+        btnSelecionaProposta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSnackbar("Validar");
+            }
+        });
+
+        recyclerOfertas.setHasFixedSize(true);
+        recyclerOfertas.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+        progressBar.setVisibility(View.VISIBLE);
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference refOfer = database.getReference("demandas/" + codDemanda + "/propostas");
+        refOfer.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ofertaList.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Oferta oferta = ds.getValue(Oferta.class);
+                    ofertaList.add(oferta);
+                }
+                OfertaProfAdapter adapterOfertas = new OfertaProfAdapter(ofertaList, getContext());
+                recyclerOfertas.setAdapter(adapterOfertas);
+                progressBar.setVisibility(GONE);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                progressBar.setVisibility(GONE);
+            }
+        });
+
+        voltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertapropostas.dismiss();
+            }
+        });
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Aprender " + descDemanda);
+        builder.setView(view);
+        alertapropostas = builder.create();
+        alertapropostas.show();
+    }
+
+    private void openProgressBar(){
         progressBar.setVisibility( View.VISIBLE );
     }
 
-    protected void closeProgressBar(){
+    private void closeProgressBar(){
         progressBar.setVisibility( View.GONE );
     }
 
-    protected void showSnackbar(String message){
+    private void showSnackbar(String message){
         Snackbar.make(progressBar,
                 message,
                 Snackbar.LENGTH_LONG)
@@ -266,67 +396,6 @@ public class AlunoInicioFragment extends Fragment  {
                 message,
                 Toast.LENGTH_LONG)
                 .show();
-    }
-
-    public void dialogDetalhesDemanda() {
-        LayoutInflater li = getLayoutInflater();
-        final View view = li.inflate(R.layout.dialog_demanda_detalhes, null);
-
-        voltar = view.findViewById(R.id.VerPropostas);
-
-        txtDescDemanda = view.findViewById(R.id.txtAluno);
-        txtCatDemanda = view.findViewById(R.id.txtCatDemanda);
-        txtTurnoDemanda = view.findViewById(R.id.txtTurno);
-        txtInicioDemanda = view.findViewById(R.id.txtInicio);
-        txtnHorasaulaDemanda = view.findViewById(R.id.txtCH);
-        txtLocalidadeDemanda = view.findViewById(R.id.txtCidade);
-        txtEstadoDemanda = view.findViewById(R.id.txtEstado);
-        txtLogradouroDemanda = view.findViewById(R.id.txtLogradouro);
-        txtComplementoDemanda = view.findViewById(R.id.txtComplemento);
-        txtNumeroDemanda = view.findViewById(R.id.txtNumero);
-        txtCEPDemanda = view.findViewById(R.id.txtCEP);
-        txtBairroDemanda = view.findViewById(R.id.txtBairro);
-        txtExpiracao = view.findViewById(R.id.textExpiracao);
-
-
-        txtDescDemanda.setText(String.valueOf(demandadetalhe.getDescricao()));
-        txtCatDemanda.setText(String.valueOf(demandadetalhe.getCategoria()));
-        txtTurnoDemanda.setText(String.valueOf(demandadetalhe.getTurno()));
-        try {
-            inicioformatado = formatoDataDemanda.parse(demandadetalhe.getInicio());
-            inicio = formatoData.format(inicioformatado);
-            txtInicioDemanda.setText(inicio);
-
-            expiracaoformatada = formatoDataDemanda.parse(demandadetalhe.getExpiracao());
-            expiracao = formatoData.format(expiracaoformatada);
-            txtExpiracao.setText(expiracao);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        txtnHorasaulaDemanda.setText(String.valueOf(demandadetalhe.getHorasaula()) + " horas/aula");
-        txtLocalidadeDemanda.setText(String.valueOf(demandadetalhe.getLocalidade()));
-        txtEstadoDemanda.setText(String.valueOf(demandadetalhe.getEstado()));
-        txtLogradouroDemanda.setText(String.valueOf(demandadetalhe.getLogradouro()));
-        txtComplementoDemanda.setText(String.valueOf(demandadetalhe.getComplemento()));
-        txtNumeroDemanda.setText(String.valueOf(demandadetalhe.getNumero()));
-        txtCEPDemanda.setText(String.valueOf(demandadetalhe.getCEP()));
-        txtBairroDemanda.setText(String.valueOf(demandadetalhe.getBairro()));
-
-        voltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alerta.dismiss();
-            }
-        });
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Detalhes da demanda");
-
-        builder.setView(view);
-        alerta = builder.create();
-        alerta.show();
     }
 
     @Override
