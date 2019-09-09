@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "729121059379",
+    "firebase_url": "https://ensineme-bbf41.firebaseio.com",
+    "project_id": "ensineme-bbf41",
+    "storage_bucket": "ensineme-bbf41.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:729121059379:android:35190b0d2acb6754",
+        "android_client_info": {
+          "package_name": "senac.ensineme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "729121059379-hsnplm6hqcvpbcfo4pe78cigjb90rt4r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "senac.ensineme",
+            "certificate_hash": "eb85148bc60764e002142fa5401530a339cf06b7"
+          }
+        },
+        {
+          "client_id": "729121059379-jdobn8tiu4l82j18mj3oc5oofmi92ttk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIv7JKtkOzOGT82_OEXjyjhNfqWCa7c9I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "729121059379-jdobn8tiu4l82j18mj3oc5oofmi92ttk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
