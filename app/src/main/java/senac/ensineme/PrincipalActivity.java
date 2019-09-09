@@ -7,7 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.onesignal.OneSignal;
+
 public class PrincipalActivity extends AppCompatActivity {
+
+    private Button btnCadastrar, btnEntrar;
+
 
 
     @Override
@@ -15,8 +20,13 @@ public class PrincipalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
 
+        // OneSignal Initialization
+        OneSignal.startInit(this)
+                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+                .unsubscribeWhenNotificationsAreDisabled(true)
+                .init();
 
-        Button btnCadastrar = findViewById(R.id.btnCadastrarCategoria);
+        btnCadastrar = (Button) findViewById(R.id.btnCadastrarCategoria);
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -24,7 +34,7 @@ public class PrincipalActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        Button btnEntrar = findViewById(R.id.btnCancelar);
+        btnEntrar = (Button) findViewById(R.id.btnCancelar);
         btnEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
