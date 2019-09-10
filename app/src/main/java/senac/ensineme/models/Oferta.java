@@ -8,9 +8,17 @@ import java.util.Map;
 
 public class Oferta {
     private DatabaseReference firebase, firebaseProf,firebaseAlu, firebaseCat, firebaseDem;
-    private String professor, aluno, codDemanda, codOferta, codCategoria, valorOferta, statusOferta, dataOferta, comentarioOferta;
+    private String professor, aluno, codDemanda, codOferta, codCategoria, valorOferta, statusOferta, dataOferta, comentarioOferta, atualizacao;
 
     public Oferta() {
+    }
+
+    public String getAtualizacao() {
+        return atualizacao;
+    }
+
+    public void setAtualizacao(String atualizacao) {
+        this.atualizacao = atualizacao;
     }
 
     public String getAluno() {
@@ -106,6 +114,7 @@ public class Oferta {
             ofertaProfUpdates.put("statusOferta", getStatusOferta());
             ofertaProfUpdates.put("dataOferta", getDataOferta());
             ofertaProfUpdates.put("comentarioOferta", getComentarioOferta());
+            ofertaProfUpdates.put("atualizacao",getAtualizacao());
             firebaseProf.setValue(ofertaProfUpdates, completionListener[0]);
 
             Map<String, Object> ofertaAluUpdates = new HashMap<>();
@@ -114,12 +123,16 @@ public class Oferta {
             firebaseAlu.setValue(ofertaAluUpdates, completionListener[0]);
 
             Map<String, Object> ofertaDemUpdates = new HashMap<>();
+            ofertaDemUpdates.put("aluno", getAluno());
             ofertaDemUpdates.put("professor", getProfessor());
+            ofertaDemUpdates.put("codDemanda", getCodDemanda());
             ofertaDemUpdates.put("codOferta",getCodOferta());
+            ofertaDemUpdates.put("codCategoria", getCodCategoria());
             ofertaDemUpdates.put("valorOferta", getValorOferta());
             ofertaDemUpdates.put("statusOferta", getStatusOferta());
             ofertaDemUpdates.put("dataOferta", getDataOferta());
             ofertaDemUpdates.put("comentarioOferta", getComentarioOferta());
+            ofertaDemUpdates.put("atualizacao",getAtualizacao());
             firebaseDem.setValue(ofertaDemUpdates, completionListener[0]);
 
             Map<String, Object> ofertaCatUpdates = new HashMap<>();
@@ -148,6 +161,7 @@ public class Oferta {
         ofertaUpdates.put("statusOferta", getStatusOferta());
         ofertaUpdates.put("dataOferta", getDataOferta());
         ofertaUpdates.put("comentarioOferta", getComentarioOferta());
+        ofertaUpdates.put("atualizacao",getAtualizacao());
         firebase.updateChildren(ofertaUpdates, completionListener[0]);
 
         Map<String, Object> ofertaProfUpdates = new HashMap<>();
@@ -159,6 +173,7 @@ public class Oferta {
         ofertaProfUpdates.put("statusOferta", getStatusOferta());
         ofertaProfUpdates.put("dataOferta", getDataOferta());
         ofertaProfUpdates.put("comentarioOferta", getComentarioOferta());
+        ofertaProfUpdates.put("atualizacao",getAtualizacao());
         firebaseProf.updateChildren(ofertaProfUpdates, completionListener[0]);
 
         Map<String, Object> ofertaAluUpdates = new HashMap<>();
@@ -167,12 +182,16 @@ public class Oferta {
         firebaseAlu.updateChildren(ofertaAluUpdates, completionListener[0]);
 
         Map<String, Object> ofertaDemUpdates = new HashMap<>();
+        ofertaDemUpdates.put("aluno", getAluno());
         ofertaDemUpdates.put("professor", getProfessor());
+        ofertaDemUpdates.put("codDemanda", getCodDemanda());
         ofertaDemUpdates.put("codOferta",getCodOferta());
+        ofertaDemUpdates.put("codCategoria", getCodCategoria());
         ofertaDemUpdates.put("valorOferta", getValorOferta());
         ofertaDemUpdates.put("statusOferta", getStatusOferta());
         ofertaDemUpdates.put("dataOferta", getDataOferta());
         ofertaDemUpdates.put("comentarioOferta", getComentarioOferta());
+        ofertaDemUpdates.put("atualizacao",getAtualizacao());
         firebaseDem.updateChildren(ofertaDemUpdates, completionListener[0]);
 
         Map<String, Object> ofertaCatUpdates = new HashMap<>();
@@ -213,15 +232,18 @@ public class Oferta {
 
         Map<String, Object> ofertaUpdates = new HashMap<>();
         ofertaUpdates.put("statusOferta", getStatusOferta());
+        ofertaUpdates.put("atualizacao",getAtualizacao());
         firebase.updateChildren(ofertaUpdates, completionListener[0]);
 
         Map<String, Object> ofertaProfUpdates = new HashMap<>();
         ofertaProfUpdates.put("statusOferta", getStatusOferta());
+        ofertaProfUpdates.put("atualizacao",getAtualizacao());
         firebaseProf.updateChildren(ofertaProfUpdates, completionListener[0]);
 
 
         Map<String, Object> ofertaDemUpdates = new HashMap<>();
         ofertaDemUpdates.put("statusOferta", getStatusOferta());
+        ofertaDemUpdates.put("atualizacao",getAtualizacao());
         firebaseDem.updateChildren(ofertaDemUpdates, completionListener[0]);
 
     }

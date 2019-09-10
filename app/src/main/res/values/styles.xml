@@ -122,7 +122,7 @@
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/black_overlay</item>
     </style>
-    <style name="temaAluno" parent="Theme.AppCompat.Light">
+    <style name="temaAluno" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:colorPrimary">#11AC9D</item>
@@ -130,7 +130,7 @@
         <item name="android:colorAccent">#137bc0</item>
     </style>
 
-    <style name="temaProfessor" parent="Theme.AppCompat.Light">
+    <style name="temaProfessor" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>

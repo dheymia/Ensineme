@@ -26,7 +26,7 @@ public class ProfessorMainActivity extends AppCompatActivity {
 
     private Usuario usuario;
     private Usuario usuariologado;
-    private String tipoUsuario;
+    public static String idUsuario, nomeUsuario, tipoUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,36 +38,6 @@ public class ProfessorMainActivity extends AppCompatActivity {
         String name = sharedPreferences.getString("signature", "visitante");
 
 
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-
-        usuario = new Usuario();
-        String idUsuario;
-        if (firebaseUser != null) {
-            usuario.setId(firebaseUser.getUid());
-            idUsuario = usuario.getId();
-        }else{
-            return;
-        }
-
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("usuarios/" + idUsuario);
-
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                usuariologado = dataSnapshot.getValue(Usuario.class);
-                if (usuariologado.getTipo() != null) {
-                    tipoUsuario = usuariologado.getTipo();
-//                    txtNome.setText("Olá " + nomeUsuario);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.

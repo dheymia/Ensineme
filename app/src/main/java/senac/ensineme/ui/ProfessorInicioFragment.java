@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,7 +45,9 @@ import java.util.Locale;
 import java.util.Objects;
 
 import senac.ensineme.AlunoMainActivity;
+import senac.ensineme.BuscaActivity;
 import senac.ensineme.FullscreenActivity;
+import senac.ensineme.ProfessorMainActivity;
 import senac.ensineme.R;
 import senac.ensineme.SettingsActivity;
 import senac.ensineme.adapters.CategoriaProfAdapter;
@@ -60,28 +63,21 @@ import static android.view.View.GONE;
 
 public class ProfessorInicioFragment extends Fragment implements DatabaseReference.CompletionListener {
 
+    private FirebaseDatabase firebase;
+    private String nomeProfessor;
+    private String idProfessor;
+    private String tipoUsuario;
+    private ProgressBar progressBar;
+    public static String codCategoria;
     private AlertDialog alerta;
     private AlertDialog alertaoferta;
     private AlertDialog alertapropostas;
-    private Toolbar toolbar;
-    private ProgressBar progressBar;
     private RecyclerView recyclerDemandas;
     private RecyclerView recyclerCategorias;
     private RecyclerView recyclerOfertas;
     private List <Oferta> ofertaList = new ArrayList<>();
     private List<Categoria> categoriaList = new ArrayList<>();
     private List<Demanda> demandasList = new ArrayList<>();
-    private static Demanda demandaSelecionada;
-    private Demanda demanda, demandadetalhe;
-    private String codDemanda;
-    private String valorOferta;
-    private String comentarioOferta;
-    private String professor;
-    private String data;
-    private String codOferta;
-    private String aluno;
-    private String codCategoria;
-    private Oferta novaoferta;
     private Date dataatual = new Date();
     private String myFormat = "dd/MM/yyyy";
     private String format = "yyyy/MM/dd";
@@ -89,36 +85,70 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
     private SimpleDateFormat formatoDataDemanda = new SimpleDateFormat(format, new Locale("pt", "BR"));
     private String nomeAluno;
     private String emailAluno;
-    private String descDemanda;
-    private String inicioDemanda;
+    private String aluno;
+    private String codigo;
+    private String descricao;
+    private String turno;
+    private String status;
+    private String categoria;
+    private String categoriaCod;
+    private String inicio;
+    private String data;
+    private String expiracao;
+    private String CEP;
+    private String logradouro;
+    private String bairro;
+    private String complemento;
+    private String localidade;
+    private String estado;
+    private String atualizacao;
+    private String situacao;
+    private int horasaula;
+    private int numero;
+
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_professor_inicio, container, false);
         recyclerDemandas = root.findViewById(R.id.listDemandas);
         recyclerCategorias = root.findViewById(R.id.listCategorias);
         progressBar = root.findViewById(R.id.loading);
-        toolbar = root.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        Toolbar toolbar = root.findViewById(R.id.toolbar);
         ImageView imagemtoolbar = root.findViewById(R.id.app_bar_image);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(String.valueOf(AlunoMainActivity.nomeUsuario));
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle(String.valueOf(AlunoMainActivity.tipoUsuario));
-
         imagemtoolbar.setImageResource(R.drawable.ensinemeprincipal);
 
-        FirebaseDatabase firebase = FirebaseDatabase.getInstance();
+        ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
+        Objects.requireNonNull(((AppCompatActivity) getActivity()).getSupportActionBar()).setTitle(String.valueOf(nomeProfessor));
+        Objects.requireNonNull(((AppCompatActivity) getActivity()).getSupportActionBar()).setSubtitle(String.valueOf(tipoUsuario));
 
-        DatabaseReference ref = firebase.getReference("categorias");
-        DatabaseReference refDem = firebase.getReference("demandas");
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        firebase = FirebaseDatabase.getInstance();
+
+        Usuario usuario = new Usuario();
+        if (firebaseUser != null) {
+            usuario.setId(firebaseUser.getUid());
+            idProfessor = usuario.getId();
+
+        DatabaseReference refProf = firebase.getReference("usuarios/" + idProfessor);
+        refProf.addValueEventListener(ConsultaUsuario);
+
+        DatabaseReference refCategorias = firebase.getReference("categorias");
+        DatabaseReference refDemandas = firebase.getReference("demandas");
 
         recyclerCategorias.setHasFixedSize(true);
         recyclerCategorias.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        progressBar.setFocusable(true);
-        openProgressBar();
-        ref.limitToFirst(100).orderByChild("nome").addValueEventListener(ListaCategorias);
-
         recyclerDemandas.setHasFixedSize(true);
         recyclerDemandas.setLayoutManager(new LinearLayoutManager(getContext()));
-        refDem.addValueEventListener(ListenerGeralDemandas);
+
+
+        progressBar.setFocusable(true);
+        openProgressBar();
+        refCategorias.orderByChild("nome").addValueEventListener(ListaCategorias);
+        progressBar.setFocusable(true);
+        openProgressBar();
+        //refDemandas.orderByChild("situacao").equalTo("ATIVA").addValueEventListener(ListaDemandas);
+        refDemandas.addValueEventListener(ListaDemandas);
 
         return root;
     }
@@ -137,15 +167,49 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
             adapter.setOnItemClickListener(ClickItemCategoria);
             recyclerCategorias.setAdapter(adapter);
 
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+            showSnackbar("Erro de leitura: " + databaseError.getCode());
+            closeProgressBar();
+        }
+    };
+
+    private ValueEventListener ListaDemandas = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            demandasList.clear();
+
+            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                Demanda demanda = ds.getValue(Demanda.class);
+                demandasList.add(demanda);
+
+                Collections.sort(demandasList, new Comparator<Demanda>() {
+                    @Override
+                    public int compare(Demanda demanda, Demanda t1) {
+                        if (demanda.getExpiracao() == null || t1.getExpiracao() == null)
+                            return 0;
+                        return demanda.getExpiracao().compareTo(t1.getExpiracao());
+                    }
+                });
+
+            }
+
+            DemandaProfAdapter adapterDemandas = new DemandaProfAdapter(demandasList, getContext());
+            adapterDemandas.setOnItemClickListener(ClickItemDemandas);
+            adapterDemandas.setClickInserir(clickInserirProposta);
+            adapterDemandas.setClickConsultaPrposta(clickConsultarPropostas);
+            recyclerDemandas.setAdapter(adapterDemandas);
             closeProgressBar();
         }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
+            showSnackbar("Erro de leitura: " + databaseError.getCode());
             closeProgressBar();
         }
     };
-
 
     private View.OnClickListener ClickItemCategoria = new View.OnClickListener() {
         @Override
@@ -154,57 +218,71 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
             int position = viewHolder.getAdapterPosition();
 
             Categoria categoriaSelecionada = categoriaList.get(position);
+            codCategoria = categoriaSelecionada.getCodigo();
 
-            //Intent busca
-
-
+            Intent busca = new Intent(getContext(), BuscaActivity.class);
+            startActivity(busca);
         }
     };
 
-    private final View.OnClickListener onItemClickListenerDemandas = new View.OnClickListener() {
+
+    private final View.OnClickListener ClickItemDemandas = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
 
             RecyclerView.ViewHolder holder = (RecyclerView.ViewHolder) view.getTag();
             int position = holder.getAdapterPosition();
 
-            demandaSelecionada = demandasList.get(position);
+            Demanda demandaClicada = demandasList.get(position);
+            codigo = demandaClicada.getCodigo();
+            aluno = demandaClicada.getAluno();
 
-            codDemanda = demandaSelecionada.getCodigo();
-            aluno = demandaSelecionada.getAluno();
-            descDemanda = demandaSelecionada.getDescricao();
-
-            final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference refDem = database.getReference("demandas/" + codDemanda);
-
-            refDem.addValueEventListener(new ValueEventListener() {
+            DatabaseReference refUsu = firebase.getReference("usuarios/" + aluno);
+            refUsu.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Usuario alunoSelecionado = dataSnapshot.getValue(Usuario.class);
+                    nomeAluno = alunoSelecionado.getNome();
+                    nomeProfessor = alunoSelecionado.getNome();
+                    emailAluno = alunoSelecionado.getEmail();
+                    tipoUsuario = alunoSelecionado.getTipo();
 
-                    demandadetalhe = dataSnapshot.getValue(Demanda.class);
-
-                    DatabaseReference refUsu = database.getReference("usuarios/" + aluno);
-                    refUsu.addValueEventListener(new ValueEventListener() {
+                    DatabaseReference refDem = firebase.getReference("demandas/" + codigo);
+                    refDem.addValueEventListener (new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                            Usuario alunoselecionado = dataSnapshot.getValue(Usuario.class);
-                            nomeAluno = alunoselecionado.getNome();
+                            Demanda demandaSelecionada = dataSnapshot.getValue(Demanda.class);
+                            aluno = demandaSelecionada.getAluno();
+                            codigo = demandaSelecionada.getCodigo();
+                            descricao = demandaSelecionada.getDescricao();
+                            turno = demandaSelecionada.getTurno();
+                            status = demandaSelecionada.getStatus();
+                            categoria = demandaSelecionada.getCategoria();
+                            categoriaCod = demandaSelecionada.getCategoriaCod();
+                            inicio = demandaSelecionada.getInicio();
+                            expiracao = demandaSelecionada.getExpiracao();
+                            CEP = demandaSelecionada.getCEP();
+                            logradouro = demandaSelecionada.getLogradouro();
+                            bairro = demandaSelecionada.getBairro();
+                            complemento = demandaSelecionada.getComplemento();
+                            localidade = demandaSelecionada.getLocalidade();
+                            estado = demandaSelecionada.getEstado();
+                            horasaula = demandaSelecionada.getHorasaula();
+                            numero = demandaSelecionada.getNumero();
 
                             dialogDetalhesDemanda();
                         }
+
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
+                            showSnackbar("Erro de leitura: " + databaseError.getCode());
                         }
                     });
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Snackbar.make(progressBar,
-                            "Erro de leitura: " + databaseError.getCode(),
-                            Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    showSnackbar("Erro de leitura: " + databaseError.getCode());
+                    closeProgressBar();
                 }
             });
         }
@@ -216,44 +294,49 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
 
         LinearLayout voltar = view.findViewById(R.id.VerPropostas);
 
-        TextView txtDescDemanda = view.findViewById(R.id.txtAluno);
-        TextView txtCatDemanda = view.findViewById(R.id.txtCatDemanda);
-        TextView txtTurnoDemanda = view.findViewById(R.id.txtTurno);
-        TextView txtInicioDemanda = view.findViewById(R.id.txtInicio);
-        TextView txtnHorasaulaDemanda = view.findViewById(R.id.txtCH);
-        TextView txtLocalidadeDemanda = view.findViewById(R.id.txtCidade);
-        TextView txtEstadoDemanda = view.findViewById(R.id.txtEstado);
-        TextView txtLogradouroDemanda = view.findViewById(R.id.txtLogradouro);
-        TextView txtComplementoDemanda = view.findViewById(R.id.txtComplemento);
-        TextView txtNumeroDemanda = view.findViewById(R.id.txtNumero);
-        TextView txtCEPDemanda = view.findViewById(R.id.txtCEP);
-        TextView txtBairroDemanda = view.findViewById(R.id.txtBairro);
-        TextView txtExpiracao = view.findViewById(R.id.textExpiracao);
+        final TextView txtDescDemanda = view.findViewById(R.id.txtAluno);
+        final TextView txtCatDemanda = view.findViewById(R.id.txtCatDemanda);
+        final TextView txtTurnoDemanda = view.findViewById(R.id.txtTurno);
+        final TextView txtInicioDemanda = view.findViewById(R.id.txtInicio);
+        final TextView txtnHorasaulaDemanda = view.findViewById(R.id.txtCH);
+        final TextView txtLocalidadeDemanda = view.findViewById(R.id.txtCidade);
+        final TextView txtEstadoDemanda = view.findViewById(R.id.txtEstado);
+        final TextView txtLogradouroDemanda = view.findViewById(R.id.txtLogradouro);
+        final TextView txtComplementoDemanda = view.findViewById(R.id.txtComplemento);
+        final TextView txtNumeroDemanda = view.findViewById(R.id.txtNumero);
+        final TextView txtCEPDemanda = view.findViewById(R.id.txtCEP);
+        final TextView txtBairroDemanda = view.findViewById(R.id.txtBairro);
+        final TextView txtExpiracao = view.findViewById(R.id.textExpiracao);
 
-
-        txtDescDemanda.setText(String.valueOf(demandadetalhe.getDescricao()));
-        txtCatDemanda.setText(String.valueOf(demandadetalhe.getCategoria()));
-        txtTurnoDemanda.setText(String.valueOf(demandadetalhe.getTurno()));
+        txtDescDemanda.setText(String.valueOf(descricao));
+        txtCatDemanda.setText(String.valueOf(categoria));
+        txtTurnoDemanda.setText(String.valueOf(turno));
         try {
-            Date inicioformatado = formatoDataDemanda.parse(demandadetalhe.getInicio());
+            Date inicioformatado = formatoDataDemanda.parse(inicio);
             String inicio = formatoData.format(Objects.requireNonNull(inicioformatado));
             txtInicioDemanda.setText(inicio);
 
-            Date expiracaoformatada = formatoDataDemanda.parse(demandadetalhe.getExpiracao());
+            Date expiracaoformatada = formatoDataDemanda.parse(expiracao);
             String expiracao = formatoData.format(expiracaoformatada);
             txtExpiracao.setText(expiracao);
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        txtnHorasaulaDemanda.setText(String.valueOf(demandadetalhe.getHorasaula()) + " horas/aula");
-        txtLocalidadeDemanda.setText(String.valueOf(demandadetalhe.getLocalidade()));
-        txtEstadoDemanda.setText(String.valueOf(demandadetalhe.getEstado()));
-        txtLogradouroDemanda.setText(String.valueOf(demandadetalhe.getLogradouro()));
-        txtComplementoDemanda.setText(String.valueOf(demandadetalhe.getComplemento()));
-        txtNumeroDemanda.setText(String.valueOf(demandadetalhe.getNumero()));
-        txtCEPDemanda.setText(String.valueOf(demandadetalhe.getCEP()));
-        txtBairroDemanda.setText(String.valueOf(demandadetalhe.getBairro()));
+        txtnHorasaulaDemanda.setText(String.valueOf(horasaula) + " horas/aula");
+        txtLocalidadeDemanda.setText(String.valueOf(localidade));
+        txtEstadoDemanda.setText(String.valueOf(estado));
+        txtLogradouroDemanda.setText(String.valueOf(logradouro));
+        txtComplementoDemanda.setText(String.valueOf(complemento));
+        txtNumeroDemanda.setText(String.valueOf(numero));
+        txtCEPDemanda.setText(String.valueOf(CEP));
+        txtBairroDemanda.setText(String.valueOf(bairro));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(String.valueOf(nomeAluno) + " quer aprender");
+        builder.setView(view);
+        alerta = builder.create();
+        alerta.show();
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -261,44 +344,67 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
                 alerta.dismiss();
             }
         });
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(String.valueOf(nomeAluno) + " quer aprender");
-        builder.setView(view);
-        alerta = builder.create();
-        alerta.show();
     }
 
-    private View.OnClickListener clickInserir = new View.OnClickListener() {
+    private View.OnClickListener clickInserirProposta = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int position = viewHolder.getAdapterPosition();
 
-            demandaSelecionada = demandasList.get(position);
+            Demanda demandaClicada = demandasList.get(position);
+            codigo = demandaClicada.getCodigo();
+            aluno = demandaClicada.getAluno();
 
-            codDemanda = demandaSelecionada.getCodigo();
-            codCategoria = demandaSelecionada.getCategoriaCod();
-            aluno = demandaSelecionada.getAluno();
-            descDemanda = demandaSelecionada.getDescricao();
-            inicioDemanda = demandaSelecionada.getInicio();
-
-            final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference refUsu = database.getReference("usuarios/" + aluno);
+            DatabaseReference refUsu = firebase.getReference("usuarios/" + aluno);
             refUsu.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Usuario alunoSelecionado = dataSnapshot.getValue(Usuario.class);
+                    nomeAluno = alunoSelecionado.getNome();
+                    nomeProfessor = alunoSelecionado.getNome();
+                    emailAluno = alunoSelecionado.getEmail();
+                    tipoUsuario = alunoSelecionado.getTipo();
 
-                    Usuario alunoselecionado = dataSnapshot.getValue(Usuario.class);
-                    nomeAluno = alunoselecionado.getNome();
-                    emailAluno = alunoselecionado.getEmail();
+                    DatabaseReference refDem = firebase.getReference("demandas/" + codigo);
+                    refDem.addValueEventListener (new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Demanda demandaSelecionada = dataSnapshot.getValue(Demanda.class);
+                            aluno = demandaSelecionada.getAluno();
+                            codigo = demandaSelecionada.getCodigo();
+                            descricao = demandaSelecionada.getDescricao();
+                            turno = demandaSelecionada.getTurno();
+                            status = demandaSelecionada.getStatus();
+                            categoria = demandaSelecionada.getCategoria();
+                            categoriaCod = demandaSelecionada.getCategoriaCod();
+                            inicio = demandaSelecionada.getInicio();
+                            expiracao = demandaSelecionada.getExpiracao();
+                            CEP = demandaSelecionada.getCEP();
+                            logradouro = demandaSelecionada.getLogradouro();
+                            bairro = demandaSelecionada.getBairro();
+                            complemento = demandaSelecionada.getComplemento();
+                            localidade = demandaSelecionada.getLocalidade();
+                            estado = demandaSelecionada.getEstado();
+                            horasaula = demandaSelecionada.getHorasaula();
+                            numero = demandaSelecionada.getNumero();
 
                             dialogOfertas();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            showSnackbar("Erro de leitura: " + databaseError.getCode());
+                        }
+                    });
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
+                    showSnackbar("Erro de leitura: " + databaseError.getCode());
+                    closeProgressBar();
                 }
             });
+
 
         }
     };
@@ -307,12 +413,11 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
 
         LayoutInflater li = getLayoutInflater();
         View view = li.inflate(R.layout.dialog_ofertas_inserir, null);
-
+        final ProgressBar progressBar = view.findViewById(R.id.loading);
         final Button btnCadastrarOferta = view.findViewById(R.id.btnInserirOferta);
         final EditText txtValorOferta = view.findViewById(R.id.txtValorOferta);
         final EditText txtComentarioOferta = view.findViewById(R.id.txtComentarioOferta);
         LinearLayout voltar = view.findViewById(R.id.inserirPropostas);
-        final ProgressBar progressBar = view.findViewById(R.id.loading);
         TextView txtAluno = view.findViewById(R.id.txtAluno);
         TextView txtInicio = view.findViewById(R.id.txtInicio);
         TextView txtEmail= view.findViewById(R.id.txtEmail);
@@ -321,7 +426,7 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
         txtEmail.setText(String.valueOf(emailAluno));
 
         try {
-            Date inicioformatado = formatoDataDemanda.parse(inicioDemanda);
+            Date inicioformatado = formatoDataDemanda.parse(inicio);
             String inicio = formatoData.format(Objects.requireNonNull(inicioformatado));
             txtInicio.setText(inicio);
 
@@ -329,48 +434,11 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
             e.printStackTrace();
         }
 
-        btnCadastrarOferta.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
-                valorOferta = txtValorOferta.getText().toString();
-                comentarioOferta = txtComentarioOferta.getText().toString();
-                data = formatoDataDemanda.format(dataatual);
-
-                if (valorOferta.isEmpty()) {
-                    txtValorOferta.setError(getString(R.string.msg_erro_campo_empty));
-                    txtValorOferta.requestFocus();
-                } else if (comentarioOferta.isEmpty()) {
-                    txtComentarioOferta.setError(getString(R.string.msg_erro_campo_empty));
-                    txtComentarioOferta.requestFocus();
-                } else {
-                    btnCadastrarOferta.setEnabled(false);
-                    progressBar.setFocusable(true);
-                    progressBar.setVisibility(View.VISIBLE);
-                    novaoferta = new Oferta();
-                    DatabaseReference database = FirebaseDB.getFirebase();
-                    codOferta = database.child("propostas").push().getKey();
-                    novaoferta.setCodOferta(codOferta);
-                    novaoferta.setProfessor(professor);
-                    novaoferta.setAluno(aluno);
-                    novaoferta.setCodDemanda(codDemanda);
-                    novaoferta.setCodCategoria(codCategoria);
-                    novaoferta.setValorOferta(valorOferta);
-                    novaoferta.setStatusOferta("Aguardando avaliação");
-                    novaoferta.setDataOferta(data);
-                    novaoferta.setComentarioOferta(comentarioOferta);
-                    novaoferta.salvaOfertaDB(ProfessorInicioFragment.this);
-
-                    demanda = new Demanda();
-                    demanda.setCodigo(codDemanda);
-                    demanda.setAluno(aluno);
-                    demanda.setCategoriaCod(codCategoria);
-                    demanda.setStatus("Aguardando validação");
-                    demanda.atualizaStatusDemandaDB(ProfessorInicioFragment.this);
-                }
-                progressBar.setVisibility(GONE);
-                btnCadastrarOferta.setEnabled(true);
-
-            }
-        });
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Ensinar "+ descricao);
+        builder.setView(view);
+        alertaoferta = builder.create();
+        alertaoferta.show();
 
         voltar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
@@ -378,22 +446,71 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
             }
         });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Ensinar "+ String.valueOf(descDemanda));
-        builder.setView(view);
-        alertaoferta = builder.create();
-        alertaoferta.show();
+        btnCadastrarOferta.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+
+                progressBar.setFocusable(true);
+                progressBar.setVisibility(View.VISIBLE);
+                btnCadastrarOferta.setEnabled(false);
+
+                String valorOferta = txtValorOferta.getText().toString();
+                String comentarioOferta = txtComentarioOferta.getText().toString();
+                String data = formatoDataDemanda.format(dataatual);
+
+                if (comentarioOferta.isEmpty()) {
+                    txtComentarioOferta.setError(getString(R.string.msg_erro_campo_empty));
+                    txtComentarioOferta.requestFocus();
+                } else if (valorOferta.isEmpty()) {
+                    txtValorOferta.setError(getString(R.string.msg_erro_campo_empty));
+                    txtValorOferta.requestFocus();
+                } else {
+                    btnCadastrarOferta.setEnabled(false);
+                    progressBar.setFocusable(true);
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    Oferta novaoferta = new Oferta();
+                    DatabaseReference database = FirebaseDB.getFirebase();
+                    String codOferta = database.child("propostas").push().getKey();
+                    novaoferta.setCodOferta(codOferta);
+                    novaoferta.setProfessor(idProfessor);
+                    novaoferta.setAluno(aluno);
+                    novaoferta.setCodDemanda(codigo);
+                    novaoferta.setCodCategoria(categoriaCod);
+                    novaoferta.setValorOferta(valorOferta);
+                    novaoferta.setStatusOferta("Aguardando avaliação");
+                    novaoferta.setDataOferta(data);
+                    novaoferta.setAtualizacao(data);
+                    novaoferta.setComentarioOferta(comentarioOferta);
+                    novaoferta.salvaOfertaDB(ProfessorInicioFragment.this);
+
+                    Demanda demanda = new Demanda();
+                    demanda.setCodigo(codigo);
+                    demanda.setAluno(aluno);
+                    demanda.setCategoriaCod(categoriaCod);
+                    demanda.setStatus("Aguardando validação");
+                    demanda.setAtualizacao(data);
+                    demanda.atualizaStatusDemandaDB(ProfessorInicioFragment.this);
+
+                    progressBar.setVisibility(GONE);
+                    btnCadastrarOferta.setEnabled(true);
+                    alertaoferta.dismiss();
+                }
+
+            }
+        });
     }
 
-    private View.OnClickListener clickConsultar = new View.OnClickListener() {
+    private View.OnClickListener clickConsultarPropostas = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int position = viewHolder.getAdapterPosition();
 
-            demandaSelecionada = demandasList.get(position);
-            codDemanda = demandaSelecionada.getCodigo();
-            descDemanda = demandaSelecionada.getDescricao();
+            Demanda demandaClicada = demandasList.get(position);
+            codigo = demandaClicada.getCodigo();
+
+            DatabaseReference refDem = firebase.getReference("demandas/" + codigo);
+            refDem.addValueEventListener(ConsultaDemanda);
 
             dialogconsultaOfertas();
         }
@@ -416,75 +533,95 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
         recyclerOfertas.setHasFixedSize(true);
         recyclerOfertas.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Ensinar " + descricao);
+        builder.setView(view);
+        alertapropostas = builder.create();
+        alertapropostas.show();
+
+        progressBar.setFocusable(true);
         progressBar.setVisibility(View.VISIBLE);
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference refOfer = database.getReference("demandas/" + codDemanda + "/propostas");
-        refOfer.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ofertaList.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Oferta oferta = ds.getValue(Oferta.class);
-                    ofertaList.add(oferta);
-                }
-                OfertaProfAdapter adapterOfertas = new OfertaProfAdapter(ofertaList, getContext());
-                recyclerOfertas.setAdapter(adapterOfertas);
-                progressBar.setVisibility(GONE);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                progressBar.setVisibility(GONE);
-            }
-        });
+        DatabaseReference refOfer = database.getReference("demandas/" + codigo + "/propostas");
+        refOfer.addValueEventListener(ListaOfertas);
+        progressBar.setVisibility(GONE);
 
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alertapropostas.dismiss();
+                alertapropostas.cancel();
             }
         });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Ensinar " + descDemanda);
-        builder.setView(view);
-        alertapropostas = builder.create();
-        alertapropostas.show();
     }
 
-    private ValueEventListener ListenerGeralDemandas = new ValueEventListener() {
+    private ValueEventListener ConsultaDemanda = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            demandasList.clear();
+            Demanda demandaSelecionada = dataSnapshot.getValue(Demanda.class);
+            aluno = demandaSelecionada.getAluno();
+            codigo = demandaSelecionada.getCodigo();
+            descricao = demandaSelecionada.getDescricao();
+            turno = demandaSelecionada.getDescricao();
+            status = demandaSelecionada.getStatus();
+            categoria = demandaSelecionada.getCategoria();
+            categoriaCod = demandaSelecionada.getCategoriaCod();
+            inicio = demandaSelecionada.getInicio();
+            expiracao = demandaSelecionada.getExpiracao();
+            CEP = demandaSelecionada.getCEP();
+            logradouro = demandaSelecionada.getLogradouro();
+            bairro = demandaSelecionada.getBairro();
+            complemento = demandaSelecionada.getComplemento();
+            localidade = demandaSelecionada.getLocalidade();
+            estado = demandaSelecionada.getEstado();
+            horasaula = demandaSelecionada.getHorasaula();
+            numero = demandaSelecionada.getNumero();
 
-            for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                Demanda demanda = ds.getValue(Demanda.class);
-                demandasList.add(demanda);
 
-                Collections.sort(demandasList, new Comparator<Demanda>() {
-                    @Override
-                    public int compare(Demanda demanda, Demanda t1) {
-                        if (demanda.getExpiracao() == null || t1.getExpiracao() == null)
-                            return 0;
-                        return demanda.getExpiracao().compareTo(t1.getExpiracao());
-                    }
-                });
-
-
-            }
-
-            DemandaProfAdapter adapterDemandas = new DemandaProfAdapter(demandasList, getContext());
-            adapterDemandas.setOnItemClickListener(onItemClickListenerDemandas);
-            adapterDemandas.setClickInserir(clickInserir);
-            adapterDemandas.setClickConsultaPrposta(clickConsultar);
-            recyclerDemandas.setAdapter(adapterDemandas);
-            closeProgressBar();
         }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
+            showSnackbar("Erro de leitura: " + databaseError.getCode());
+        }
+    };
+
+    private ValueEventListener ConsultaUsuario = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            Usuario alunoSelecionado = dataSnapshot.getValue(Usuario.class);
+            nomeAluno = alunoSelecionado.getNome();
+            nomeProfessor = alunoSelecionado.getNome();
+            emailAluno = alunoSelecionado.getEmail();
+            tipoUsuario = alunoSelecionado.getTipo();
+
+        }
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+            showSnackbar("Erro de leitura: " + databaseError.getCode());
             closeProgressBar();
         }
     };
+
+    private ValueEventListener ListaOfertas = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            ofertaList.clear();
+            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                Oferta oferta = ds.getValue(Oferta.class);
+                ofertaList.add(oferta);
+            }
+            OfertaProfAdapter adapterOfertas = new OfertaProfAdapter(ofertaList, getContext());
+            //inserir click oferta editar
+            recyclerOfertas.setAdapter(adapterOfertas);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+            showSnackbar("Erro de leitura: " + databaseError.getCode());
+        }
+    };
+
 
     private void openProgressBar() {
         progressBar.setVisibility(View.VISIBLE);
@@ -540,10 +677,8 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
         if (databaseError != null) {
             showSnackbar(databaseError.getMessage());
-
         } else {
             showToast("Proposta criada com sucesso!");
-            alertaoferta.dismiss();
         }
     }
 }
