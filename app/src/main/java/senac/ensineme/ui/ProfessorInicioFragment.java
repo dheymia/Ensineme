@@ -1,5 +1,6 @@
 package senac.ensineme.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -44,6 +45,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import senac.ensineme.AdministradorMainActivity;
 import senac.ensineme.AlunoMainActivity;
 import senac.ensineme.BuscaActivity;
 import senac.ensineme.FullscreenActivity;
@@ -103,6 +105,8 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
     private String estado;
     private String atualizacao;
     private String situacao;
+    private String valorOferta;
+    private String comentarioOferta;
     private int horasaula;
     private int numero;
 
@@ -118,10 +122,7 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
         imagemtoolbar.setImageResource(R.drawable.ensinemeprincipal);
 
         ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
-        Objects.requireNonNull(((AppCompatActivity) getActivity()).getSupportActionBar()).setTitle(String.valueOf(nomeProfessor));
-        Objects.requireNonNull(((AppCompatActivity) getActivity()).getSupportActionBar()).setSubtitle(String.valueOf(tipoUsuario));
-
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         firebase = FirebaseDatabase.getInstance();
 
@@ -129,9 +130,22 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
         if (firebaseUser != null) {
             usuario.setId(firebaseUser.getUid());
             idProfessor = usuario.getId();
+        }
 
         DatabaseReference refProf = firebase.getReference("usuarios/" + idProfessor);
-        refProf.addValueEventListener(ConsultaUsuario);
+        refProf.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Usuario alunoSelecionado = dataSnapshot.getValue(Usuario.class);
+                nomeProfessor = alunoSelecionado.getNome();
+                tipoUsuario = alunoSelecionado.getTipo();
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                showSnackbar("Erro de leitura: " + databaseError.getCode());
+            }
+        });
 
         DatabaseReference refCategorias = firebase.getReference("categorias");
         DatabaseReference refDemandas = firebase.getReference("demandas");
@@ -449,13 +463,11 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
         btnCadastrarOferta.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
 
-                progressBar.setFocusable(true);
-                progressBar.setVisibility(View.VISIBLE);
-                btnCadastrarOferta.setEnabled(false);
 
-                String valorOferta = txtValorOferta.getText().toString();
-                String comentarioOferta = txtComentarioOferta.getText().toString();
-                String data = formatoDataDemanda.format(dataatual);
+
+                valorOferta = txtValorOferta.getText().toString();
+                comentarioOferta = txtComentarioOferta.getText().toString();
+                data = formatoDataDemanda.format(dataatual);
 
                 if (comentarioOferta.isEmpty()) {
                     txtComentarioOferta.setError(getString(R.string.msg_erro_campo_empty));
@@ -464,40 +476,40 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
                     txtValorOferta.setError(getString(R.string.msg_erro_campo_empty));
                     txtValorOferta.requestFocus();
                 } else {
-                    btnCadastrarOferta.setEnabled(false);
                     progressBar.setFocusable(true);
                     progressBar.setVisibility(View.VISIBLE);
-
-                    Oferta novaoferta = new Oferta();
-                    DatabaseReference database = FirebaseDB.getFirebase();
-                    String codOferta = database.child("propostas").push().getKey();
-                    novaoferta.setCodOferta(codOferta);
-                    novaoferta.setProfessor(idProfessor);
-                    novaoferta.setAluno(aluno);
-                    novaoferta.setCodDemanda(codigo);
-                    novaoferta.setCodCategoria(categoriaCod);
-                    novaoferta.setValorOferta(valorOferta);
-                    novaoferta.setStatusOferta("Aguardando avaliação");
-                    novaoferta.setDataOferta(data);
-                    novaoferta.setAtualizacao(data);
-                    novaoferta.setComentarioOferta(comentarioOferta);
-                    novaoferta.salvaOfertaDB(ProfessorInicioFragment.this);
-
-                    Demanda demanda = new Demanda();
-                    demanda.setCodigo(codigo);
-                    demanda.setAluno(aluno);
-                    demanda.setCategoriaCod(categoriaCod);
-                    demanda.setStatus("Aguardando validação");
-                    demanda.setAtualizacao(data);
-                    demanda.atualizaStatusDemandaDB(ProfessorInicioFragment.this);
-
-                    progressBar.setVisibility(GONE);
-                    btnCadastrarOferta.setEnabled(true);
-                    alertaoferta.dismiss();
+                    CadastrarOferta();
                 }
-
             }
+
         });
+    }
+
+    public void CadastrarOferta(){
+
+
+            Oferta novaoferta = new Oferta();
+            DatabaseReference database = FirebaseDB.getFirebase();
+            String codOferta = database.child("propostas").push().getKey();
+            novaoferta.setCodOferta(codOferta);
+            novaoferta.setProfessor(idProfessor);
+            novaoferta.setAluno(aluno);
+            novaoferta.setCodDemanda(codigo);
+            novaoferta.setCodCategoria(categoriaCod);
+            novaoferta.setValorOferta(valorOferta);
+            novaoferta.setStatusOferta("Aguardando avaliação");
+            novaoferta.setDataOferta(data);
+            novaoferta.setAtualizacao(data);
+            novaoferta.setComentarioOferta(comentarioOferta);
+            novaoferta.salvaOfertaDB(ProfessorInicioFragment.this);
+
+            Demanda demanda = new Demanda();
+            demanda.setCodigo(codigo);
+            demanda.setAluno(aluno);
+            demanda.setCategoriaCod(categoriaCod);
+            demanda.setStatus("Aguardando validação");
+            demanda.setAtualizacao(data);
+            demanda.atualizaStatusDemandaDB(ProfessorInicioFragment.this);
     }
 
     private View.OnClickListener clickConsultarPropostas = new View.OnClickListener() {
@@ -678,7 +690,10 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
         if (databaseError != null) {
             showSnackbar(databaseError.getMessage());
         } else {
+            alertaoferta.dismiss();
+            ((AppCompatActivity)getActivity()).finish();
             showToast("Proposta criada com sucesso!");
         }
     }
+
 }

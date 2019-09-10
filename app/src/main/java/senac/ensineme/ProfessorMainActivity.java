@@ -1,5 +1,8 @@
 package senac.ensineme;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -49,41 +52,5 @@ public class ProfessorMainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
     }
-
-  /*
-    @Override
-    public void onBackPressed()    {
-
-        if (tipoUsuario.equals("administrador")) {
-            Intent administrador = new Intent(ProfessorMainActivity.this, AdministradorMainActivity.class);
-            startActivity(administrador);
-            finish();
-
-        } else {
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder
-                    .setMessage("Deseja sair?")
-                    .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            finishAffinity();
-
-                        }
-                    })
-
-                    .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    })
-                    .show();
-        }
-    }
-
-   */
 
 }
