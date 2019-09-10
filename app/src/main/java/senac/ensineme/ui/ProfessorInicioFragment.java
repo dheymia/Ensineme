@@ -1,4 +1,4 @@
-package senac.ensineme.ui.professor_inicio;
+package senac.ensineme.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,13 +22,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,6 +43,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import senac.ensineme.AlunoMainActivity;
 import senac.ensineme.FullscreenActivity;
 import senac.ensineme.R;
 import senac.ensineme.SettingsActivity;
@@ -92,12 +91,8 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
     private String emailAluno;
     private String descDemanda;
     private String inicioDemanda;
-    private String nomeUsuario;
-    private String tipoUsuario;
-    String idUsuario;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ProfessorInicioViewModel homeViewModel = ViewModelProviders.of(this).get(ProfessorInicioViewModel.class);
         View root = inflater.inflate(R.layout.fragment_professor_inicio, container, false);
         recyclerDemandas = root.findViewById(R.id.listDemandas);
         recyclerCategorias = root.findViewById(R.id.listCategorias);
@@ -105,77 +100,30 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
         toolbar = root.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ImageView imagemtoolbar = root.findViewById(R.id.app_bar_image);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(String.valueOf(AlunoMainActivity.nomeUsuario));
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle(String.valueOf(AlunoMainActivity.tipoUsuario));
 
         imagemtoolbar.setImageResource(R.drawable.ensinemeprincipal);
 
         FirebaseDatabase firebase = FirebaseDatabase.getInstance();
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        Usuario usuario = new Usuario();
-        if (firebaseUser != null) {
-            usuario.setId(firebaseUser.getUid());
-            idUsuario = usuario.getId();
-        }else{
 
-        }
         DatabaseReference ref = firebase.getReference("categorias");
         DatabaseReference refDem = firebase.getReference("demandas");
 
-
-        DatabaseReference refUsu = firebase.getReference("usuarios/" + idUsuario);
-
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Usuario logado = dataSnapshot.getValue(Usuario.class);
-                if (logado.getTipo() != null) {
-                    nomeUsuario = logado.getNome();
-                    tipoUsuario = logado.getTipo();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(String.valueOf(nomeUsuario));
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle(String.valueOf(tipoUsuario));
-
         recyclerCategorias.setHasFixedSize(true);
         recyclerCategorias.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        progressBar.setFocusable(true);
         openProgressBar();
-        ref.limitToFirst(100).orderByChild("nome").addValueEventListener(ListenerGeral);
+        ref.limitToFirst(100).orderByChild("nome").addValueEventListener(ListaCategorias);
 
         recyclerDemandas.setHasFixedSize(true);
         recyclerDemandas.setLayoutManager(new LinearLayoutManager(getContext()));
-        openProgressBar();
         refDem.addValueEventListener(ListenerGeralDemandas);
 
         return root;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setHasOptionsMenu(true);
-    }
-
-    private View.OnClickListener onItemClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
-            int position = viewHolder.getAdapterPosition();
-
-            Categoria categoriaSelecionada = categoriaList.get(position);
-            Toast.makeText(getContext(), "Consultando " + categoriaSelecionada.getNome(), Toast.LENGTH_SHORT).show();
-
-        }
-    };
-
-    private ValueEventListener ListenerGeral = new ValueEventListener() {
+    private ValueEventListener ListaCategorias = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             categoriaList.clear();
@@ -186,7 +134,7 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
             }
 
             CategoriaProfAdapter adapter = new CategoriaProfAdapter(categoriaList, getContext());
-            adapter.setOnItemClickListener(onItemClickListener);
+            adapter.setOnItemClickListener(ClickItemCategoria);
             recyclerCategorias.setAdapter(adapter);
 
             closeProgressBar();
@@ -195,6 +143,21 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
             closeProgressBar();
+        }
+    };
+
+
+    private View.OnClickListener ClickItemCategoria = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+            int position = viewHolder.getAdapterPosition();
+
+            Categoria categoriaSelecionada = categoriaList.get(position);
+
+            //Intent busca
+
+
         }
     };
 

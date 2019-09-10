@@ -29,7 +29,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 
 
 import android.util.Log;
@@ -64,7 +63,6 @@ import senac.ensineme.models.Categoria;
 import senac.ensineme.models.Demanda;
 
 import senac.ensineme.models.FirebaseDB;
-import senac.ensineme.ui.aluno_busca.AlunoBuscaFragment;
 import senac.ensineme.ui.aluno_inicio.AlunoInicioFragment;
 
 

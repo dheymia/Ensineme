@@ -37,7 +37,7 @@ public class AlunoMainActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
-    private String idUsuario, nomeUsuario, tipoUsuario;
+    public static String idUsuario, nomeUsuario, tipoUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,35 @@ public class AlunoMainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String name = sharedPreferences.getString("signature", "visitante");
 
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+        usuario = new Usuario();
+        if (firebaseUser != null) {
+            usuario.setId(firebaseUser.getUid());
+            idUsuario = usuario.getId();
+        }else{
+            return;
+        }
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("usuarios/" + idUsuario);
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                usuariologado = dataSnapshot.getValue(Usuario.class);
+                if (usuariologado.getTipo() != null) {
+                    tipoUsuario = usuariologado.getTipo();
+                    nomeUsuario = usuariologado.getNome();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
         // Passing each menu ID as a set of Ids because each

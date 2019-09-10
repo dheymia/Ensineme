@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_busca"
-        android:name="senac.ensineme.ui.aluno_busca.AlunoBuscaFragment"
+        android:name="senac.ensineme.ui.AlunoBuscaFragment"
         android:label="@string/title_busca"
         tools:layout="@layout/fragment_aluno_busca" />
 </navigation>

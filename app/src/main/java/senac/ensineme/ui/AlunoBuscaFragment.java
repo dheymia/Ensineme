@@ -1,4 +1,4 @@
-package senac.ensineme.ui.aluno_busca;
+package senac.ensineme.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,12 +13,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,7 +49,6 @@ public class AlunoBuscaFragment extends Fragment implements AdapterView.OnItemSe
 
     private AlertDialog alerta;
     private AlertDialog alertapropostas;
-    private AlunoBuscaViewModel buscaViewModel;
     private TextView textView, txtExpiracao, txtDescDemanda, txtCatDemanda, txtTurnoDemanda, txtInicioDemanda, txtnHorasaulaDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtLogradouroDemanda, txtComplementoDemanda, txtNumeroDemanda, txtCEPDemanda, txtBairroDemanda;
     private RecyclerView recyclerView;
     private LinearLayout voltar;
@@ -81,20 +77,12 @@ public class AlunoBuscaFragment extends Fragment implements AdapterView.OnItemSe
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        buscaViewModel =
-                ViewModelProviders.of(this).get(AlunoBuscaViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_aluno_busca, container, false);
         //textView = root.findViewById(R.id.text_dashboard);
         recyclerView = root.findViewById(R.id.listAlunoDemandas);
         progressBar = root.findViewById(R.id.loading);
         spConsulta = root.findViewById(R.id.spConsulta);
-        buscaViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-            }
-        });
-
         firebase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();

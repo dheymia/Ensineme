@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_inicio"
-        android:name="senac.ensineme.ui.professor_inicio.ProfessorInicioFragment"
+        android:name="senac.ensineme.ui.ProfessorInicioFragment"
         android:label="@string/title_inicio"
         tools:layout="@layout/fragment_professor_inicio" />
 

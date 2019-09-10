@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
-import android.app.MediaRouteButton;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -27,14 +26,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import senac.ensineme.adapters.CategoriaProfAdapter;
-import senac.ensineme.adapters.DemandaAluAdapter;
 import senac.ensineme.adapters.OfertaAluAdapter;
 import senac.ensineme.models.Demanda;
-import senac.ensineme.models.FirebaseDB;
 import senac.ensineme.models.Oferta;
 import senac.ensineme.ui.aluno_inicio.AlunoInicioFragment;
-import senac.ensineme.ui.professor_inicio.ProfessorInicioFragment;
 
 import static android.view.View.GONE;
 

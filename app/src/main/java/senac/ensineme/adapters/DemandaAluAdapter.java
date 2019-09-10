@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -65,7 +64,7 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
         final Demanda demanda = demandaList.get(position);
 
         viewHolder.categoria.setText(demanda.getCategoria());
-        viewHolder.descricao.setText("Aprender " + demanda.getDescricao());
+        viewHolder.descricao.setText(demanda.getDescricao());
         viewHolder.status.setText(demanda.getStatus());
         try {
             Date expiracaoformatada = formatoDataDemanda.parse(demanda.getExpiracao());

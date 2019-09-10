@@ -1,13 +1,7 @@
 package senac.ensineme;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,7 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import senac.ensineme.models.Usuario;
-import senac.ensineme.ui.professor_busca.ProfessorBuscaFragment;
 
 public class ProfessorMainActivity extends AppCompatActivity {
 
@@ -40,8 +33,6 @@ public class ProfessorMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_professor);
         BottomNavigationView navView = findViewById(R.id.nav_view);
-
-       //getSupportActionBar().hide();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String name = sharedPreferences.getString("signature", "visitante");

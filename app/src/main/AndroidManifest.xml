@@ -10,6 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".BuscaActivity"></activity>
         <activity
             android:name=".OfertaActivity"
             android:parentActivityName=".AlunoMainActivity"
@@ -18,7 +19,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="senac.ensineme.AlunoMainActivity"
                 android:windowSoftInputMode="adjustResize" />
-
         </activity>
         <activity
             android:name=".SettingsActivity"
@@ -43,7 +43,7 @@
             android:name=".AlunoMainActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
-            android:theme="@style/temaAluno"></activity>
+            android:theme="@style/temaAluno" />
         <activity
             android:name=".CategoriasActivity"
             android:label="@string/title_activity_categoria"
