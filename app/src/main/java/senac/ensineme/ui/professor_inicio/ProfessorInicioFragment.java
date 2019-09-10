@@ -19,6 +19,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -62,6 +64,7 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
     private AlertDialog alerta;
     private AlertDialog alertaoferta;
     private AlertDialog alertapropostas;
+    private Toolbar toolbar;
     private ProgressBar progressBar;
     private RecyclerView recyclerDemandas;
     private RecyclerView recyclerCategorias;
@@ -89,6 +92,9 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
     private String emailAluno;
     private String descDemanda;
     private String inicioDemanda;
+    private String nomeUsuario;
+    private String tipoUsuario;
+    String idUsuario;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ProfessorInicioViewModel homeViewModel = ViewModelProviders.of(this).get(ProfessorInicioViewModel.class);
@@ -96,20 +102,46 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
         recyclerDemandas = root.findViewById(R.id.listDemandas);
         recyclerCategorias = root.findViewById(R.id.listCategorias);
         progressBar = root.findViewById(R.id.loading);
+        toolbar = root.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ImageView imagemtoolbar = root.findViewById(R.id.app_bar_image);
-
 
         imagemtoolbar.setImageResource(R.drawable.ensinemeprincipal);
 
         FirebaseDatabase firebase = FirebaseDatabase.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        Usuario usuario = new Usuario();
         if (firebaseUser != null) {
-            professor = firebaseUser.getUid();
+            usuario.setId(firebaseUser.getUid());
+            idUsuario = usuario.getId();
+        }else{
+
         }
         DatabaseReference ref = firebase.getReference("categorias");
         DatabaseReference refDem = firebase.getReference("demandas");
 
+
+        DatabaseReference refUsu = firebase.getReference("usuarios/" + idUsuario);
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Usuario logado = dataSnapshot.getValue(Usuario.class);
+                if (logado.getTipo() != null) {
+                    nomeUsuario = logado.getNome();
+                    tipoUsuario = logado.getTipo();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(String.valueOf(nomeUsuario));
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle(String.valueOf(tipoUsuario));
 
         recyclerCategorias.setHasFixedSize(true);
         recyclerCategorias.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));

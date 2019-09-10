@@ -52,47 +52,18 @@ public class AlunoMainActivity extends AppCompatActivity {
         String name = sharedPreferences.getString("signature", "visitante");
 
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
 
-        usuario = new Usuario();
-        if (firebaseUser != null) {
-            usuario.setId(firebaseUser.getUid());
-            idUsuario = usuario.getId();
-        }else{
-            return;
-        }
-
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("usuarios/" + idUsuario);
-
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                usuariologado = dataSnapshot.getValue(Usuario.class);
-                if (usuariologado.getTipo() != null) {
-                    nomeUsuario = usuariologado.getNome();
-                    tipoUsuario = usuariologado.getTipo();
-//                    txtNome.setText("Olá " + nomeUsuario);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_inicio, R.id.navigation_busca)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
     }
 
-    @Override
+ /*   @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -152,5 +123,5 @@ public class AlunoMainActivity extends AppCompatActivity {
                     .show();
         }
     }
-
+*/
 }

@@ -3,20 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="senac.ensineme.AlunoMainActivity">
     <item
-        android:id="@+id/app_bar_search"
-        android:icon="@drawable/ic_search_black_24dp"
-        android:title="Pesquisar"
-        app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/acaoConfigurar"
         android:orderInCategory="100"
         android:title="@string/acaoConfigurar"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/acaoSair"
         android:orderInCategory="100"
         android:title="@string/acaoSair"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 </menu>

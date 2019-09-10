@@ -41,7 +41,7 @@ public class ProfessorMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_professor);
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
-       // getSupportActionBar().hide();
+       //getSupportActionBar().hide();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String name = sharedPreferences.getString("signature", "visitante");
@@ -84,44 +84,12 @@ public class ProfessorMainActivity extends AppCompatActivity {
                 R.id.navigation_inicio, R.id.navigation_busca)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+       // NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        if (id == R.id.acaoSair) {
-            FirebaseAuth.getInstance().signOut();
-            Intent principal = new Intent(getBaseContext(), FullscreenActivity.class);
-            startActivity(principal);
-            finish();
-        }
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.acaoConfigurar) {
-            Intent novaConfig = new Intent(getBaseContext(), SettingsActivity.class);
-            startActivity(novaConfig);
-        }
-
-        if (id == R.id.app_bar_search) {
-            Intent pesquisa = new Intent(getBaseContext(), ProfessorBuscaFragment.class);
-            startActivity(pesquisa);
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+  /*
     @Override
     public void onBackPressed()    {
 
@@ -154,5 +122,7 @@ public class ProfessorMainActivity extends AppCompatActivity {
                     .show();
         }
     }
+
+   */
 
 }

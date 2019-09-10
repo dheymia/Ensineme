@@ -1,6 +1,9 @@
 package senac.ensineme.ui.aluno_inicio;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,7 +20,9 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -64,17 +69,14 @@ public class AlunoInicioFragment extends Fragment  {
     private AlertDialog alertapropostas;
     private AlertDialog alerta;
     private ProgressBar progressBar;
-    private Toolbar toolbar;
     private RecyclerView recyclerOfertas;
     private List <Oferta> ofertaList = new ArrayList<>();
     private RecyclerView recyclerDemandas,recyclerCategorias;
-    private DemandaAluAdapter adapterDemandas;
     private List<Categoria> categoriaList = new ArrayList<>();
     private List<Demanda> demandasList = new ArrayList<>();
     public static Demanda demandaSelecionada;
     private Demanda demandadetalhe;
     private String codDemanda;
-    private String expiracao;
     private String aluno;
     private String myFormat = "dd/MM/yyyy";
     private String format = "yyyy/MM/dd";
@@ -86,21 +88,17 @@ public class AlunoInicioFragment extends Fragment  {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        AlunoInicioViewModel homeViewModel = ViewModelProviders.of(this).get(AlunoInicioViewModel.class);
         View root = inflater.inflate(R.layout.fragment_aluno_inicio, container, false);
-        //final TextView textView = root.findViewById(R.id.text_home);
         FloatingActionButton fab = root.findViewById(R.id.fab);
+        ImageView imagemtoolbar = root.findViewById(R.id.app_bar_image);
         recyclerDemandas = root.findViewById(R.id.listDemandas);
         recyclerCategorias = root.findViewById(R.id.listCategorias);
         progressBar = root.findViewById(R.id.loading);
-        ImageView imagemtoolbar = root.findViewById(R.id.app_bar_image);
-        toolbar = root.findViewById(R.id.toolbar);
-        homeViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-            }
-        });
+        Toolbar toolbar = root.findViewById(R.id.toolbar);
+
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Aluno");
+
 
         imagemtoolbar.setImageResource(R.drawable.ensinemeprincipal);
 
@@ -241,7 +239,7 @@ public class AlunoInicioFragment extends Fragment  {
             txtInicioDemanda.setText(inicio);
 
             Date expiracaoformatada = formatoDataDemanda.parse(demandadetalhe.getExpiracao());
-            expiracao = formatoData.format(expiracaoformatada);
+            String expiracao = formatoData.format(expiracaoformatada);
             txtExpiracao.setText(expiracao);
 
         } catch (ParseException e) {
@@ -256,16 +254,23 @@ public class AlunoInicioFragment extends Fragment  {
         txtCEPDemanda.setText(String.valueOf(demandadetalhe.getCEP()));
         txtBairroDemanda.setText(String.valueOf(demandadetalhe.getBairro()));
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Você quer aprender");
+
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alerta.dismiss();
+                alerta.cancel();
             }
         });
 
+  /*      builder.setNegativeButton("Voltar", new DialogInterface.OnClickListener() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Você quer aprender");
+            @Override
+            public void onClick(DialogInterface dialog,int id) {
+                dialog.cancel();
+            }
+        });*/
         builder.setView(view);
         alerta = builder.create();
         alerta.show();
@@ -293,7 +298,7 @@ public class AlunoInicioFragment extends Fragment  {
 
             }
 
-            adapterDemandas = new DemandaAluAdapter(demandasList, getContext());
+            DemandaAluAdapter adapterDemandas = new DemandaAluAdapter(demandasList, getContext());
             adapterDemandas.setOnItemClickListener(onItemClickListenerDemandas);
             adapterDemandas.setClickConsultaPrposta(clickConsultar);
             recyclerDemandas.setAdapter(adapterDemandas);
@@ -408,6 +413,7 @@ public class AlunoInicioFragment extends Fragment  {
                 .show();
     }
 
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_main, menu);
@@ -435,4 +441,6 @@ public class AlunoInicioFragment extends Fragment  {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }

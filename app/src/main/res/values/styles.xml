@@ -122,11 +122,22 @@
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/black_overlay</item>
     </style>
-    <style name="temaAluno" parent="AppTheme">
+    <style name="temaAluno" parent="Theme.AppCompat.Light">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <item name="android:colorPrimary">#11AC9D</item>
         <item name="android:colorPrimaryDark">#0f9a8d</item>
         <item name="android:colorAccent">#137bc0</item>
     </style>
+
+    <style name="temaProfessor" parent="Theme.AppCompat.Light">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
     <style name="titulo_item">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
