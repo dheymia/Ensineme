@@ -3,7 +3,7 @@ buildscript {
         maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
-        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.4, 0.99.99]'
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:0.12.5'
     }
 }
 apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
@@ -26,9 +26,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [
-                onesignal_app_id               : '1:729121059379:android:35190b0d2acb6754',
+                onesignal_app_id               : '8ef04c78-dc1a-4ce1-aeba-fb4840b84c6c',
                 // Project number pulled from dashboard, local value is ignored.
-                onesignal_google_project_number: 'AIzaSyDBe8egf2Pv0i8low75rsjWABc_JH1x6zE'
+                onesignal_google_project_number: 'REMOTE'
         ]
     }
     buildTypes {

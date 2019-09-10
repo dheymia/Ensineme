@@ -13,8 +13,6 @@ public class PrincipalActivity extends AppCompatActivity {
 
     private Button btnCadastrar, btnEntrar;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +24,7 @@ public class PrincipalActivity extends AppCompatActivity {
                 .unsubscribeWhenNotificationsAreDisabled(true)
                 .init();
 
-        btnCadastrar = (Button) findViewById(R.id.btnCadastrarCategoria);
+        btnCadastrar = findViewById(R.id.btnCadastrarCategoria);
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -34,7 +32,7 @@ public class PrincipalActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        btnEntrar = (Button) findViewById(R.id.btnCancelar);
+        btnEntrar = findViewById(R.id.btnCancelar);
         btnEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
