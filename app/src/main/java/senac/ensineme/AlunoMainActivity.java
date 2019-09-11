@@ -92,7 +92,7 @@ public class AlunoMainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
 
- /*   @Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -152,5 +152,4 @@ public class AlunoMainActivity extends AppCompatActivity {
                     .show();
         }
     }
-*/
 }

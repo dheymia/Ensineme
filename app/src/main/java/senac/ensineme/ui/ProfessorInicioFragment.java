@@ -121,7 +121,10 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
         ImageView imagemtoolbar = root.findViewById(R.id.app_bar_image);
         imagemtoolbar.setImageResource(R.drawable.ensinemeprincipal);
 
-        ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Professor");
+
+
          FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         firebase = FirebaseDatabase.getInstance();
@@ -522,9 +525,37 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
             codigo = demandaClicada.getCodigo();
 
             DatabaseReference refDem = firebase.getReference("demandas/" + codigo);
-            refDem.addValueEventListener(ConsultaDemanda);
+            refDem.addValueEventListener (new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Demanda demandaSelecionada = dataSnapshot.getValue(Demanda.class);
+                    aluno = demandaSelecionada.getAluno();
+                    codigo = demandaSelecionada.getCodigo();
+                    descricao = demandaSelecionada.getDescricao();
+                    turno = demandaSelecionada.getTurno();
+                    status = demandaSelecionada.getStatus();
+                    categoria = demandaSelecionada.getCategoria();
+                    categoriaCod = demandaSelecionada.getCategoriaCod();
+                    inicio = demandaSelecionada.getInicio();
+                    expiracao = demandaSelecionada.getExpiracao();
+                    CEP = demandaSelecionada.getCEP();
+                    logradouro = demandaSelecionada.getLogradouro();
+                    bairro = demandaSelecionada.getBairro();
+                    complemento = demandaSelecionada.getComplemento();
+                    localidade = demandaSelecionada.getLocalidade();
+                    estado = demandaSelecionada.getEstado();
+                    horasaula = demandaSelecionada.getHorasaula();
+                    numero = demandaSelecionada.getNumero();
 
-            dialogconsultaOfertas();
+                    dialogconsultaOfertas();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    showSnackbar("Erro de leitura: " + databaseError.getCode());
+                }
+            });
+
         }
     };
 
@@ -566,54 +597,6 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
         });
 
     }
-
-    private ValueEventListener ConsultaDemanda = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            Demanda demandaSelecionada = dataSnapshot.getValue(Demanda.class);
-            aluno = demandaSelecionada.getAluno();
-            codigo = demandaSelecionada.getCodigo();
-            descricao = demandaSelecionada.getDescricao();
-            turno = demandaSelecionada.getDescricao();
-            status = demandaSelecionada.getStatus();
-            categoria = demandaSelecionada.getCategoria();
-            categoriaCod = demandaSelecionada.getCategoriaCod();
-            inicio = demandaSelecionada.getInicio();
-            expiracao = demandaSelecionada.getExpiracao();
-            CEP = demandaSelecionada.getCEP();
-            logradouro = demandaSelecionada.getLogradouro();
-            bairro = demandaSelecionada.getBairro();
-            complemento = demandaSelecionada.getComplemento();
-            localidade = demandaSelecionada.getLocalidade();
-            estado = demandaSelecionada.getEstado();
-            horasaula = demandaSelecionada.getHorasaula();
-            numero = demandaSelecionada.getNumero();
-
-
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-            showSnackbar("Erro de leitura: " + databaseError.getCode());
-        }
-    };
-
-    private ValueEventListener ConsultaUsuario = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            Usuario alunoSelecionado = dataSnapshot.getValue(Usuario.class);
-            nomeAluno = alunoSelecionado.getNome();
-            nomeProfessor = alunoSelecionado.getNome();
-            emailAluno = alunoSelecionado.getEmail();
-            tipoUsuario = alunoSelecionado.getTipo();
-
-        }
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-            showSnackbar("Erro de leitura: " + databaseError.getCode());
-            closeProgressBar();
-        }
-    };
 
     private ValueEventListener ListaOfertas = new ValueEventListener() {
         @Override
@@ -658,7 +641,18 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+        if (databaseError != null) {
+            showSnackbar(databaseError.getMessage());
+        } else {
+            alertaoferta.dismiss();
+            ((AppCompatActivity)getActivity()).finish();
+            showToast("Proposta criada com sucesso!");
+        }
+    }
+
+  /*  @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_main, menu);
     }
 
@@ -683,17 +677,6 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-        if (databaseError != null) {
-            showSnackbar(databaseError.getMessage());
-        } else {
-            alertaoferta.dismiss();
-            ((AppCompatActivity)getActivity()).finish();
-            showToast("Proposta criada com sucesso!");
-        }
-    }
+    }*/
 
 }

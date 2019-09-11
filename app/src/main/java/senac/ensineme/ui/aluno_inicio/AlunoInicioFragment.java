@@ -400,7 +400,7 @@ public class AlunoInicioFragment extends Fragment  {
     }
 
 
-    @Override
+   /* @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_main, menu);
     }
@@ -427,6 +427,6 @@ public class AlunoInicioFragment extends Fragment  {
 
         return super.onOptionsItemSelected(item);
     }
-
+*/
 
 }

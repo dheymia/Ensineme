@@ -4,6 +4,7 @@
     tools:context="senac.ensineme.AlunoMainActivity">
     <item
         android:id="@+id/acaoConfigurar"
+        android:icon="@drawable/config"
         android:orderInCategory="100"
         android:title="@string/acaoConfigurar"
         app:showAsAction="always" />
