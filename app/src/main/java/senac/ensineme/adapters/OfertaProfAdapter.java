@@ -1,6 +1,7 @@
 package senac.ensineme.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,12 @@ public class OfertaProfAdapter extends RecyclerView.Adapter<OfertaProfAdapter.Of
 
         ((OfertaViewHolder) holder).valorOferta.setText(oferta.getValorOferta());
         ((OfertaViewHolder) holder).status.setText(oferta.getStatusOferta());
+        if (oferta.getStatusOferta().equals("Rejeitada")){
+            ((OfertaViewHolder) holder).professor.setBackgroundResource(R.drawable.textovermelho);
+            ((OfertaViewHolder) holder).valorOferta.setBackgroundResource(R.drawable.textovermelho);
+            ((OfertaViewHolder) holder).status.getResources().getColor(R.color.vermelho);
+        }
+
 
     }
 

@@ -67,11 +67,16 @@ public class OfertaValidaActivity extends AppCompatActivity implements DatabaseR
             codCategoria = AlunoInicioFragment.demandaSelecionada.getCategoriaCod();
             descDemanda = AlunoInicioFragment.demandaSelecionada.getDescricao();
         }else if(AlunoBuscaActivity.validar){
-            codDemanda = AlunoBuscaActivity.demandaSelecionada.getCodigo();
-            aluno = AlunoBuscaActivity.demandaSelecionada.getAluno();
-            codCategoria = AlunoBuscaActivity.demandaSelecionada.getCategoriaCod();
-            descDemanda = AlunoBuscaActivity.demandaSelecionada.getDescricao();
-        }
+        codDemanda = AlunoBuscaActivity.demandaSelecionada.getCodigo();
+        aluno = AlunoBuscaActivity.demandaSelecionada.getAluno();
+        codCategoria = AlunoBuscaActivity.demandaSelecionada.getCategoriaCod();
+        descDemanda = AlunoBuscaActivity.demandaSelecionada.getDescricao();
+    }else if(AlunoBuscaFragment.validar){
+        codDemanda = AlunoBuscaFragment.demandaSelecionada.getCodigo();
+        aluno = AlunoBuscaFragment.demandaSelecionada.getAluno();
+        codCategoria = AlunoBuscaFragment.demandaSelecionada.getCategoriaCod();
+        descDemanda = AlunoBuscaFragment.demandaSelecionada.getDescricao();
+    }
 
         demanda.setText("Aprender "+ descDemanda);
 

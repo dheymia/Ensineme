@@ -1,7 +1,10 @@
 package senac.ensineme.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -15,6 +18,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +42,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import senac.ensineme.AlunoBuscaActivity;
+import senac.ensineme.OfertaValidaActivity;
 import senac.ensineme.R;
 import senac.ensineme.adapters.DemandaAluAdapter;
 import senac.ensineme.adapters.OfertaProfAdapter;
@@ -59,7 +66,7 @@ public class AlunoBuscaFragment extends Fragment implements AdapterView.OnItemSe
     private ArrayAdapter<CharSequence> statusAdapter;
     public static DemandaAluAdapter adapter;
     private List<Demanda> demandasList = new ArrayList<>();
-    private Demanda demandaSelecionada;
+    public static Demanda demandaSelecionada;
     private Demanda demandadetalhe;
     private FirebaseDatabase firebase;
     private DatabaseReference ref;
@@ -68,6 +75,7 @@ public class AlunoBuscaFragment extends Fragment implements AdapterView.OnItemSe
     private String consulta, aluno, codDemanda, inicio, expiracao;
     private Date inicioformatado, expiracaoformatada;
     private String descDemanda;
+    public static boolean validar = false;
 
     private String myFormat = "dd/MM/yyyy";
     private String format = "yyyy/MM/dd";
@@ -83,6 +91,11 @@ public class AlunoBuscaFragment extends Fragment implements AdapterView.OnItemSe
         recyclerView = root.findViewById(R.id.listAlunoDemandas);
         progressBar = root.findViewById(R.id.loading);
         spConsulta = root.findViewById(R.id.spConsulta);
+        Toolbar toolbar = root.findViewById(R.id.toolbar);
+        Menu menu;
+
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
         firebase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -151,9 +164,9 @@ public class AlunoBuscaFragment extends Fragment implements AdapterView.OnItemSe
                 Collections.sort(demandasList, new Comparator<Demanda>() {
                     @Override
                     public int compare(Demanda demanda, Demanda t1) {
-                        if (demanda.getExpiracao() == null || t1.getExpiracao() == null)
+                        if (demanda.getAtualizacao() == null || t1.getAtualizacao() == null)
                             return 0;
-                        return demanda.getExpiracao().compareTo(t1.getExpiracao());
+                        return t1.getAtualizacao().compareTo(demanda.getAtualizacao());
                     }
                 });
             }
@@ -173,74 +186,76 @@ public class AlunoBuscaFragment extends Fragment implements AdapterView.OnItemSe
 
     private View.OnClickListener clickConsultar = new View.OnClickListener() {
         @Override
-        public void onClick(View view) {
-            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+        public void onClick(View v) {
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) v.getTag();
             int position = viewHolder.getAdapterPosition();
 
             demandaSelecionada = demandasList.get(position);
-            codDemanda = demandaSelecionada.getCodigo();
-            descDemanda = demandaSelecionada.getDescricao();
 
-            dialogconsultaOfertas();
+            LayoutInflater li = getLayoutInflater();
+            final View view = li.inflate(R.layout.dialog_ofertas_consultar, null);
+
+            LinearLayout voltar = view.findViewById(R.id.ConsultaPropostas);
+            recyclerOfertas = view.findViewById(R.id.ListOfertas);
+            final ProgressBar progressBar = view.findViewById(R.id.loading);
+            Button btnSelecionaProposta = view.findViewById(R.id.btnEscolherProposta);
+            TextView txtTitulo = view.findViewById(R.id.txtTitulo);
+
+            txtTitulo.setText("Propostas recebidas");
+
+            if (demandaSelecionada.getStatus().equals("Aguardando validação")){
+                btnSelecionaProposta.setVisibility(View.VISIBLE);
+            } else {
+                btnSelecionaProposta.setVisibility(View.GONE);
+            }
+
+            btnSelecionaProposta.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    validar = true;
+                    Intent oferta = new Intent(getContext(), OfertaValidaActivity.class);
+                    startActivity(oferta);
+                }
+            });
+
+            recyclerOfertas.setHasFixedSize(true);
+            recyclerOfertas.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+            progressBar.setFocusable(true);
+            progressBar.setVisibility(View.VISIBLE);
+            DatabaseReference refOfer = firebase.getReference("demandas/" + demandaSelecionada.getCodigo() + "/propostas");
+            refOfer.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    ofertaList.clear();
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        Oferta oferta = ds.getValue(Oferta.class);
+                        ofertaList.add(oferta);
+                    }
+                    OfertaProfAdapter adapterOfertas = new OfertaProfAdapter(ofertaList, getContext());
+                    recyclerOfertas.setAdapter(adapterOfertas);
+                    progressBar.setVisibility(GONE);
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    progressBar.setVisibility(GONE);
+                }
+            });
+
+            voltar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    alertapropostas.dismiss();
+                }
+            });
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Aprender " + demandaSelecionada.getDescricao());
+            builder.setView(view);
+            alertapropostas = builder.create();
+            alertapropostas.show();
         }
     };
-
-    private void dialogconsultaOfertas() {
-
-        LayoutInflater li = getLayoutInflater();
-        final View view = li.inflate(R.layout.dialog_ofertas_consultar, null);
-
-        LinearLayout voltar = view.findViewById(R.id.ConsultaPropostas);
-        recyclerOfertas = view.findViewById(R.id.ListOfertas);
-        final ProgressBar progressBar = view.findViewById(R.id.loading);
-        Button btnSelecionaProposta = view.findViewById(R.id.btnEscolherProposta);
-        TextView txtTitulo = view.findViewById(R.id.txtTitulo);
-
-        txtTitulo.setText("Propostas recebidas");
-        btnSelecionaProposta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showSnackbar("Validar");
-            }
-        });
-
-        recyclerOfertas.setHasFixedSize(true);
-        recyclerOfertas.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
-        progressBar.setVisibility(View.VISIBLE);
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference refOfer = database.getReference("demandas/" + codDemanda + "/propostas");
-        refOfer.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ofertaList.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Oferta oferta = ds.getValue(Oferta.class);
-                    ofertaList.add(oferta);
-                }
-                OfertaProfAdapter adapterOfertas = new OfertaProfAdapter(ofertaList, getContext());
-                recyclerOfertas.setAdapter(adapterOfertas);
-                progressBar.setVisibility(GONE);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                progressBar.setVisibility(GONE);
-            }
-        });
-
-        voltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertapropostas.dismiss();
-            }
-        });
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Aprender " + descDemanda);
-        builder.setView(view);
-        alertapropostas = builder.create();
-        alertapropostas.show();
-    }
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         Object item = parent.getItemAtPosition(pos);
@@ -345,5 +360,17 @@ public class AlunoBuscaFragment extends Fragment implements AdapterView.OnItemSe
                 message,
                 Toast.LENGTH_LONG)
                 .show();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_search, menu);
     }
 }
