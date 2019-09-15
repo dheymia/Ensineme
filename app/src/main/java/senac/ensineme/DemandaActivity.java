@@ -71,7 +71,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     private Button btnCadastrar;
     private EditText txtDescDemanda, txtCEPDemanda, txtLogradouroDemanda, txtBairroDemanda, txtComplementoDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtInicioDemanda, txtNumero;
     private Spinner spnCatDemanda, spnTurnoDemanda, spnValidadeDemanda, spnHorasaulaDemanda;
-    private String status, aluno, codDemanda, descricao,  turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado, inicioDemanda, validadeDemanda, data,nomeCategoria, codCategoria, numero, inicio;
+    private String situacao, status, aluno, codDemanda, descricao,  turno, cargaHoraria, CEP, logradouro, bairro, complemento, localidade, estado, inicioDemanda, validadeDemanda, data,nomeCategoria, codCategoria, numero, inicio;
     private int horasaula, validade;
     private ArrayAdapter<CharSequence> turnoAdapter, validadeAdapter, horasAulaAdapter;
     private ArrayAdapter<Categoria> categoriaAdapter;
@@ -79,11 +79,11 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     private Calendar myCalendar;
     private Categoria categoria;
     private Demanda demanda, demandaSelecionada;
-    private Date dataatual = new Date();
     private Date dataformatada, inicioformatado;
     private DatabaseReference firebase;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
+    private Date dataatual = new Date();
     private String myFormat = "dd/MM/yyyy";
     private String format = "yyyy/MM/dd";
     private SimpleDateFormat formatoData =  new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
@@ -109,7 +109,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         btnCadastrar = (Button) findViewById(R.id.btnCadastrarDemanda);
         btnCadastrar.setOnClickListener((View.OnClickListener) this);
 
-        if (AlunoInicioFragment.alterar){
+        if (AlunoInicioFragment.alterar || AlunoBuscaActivity.alterar){
             getSupportActionBar().setTitle("Alterar demanda");
             spnCatDemanda.setVisibility( View.GONE );
             btnCadastrar.setText(getString(R.string.acaoAlterar));
@@ -188,7 +188,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         } catch (ParseException e) {
             e.printStackTrace();
         }
-            }
+    }
 
     @Override
     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
@@ -208,39 +208,39 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         }
     }
 
-   protected void categoriaSpinner() {
+    protected void categoriaSpinner() {
 
-       categoriaList.clear();
+        categoriaList.clear();
 
-       final FirebaseDatabase database = FirebaseDatabase.getInstance();
-       DatabaseReference ref = database.getReference("categorias");
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("categorias");
 
-       ref.orderByChild("nome").addValueEventListener(new ValueEventListener() {
-           @Override
-           public void onDataChange(DataSnapshot dataSnapshot) {
+        ref.orderByChild("nome").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-               for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                   categoria = ds.getValue(Categoria.class);
-                   categoriaList.add(categoria);
-               }
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    categoria = ds.getValue(Categoria.class);
+                    categoriaList.add(categoria);
+                }
 
-               categoriaAdapter = new ArrayAdapter<Categoria> (DemandaActivity.this, android.R.layout.simple_spinner_item, categoriaList);
-               categoriaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-               spnCatDemanda.setAdapter(categoriaAdapter);
-               spnCatDemanda.setOnItemSelectedListener(DemandaActivity.this);
-           }
+                categoriaAdapter = new ArrayAdapter<Categoria> (DemandaActivity.this, android.R.layout.simple_spinner_item, categoriaList);
+                categoriaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spnCatDemanda.setAdapter(categoriaAdapter);
+                spnCatDemanda.setOnItemSelectedListener(DemandaActivity.this);
+            }
 
-           @Override
-           public void onCancelled(@NonNull DatabaseError databaseError) {
-               ProgressBar progressBar = (ProgressBar) findViewById(R.id.loading);
-               Snackbar.make(progressBar,
-                       "Erro de leitura: " + databaseError.getCode(),
-                       Snackbar.LENGTH_LONG)
-                       .setAction("Action", null).show();
-           }
-       });
-   }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                ProgressBar progressBar = (ProgressBar) findViewById(R.id.loading);
+                Snackbar.make(progressBar,
+                        "Erro de leitura: " + databaseError.getCode(),
+                        Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+    }
     @Override
     protected void inicializaViews() {
         txtDescDemanda = findViewById(R.id.txtDescricaoDemanda);
@@ -450,6 +450,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         demanda.setLocalidade(localidade);
         demanda.setEstado(estado);
         demanda.setData(data);
+        demanda.setAtualizacao(formatoDataDemanda.format(dataatual));
     }
 
     @Override
@@ -521,10 +522,10 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
 
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel();
         }
 
     };

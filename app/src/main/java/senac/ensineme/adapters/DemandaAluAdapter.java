@@ -57,7 +57,7 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DemandaAluAdapter.DemandaAluViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull DemandaAluAdapter.DemandaAluViewHolder holder, final int position) {
 
 
         final DemandaAluAdapter.DemandaAluViewHolder viewHolder = (DemandaAluAdapter.DemandaAluViewHolder) holder;
@@ -143,6 +143,7 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
 
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
+                                removerItem(position);
                                 demanda.excluiDemandaDB();
                                 dialog.cancel();
 
@@ -173,6 +174,19 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
     @Override
     public int getItemCount() {
         return demandaList.size();
+    }
+
+
+    private void removerItem(int position) {
+
+        demandaList.remove(position);
+
+        notifyItemRemoved(position);
+
+        notifyItemRangeChanged(position, demandaList.size());
+
+
+
     }
 
 

@@ -277,20 +277,14 @@ public class Demanda {
 
     }
 
-    public void excluiDemandaDB(DatabaseReference.CompletionListener... completionListener) {
+    public void excluiDemandaDB() {
         firebase = FirebaseDB.getFirebase().child("demandas").child(getCodigo());
         firebaseUser = FirebaseDB.getFirebase().child("usuarios").child(aluno).child("demandas").child(getCodigo());
         firebaseCat = FirebaseDB.getFirebase().child("categorias").child(categoriaCod).child("demandas").child(getCodigo());
-        if (completionListener.length == 0) {
-            firebase.removeValue();
-            firebaseUser.removeValue();
-            firebaseCat.removeValue();
-        } else {
-            firebase.removeValue((DatabaseReference.CompletionListener) this);
-            firebaseUser.removeValue((DatabaseReference.CompletionListener) this);
-            firebaseCat.removeValue((DatabaseReference.CompletionListener) this);
-        }
 
+        firebase.removeValue();
+        firebaseUser.removeValue();
+        firebaseCat.removeValue();
     }
 
 
