@@ -1,12 +1,8 @@
 package senac.ensineme.ui;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -45,11 +41,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import senac.ensineme.AdministradorMainActivity;
-import senac.ensineme.AlunoMainActivity;
-import senac.ensineme.BuscaActivity;
-import senac.ensineme.FullscreenActivity;
-import senac.ensineme.ProfessorMainActivity;
+import senac.ensineme.AlunoBuscaActivity;
 import senac.ensineme.R;
 import senac.ensineme.SettingsActivity;
 import senac.ensineme.adapters.CategoriaProfAdapter;
@@ -237,7 +229,7 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
             Categoria categoriaSelecionada = categoriaList.get(position);
             codCategoria = categoriaSelecionada.getCodigo();
 
-            Intent busca = new Intent(getContext(), BuscaActivity.class);
+            Intent busca = new Intent(getContext(), AlunoBuscaActivity.class);
             startActivity(busca);
         }
     };

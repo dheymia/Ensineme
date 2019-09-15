@@ -1,4 +1,4 @@
-package senac.ensineme.ui.professor_busca;
+package senac.ensineme.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,20 +15,10 @@ import senac.ensineme.R;
 
 public class ProfessorBuscaFragment extends Fragment {
 
-    private ProfessorBuscaViewModel notificationsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                ViewModelProviders.of(this).get(ProfessorBuscaViewModel.class);
         View root = inflater.inflate(R.layout.fragment_professor_busca, container, false);
-        //final TextView textView = root.findViewById(R.id.text_notifications);
-        notificationsViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-         //       textView.setText(s);
-            }
-        });
         return root;
     }
 }

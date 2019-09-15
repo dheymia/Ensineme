@@ -10,7 +10,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BuscaActivity"></activity>
+        <activity
+            android:name=".AlunoBuscaActivity"
+            android:parentActivityName=".AlunoMainActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="senac.ensineme.AlunoMainActivity" />
+        </activity>
         <activity
             android:name=".FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -24,7 +31,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".OfertaActivity">
+            android:name=".OfertaValidaActivity"
+            android:label="@string/title_activity_OfertaValida"
+            android:parentActivityName=".AlunoMainActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="senac.ensineme.AlunoMainActivity" />
         </activity>
         <activity
             android:name=".SettingsActivity"
@@ -67,15 +80,6 @@
             android:name=".AdministradorMainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".RecuperaSenhaActivity"
-            android:parentActivityName=".LoginActivity"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="senac.ensineme.LoginActivity"
-                android:windowSoftInputMode="adjustResize" />
-        </activity>
-        <activity
             android:name=".PrincipalActivity"
             android:label="@string/title_activity_principal"
             android:screenOrientation="portrait" />
@@ -103,13 +107,14 @@
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
             android:parentActivityName=".PrincipalActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="senac.ensineme.LoginActivity"
                 android:windowSoftInputMode="adjustResize" />
         </activity>
+        <activity android:name=".RecuperaSenhaActivity" />
+        <activity android:name=".RecuperaSenhaActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

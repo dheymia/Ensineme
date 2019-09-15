@@ -51,8 +51,8 @@ public class OfertaProfAdapter extends RecyclerView.Adapter<OfertaProfAdapter.Of
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    Usuario professor = dataSnapshot.getValue(Usuario.class);
-                    ((OfertaViewHolder) holder).professor.setText(professor.getNome());
+                Usuario professor = dataSnapshot.getValue(Usuario.class);
+                ((OfertaViewHolder) holder).professor.setText(professor.getNome());
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

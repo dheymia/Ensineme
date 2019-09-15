@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".OfertaActivity">
+    tools:context=".OfertaValidaActivity">
 
     <TextView
         android:id="@+id/txtSolicitacao"
@@ -45,7 +45,7 @@
                 style="@style/botao"
                 android:layout_width="130dp"
 
-                android:text="encerrar"
+                android:text="@string/acaoEncerrar"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -61,7 +61,7 @@
                 android:id="@+id/btnValidarProposta"
                 style="@style/botao"
                 android:layout_width="130dp"
-                android:text="validar"
+                android:text="@string/acaoEscolher"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

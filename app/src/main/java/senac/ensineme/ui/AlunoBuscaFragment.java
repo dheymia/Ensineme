@@ -49,7 +49,7 @@ public class AlunoBuscaFragment extends Fragment implements AdapterView.OnItemSe
 
     private AlertDialog alerta;
     private AlertDialog alertapropostas;
-    private TextView textView, txtExpiracao, txtDescDemanda, txtCatDemanda, txtTurnoDemanda, txtInicioDemanda, txtnHorasaulaDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtLogradouroDemanda, txtComplementoDemanda, txtNumeroDemanda, txtCEPDemanda, txtBairroDemanda;
+    private TextView txtExpiracao, txtDescDemanda, txtCatDemanda, txtTurnoDemanda, txtInicioDemanda, txtnHorasaulaDemanda, txtLocalidadeDemanda, txtEstadoDemanda, txtLogradouroDemanda, txtComplementoDemanda, txtNumeroDemanda, txtCEPDemanda, txtBairroDemanda;
     private RecyclerView recyclerView;
     private LinearLayout voltar;
     private Spinner spConsulta;
@@ -94,7 +94,7 @@ public class AlunoBuscaFragment extends Fragment implements AdapterView.OnItemSe
         statusAdapter = ArrayAdapter.createFromResource(getContext(), R.array.statusDemanda, android.R.layout.simple_spinner_item);
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spConsulta.setAdapter(statusAdapter);
-        spConsulta.setSelection(statusAdapter.getPosition("Aguardando proposta"));
+        spConsulta.setSelection(statusAdapter.getPosition("Todas"));
         spConsulta.setOnItemSelectedListener(this);
 
         consulta = spConsulta.getSelectedItem().toString();

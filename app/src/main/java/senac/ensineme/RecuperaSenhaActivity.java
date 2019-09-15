@@ -13,6 +13,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import senac.ensineme.LoginActivity;
+import senac.ensineme.R;
+
 public class RecuperaSenhaActivity extends ComumActivity implements View.OnClickListener {
 
     private Button btnRecuperaSenha;

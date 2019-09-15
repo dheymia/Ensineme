@@ -8,6 +8,10 @@
     <color name="azulfoco">#CFE4F2</color>
     <color name="verdedestaque">#0F9A8D</color>
     <color name="verdeescuro">#0D897D</color>
+    <color name="vermelho">#D31141</color>
+    <color name="vermelhoescuro">#BD0F3A</color>
+    <color name="vermelhorselecionado">#a80d34</color>
+
 
     <color name="black_overlay">#66000000</color>
 </resources>

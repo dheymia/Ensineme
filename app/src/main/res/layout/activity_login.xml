@@ -7,56 +7,22 @@
     android:orientation="vertical"
     tools:context=".LoginActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout style="@style/layoutTelasInserir">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            style="@style/layoutTelasInserir"
+            android:layout_gravity="center">
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="250dp"
-                android:layout_height="228dp"
-                android:layout_marginTop="32dp"
+            <AutoCompleteTextView
+                android:id="@+id/txtValorOferta"
+                style="@style/inserirEmail"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ensineme"
-                android:contentDescription="@string/title_activity_fullscreen" />
-
-    <AutoCompleteTextView
-        android:id="@+id/txtValorOferta"
-        style="@style/inserirEmail"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        tools:ignore="LabelFor" />
-
-    <EditText
-        android:id="@+id/txtSenha"
-        style="@style/inserirSenha"
-
-        android:hint="@string/senha"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtValorOferta"
-        tools:ignore="Autofill" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView"
+                tools:ignore="LabelFor" />
 
             <Button
                 android:id="@+id/btnCancelar"
@@ -68,6 +34,63 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtSenha" />
 
+            <EditText
+                android:id="@+id/txtSenha"
+                style="@style/inserirSenha"
+
+                android:hint="@string/senha"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtValorOferta"
+                tools:ignore="Autofill" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="250dp"
+                android:layout_height="228dp"
+                android:contentDescription="@string/title_activity_fullscreen"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ensineme" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.541"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnCancelar"
+                app:layout_constraintVertical_bias="0.03">
+
+
+                <TextView
+                    android:id="@+id/txtViewDesejaAprender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginEnd="5dp"
+                    android:fontFamily="@font/cabin_semibold"
+                    android:text="@string/esqueceuSenha" />
+
+                <TextView
+                    android:id="@+id/txtCadastrar"
+                    style="@style/titulo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:onClick="recuperaSenha"
+                    android:text="@string/recuperaSenha"
+                    android:textColor="@color/colorAccent" />
+
+            </LinearLayout>
 
             <ProgressBar
                 android:id="@+id/loading"
@@ -83,45 +106,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/txtValorOferta" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.541"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCancelar"
-        app:layout_constraintVertical_bias="0.03">
-
-
-        <TextView
-            android:id="@+id/txtViewDesejaAprender"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginEnd="5dp"
-            android:fontFamily="@font/cabin_semibold"
-            android:text="@string/esqueceuSenha" />
-
-        <TextView
-            android:id="@+id/txtCadastrar"
-            style="@style/titulo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:onClick="recuperaSenha"
-            android:text="@string/recuperaSenha"
-            android:textColor="@color/colorAccent" />
-
-    </LinearLayout>
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
 </LinearLayout>

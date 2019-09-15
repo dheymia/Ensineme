@@ -57,7 +57,7 @@ public class CategoriaProfAdapter extends RecyclerView.Adapter<CategoriaProfAdap
         }else{
             ((CategoriaProfViewHolder) holder).imagem.setImageResource(R.drawable.novo);
         }
-        }
+    }
 
     public void setOnItemClickListener(View.OnClickListener itemClickListener) {
         mOnItemClickListener = itemClickListener;

@@ -151,7 +151,7 @@ public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.
             expiracao = itemView.findViewById(R.id.txtExpiraDemanda);
             descricao = itemView.findViewById(R.id.txtDescricaoDemanda);
             inserir = itemView.findViewById(R.id.btnInserirProposta);
-            consulta = itemView.findViewById(R.id.btnConsultaProposta);
+            consulta = itemView.findViewById(R.id.btnConsultaPropostas);
 
 
             itemView.setTag(this);

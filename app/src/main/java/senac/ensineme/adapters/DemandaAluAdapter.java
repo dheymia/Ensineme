@@ -29,7 +29,7 @@ import senac.ensineme.DemandaActivity;
 import senac.ensineme.R;
 import senac.ensineme.models.Demanda;
 import senac.ensineme.models.Oferta;
-import senac.ensineme.ui.aluno_inicio.AlunoInicioFragment;
+import senac.ensineme.ui.AlunoInicioFragment;
 
 public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.DemandaAluViewHolder> {
 
@@ -67,11 +67,16 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
         viewHolder.descricao.setText(demanda.getDescricao());
         viewHolder.status.setText(demanda.getStatus());
         try {
+            Date atualizacaoformatada = formatoDataDemanda.parse(demanda.getAtualizacao());
+            String atualizacao = formatoData.format(atualizacaoformatada);
+
             Date expiracaoformatada = formatoDataDemanda.parse(demanda.getExpiracao());
             String expiracao = formatoData.format(expiracaoformatada);
 
             Date dataformatada = formatoDataDemanda.parse(demanda.getData());
             String data = formatoData.format(dataformatada);
+
+            viewHolder.atualizacao.setText(atualizacao);
 
 
             if(demanda.getStatus().equals("Aguardando proposta")){
@@ -154,6 +159,7 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
                         .show();
             }
         });
+
     }
 
     public void setOnItemClickListener(View.OnClickListener itemClickListener) {
@@ -179,18 +185,22 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
         final Button excluir;
         final Button consulta;
         final TextView resumo;
+        final TextView bemvindo;
+        final TextView atualizacao;
 
         DemandaAluViewHolder(@NonNull View itemView) {
 
             super(itemView);
 
             categoria = itemView.findViewById(R.id.txtCatDemanda);
-            status = itemView.findViewById(R.id.txtStaDemanda);
+            status = itemView.findViewById(R.id.txtStaDemandas);
             descricao = itemView.findViewById(R.id.txtDescDemanda);
             alterar = itemView.findViewById(R.id.btnAlterarDemanda);
             excluir = itemView.findViewById(R.id.btnExcluirDemanda);
             consulta = itemView.findViewById(R.id.btnVerPropostas);
             resumo = itemView.findViewById(R.id.txtResDemanda);
+            bemvindo = itemView.findViewById(R.id.txtSejaBemvindo);
+            atualizacao = itemView.findViewById(R.id.txtAtualizaDemanda);
 
             itemView.setTag(this);
             itemView.setOnClickListener(mOnItemClickListener);

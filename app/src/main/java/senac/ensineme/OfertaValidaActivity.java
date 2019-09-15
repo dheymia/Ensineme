@@ -23,23 +23,32 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import senac.ensineme.adapters.OfertaAluAdapter;
 import senac.ensineme.models.Demanda;
 import senac.ensineme.models.Oferta;
-import senac.ensineme.ui.aluno_inicio.AlunoInicioFragment;
+import senac.ensineme.ui.AlunoBuscaFragment;
+import senac.ensineme.ui.AlunoInicioFragment;
 
 import static android.view.View.GONE;
 
-public class OfertaActivity extends AppCompatActivity implements DatabaseReference.CompletionListener{
+public class OfertaValidaActivity extends AppCompatActivity implements DatabaseReference.CompletionListener{
 
 
     private List<Oferta> ofertaList = new ArrayList<>();
-    private String codDemanda, aluno, codCategoria;
+    private String codDemanda, aluno, codCategoria, descDemanda;
     private ProgressBar progressBar;
     private Oferta ofertaSelecionada;
+    private Date dataatual = new Date();
+    private String myFormat = "dd/MM/yyyy";
+    private String format = "yyyy/MM/dd";
+    private SimpleDateFormat formatoData =  new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
+    private SimpleDateFormat formatoDataDemanda = new SimpleDateFormat(format, new Locale("pt", "BR"));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,18 +61,29 @@ public class OfertaActivity extends AppCompatActivity implements DatabaseReferen
         Button validar = findViewById(R.id.btnValidarProposta);
         progressBar = findViewById(R.id.loading);
 
-        codDemanda = AlunoInicioFragment.demandaSelecionada.getCodigo();
-        aluno = AlunoInicioFragment.demandaSelecionada.getAluno();
-        codCategoria = AlunoInicioFragment.demandaSelecionada.getCategoriaCod();
+        if (AlunoInicioFragment.validar){
+            codDemanda = AlunoInicioFragment.demandaSelecionada.getCodigo();
+            aluno = AlunoInicioFragment.demandaSelecionada.getAluno();
+            codCategoria = AlunoInicioFragment.demandaSelecionada.getCategoriaCod();
+            descDemanda = AlunoInicioFragment.demandaSelecionada.getDescricao();
+        }else if(AlunoBuscaActivity.validar){
+            codDemanda = AlunoBuscaActivity.demandaSelecionada.getCodigo();
+            aluno = AlunoBuscaActivity.demandaSelecionada.getAluno();
+            codCategoria = AlunoBuscaActivity.demandaSelecionada.getCategoriaCod();
+            descDemanda = AlunoBuscaActivity.demandaSelecionada.getDescricao();
+        }
 
-        demanda.setText("Aprender "+ AlunoInicioFragment.demandaSelecionada.getDescricao());
+        demanda.setText("Aprender "+ descDemanda);
 
         FirebaseDatabase firebase = FirebaseDatabase.getInstance();
         DatabaseReference refOfer = firebase.getReference("demandas/" + codDemanda + "/propostas");
 
         recyclerOfertas.setHasFixedSize(true);
         recyclerOfertas.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
+        progressBar.setFocusable(true);
         openProgressBar();
+
         refOfer.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -72,7 +92,7 @@ public class OfertaActivity extends AppCompatActivity implements DatabaseReferen
                     Oferta oferta = ds.getValue(Oferta.class);
                     ofertaList.add(oferta);
                 }
-                OfertaAluAdapter adapter = new OfertaAluAdapter(ofertaList, OfertaActivity.this);
+                OfertaAluAdapter adapter = new OfertaAluAdapter(ofertaList, OfertaValidaActivity.this);
                 recyclerOfertas.setAdapter(adapter);
                 closeProgressBar();
             }
@@ -87,7 +107,7 @@ public class OfertaActivity extends AppCompatActivity implements DatabaseReferen
         encerrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(OfertaActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(OfertaValidaActivity.this);
                 builder
                         .setMessage("Tem certeza que deseja encerrar a solicitação sem escolher uma proposta?")
                         .setPositiveButton("Confirmar",  new DialogInterface.OnClickListener() {
@@ -114,9 +134,9 @@ public class OfertaActivity extends AppCompatActivity implements DatabaseReferen
         validar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(OfertaActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(OfertaValidaActivity.this);
                 builder
-                        .setMessage("?")
+                        .setMessage(OfertaAluAdapter.mensagem)
                         .setPositiveButton("Confirmar",  new DialogInterface.OnClickListener() {
 
                             @Override
@@ -149,7 +169,7 @@ public class OfertaActivity extends AppCompatActivity implements DatabaseReferen
             proposta.setProfessor(obj.getProfessor());
             proposta.setCodDemanda(codDemanda);
             proposta.setStatusOferta("Rejeitada");
-            proposta.atualizaStatusOfertaDB(OfertaActivity.this);
+            proposta.atualizaStatusOfertaDB(OfertaValidaActivity.this);
 
         }
         Oferta propostaselecionada = new Oferta();
@@ -157,14 +177,15 @@ public class OfertaActivity extends AppCompatActivity implements DatabaseReferen
         propostaselecionada.setProfessor(OfertaAluAdapter.codProfessor);
         propostaselecionada.setCodDemanda(codDemanda);
         propostaselecionada.setStatusOferta("Aceita");
-        propostaselecionada.atualizaStatusOfertaDB(OfertaActivity.this);
+        propostaselecionada.atualizaStatusOfertaDB(OfertaValidaActivity.this);
 
         Demanda demanda = new Demanda();
         demanda.setCodigo(codDemanda);
         demanda.setAluno(aluno);
         demanda.setCategoriaCod(codCategoria);
         demanda.setStatus("Encerrada com aceite");
-        demanda.atualizaStatusDemandaDB(OfertaActivity.this);
+        demanda.setAtualizacao(formatoDataDemanda.format(dataatual));
+        demanda.atualizaStatusDemandaDB(OfertaValidaActivity.this);
 
     }
 
@@ -177,7 +198,7 @@ public class OfertaActivity extends AppCompatActivity implements DatabaseReferen
             proposta.setProfessor(obj.getProfessor());
             proposta.setCodDemanda(codDemanda);
             proposta.setStatusOferta("Rejeitada");
-            proposta.atualizaStatusOfertaDB(OfertaActivity.this);
+            proposta.atualizaStatusOfertaDB(OfertaValidaActivity.this);
 
         }
 
@@ -186,24 +207,8 @@ public class OfertaActivity extends AppCompatActivity implements DatabaseReferen
         demanda.setAluno(aluno);
         demanda.setCategoriaCod(codCategoria);
         demanda.setStatus("Encerrada com rejeite");
-        demanda.atualizaStatusDemandaDB(OfertaActivity.this);
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
+        demanda.setAtualizacao(formatoDataDemanda.format(dataatual));
+        demanda.atualizaStatusDemandaDB(OfertaValidaActivity.this);
 
     }
 
@@ -241,4 +246,23 @@ public class OfertaActivity extends AppCompatActivity implements DatabaseReferen
                 Toast.LENGTH_LONG)
                 .show();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+
 }

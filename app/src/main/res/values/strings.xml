@@ -78,6 +78,8 @@
     <string name="acaoVerTelaAluno">Aluno</string>
     <string name="acaoAlterar">Alterar</string>
     <string name="acaoExcluir">Excluir</string>
+    <string name="acaoEscolher">Escolher</string>
+    <string name="acaoEncerrar">Encerrar</string>
     <string name="acaoInserirProposta">Inserir proposta</string>
 
     <!-- Preference Titles -->
@@ -100,6 +102,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="nome_do_aluno">Nome do aluno</string>
+    <string name="title_activity_OfertaValida">Validar proposta</string>
 
 
 </resources>

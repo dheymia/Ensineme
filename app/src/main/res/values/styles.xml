@@ -62,8 +62,8 @@
     <style name="layoutTelasInserir">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_marginLeft">36dp</item>
-        <item name="android:layout_marginRight">36dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
     </style>
 
     <style name="botao">
@@ -77,6 +77,19 @@
         <item name="android:background">@drawable/botao</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:onClick">OnClick</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:fontFamily">@font/cabin_bold</item>
+    </style>
+    <style name="botaoexcluir">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginBottom">24dp</item>
+        <item name="android:enabled">true</item>
+        <item name="android:background">@drawable/botaoexcluir</item>
+        <item name="android:textAllCaps">true</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:fontFamily">@font/cabin_bold</item>
     </style>

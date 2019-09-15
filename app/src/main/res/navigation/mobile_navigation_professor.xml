@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/navigation_busca"
-        android:name="senac.ensineme.ui.professor_busca.ProfessorBuscaFragment"
+        android:name="senac.ensineme.ui.ProfessorBuscaFragment"
         android:label="@string/title_busca"
         tools:layout="@layout/fragment_professor_busca" />
 

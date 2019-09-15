@@ -63,7 +63,7 @@ import senac.ensineme.models.Categoria;
 import senac.ensineme.models.Demanda;
 
 import senac.ensineme.models.FirebaseDB;
-import senac.ensineme.ui.aluno_inicio.AlunoInicioFragment;
+import senac.ensineme.ui.AlunoInicioFragment;
 
 
 public class DemandaActivity extends ComumActivity implements DatabaseReference.CompletionListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
