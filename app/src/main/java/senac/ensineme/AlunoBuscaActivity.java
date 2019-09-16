@@ -362,8 +362,17 @@ public class AlunoBuscaActivity extends AppCompatActivity implements AdapterView
         return true;
     }
 
-    @Override
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            adapterDemandas.getFilter().filter(query);
+        }
+    }
+
+    @Override
     public boolean onSearchRequested() {
         return super.onSearchRequested();
     }
@@ -396,7 +405,7 @@ public class AlunoBuscaActivity extends AppCompatActivity implements AdapterView
 
         consulta = item.toString();
 
-        showToast("OnItemSelectedListener : " + item.toString());
+        //showToast("OnItemSelectedListener : " + item.toString());
 
         if (consulta.equals("Todos os status")) {
             openProgressBar();

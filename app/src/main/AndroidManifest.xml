@@ -24,10 +24,17 @@
         </activity>
         <activity
             android:name=".AlunoBuscaActivity"
-            android:parentActivityName=".AlunoMainActivity">
+            android:parentActivityName=".AlunoMainActivity"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="senac.ensineme.AlunoMainActivity" />
+
         </activity>
         <activity
             android:name=".OfertaValidaActivity"
