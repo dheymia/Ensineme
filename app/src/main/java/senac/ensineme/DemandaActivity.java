@@ -63,7 +63,6 @@ import senac.ensineme.models.Categoria;
 import senac.ensineme.models.Demanda;
 
 import senac.ensineme.models.FirebaseDB;
-import senac.ensineme.ui.AlunoInicioFragment;
 
 
 public class DemandaActivity extends ComumActivity implements DatabaseReference.CompletionListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -109,7 +108,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         btnCadastrar = (Button) findViewById(R.id.btnCadastrarDemanda);
         btnCadastrar.setOnClickListener((View.OnClickListener) this);
 
-        if (AlunoInicioFragment.alterar || AlunoBuscaActivity.alterar){
+        if (AlunoMainActivity.alterar || AlunoBuscaActivity.alterar){
             getSupportActionBar().setTitle("Alterar demanda");
             spnCatDemanda.setVisibility( View.GONE );
             btnCadastrar.setText(getString(R.string.acaoAlterar));
@@ -176,7 +175,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
                 progressBar.setFocusable(true);
                 openProgressBar();
                 inicializaObjeto();
-                if(AlunoInicioFragment.alterar){
+                if(AlunoMainActivity.alterar){
                     demanda.atualizademandaDB(DemandaActivity.this);
                 } else{
                     demanda.salvaDemandaDB(DemandaActivity.this);
@@ -198,7 +197,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
             closeProgressBar();
             btnCadastrar.setEnabled(true);
         } else {
-            if(AlunoInicioFragment.alterar){
+            if(AlunoMainActivity.alterar){
                 showToast("Demanda atualizada com sucesso!");
             } else{
                 showToast("Demanda criada com sucesso!");
@@ -420,7 +419,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
     @Override
     protected void inicializaObjeto() throws ParseException {
 
-        if(AlunoInicioFragment.alterar){
+        if(AlunoMainActivity.alterar){
             status = demandaSelecionada.getStatus();
             data = demandaSelecionada.getData();
         } else{

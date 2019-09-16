@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,15 +27,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import senac.ensineme.AlunoMainActivity;
 import senac.ensineme.DemandaActivity;
 import senac.ensineme.R;
 import senac.ensineme.models.Demanda;
 import senac.ensineme.models.Oferta;
-import senac.ensineme.ui.AlunoInicioFragment;
 
-public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.DemandaAluViewHolder> {
+public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.DemandaAluViewHolder> implements Filterable {
 
     private List<Demanda> demandaList;
+    private List<Demanda> backup;
     private List <Oferta> ofertaList = new ArrayList<>();
     private Context context;
     public View.OnClickListener mOnItemClickListener, clickConsulta;
@@ -45,8 +48,14 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
 
 
     public DemandaAluAdapter(List<Demanda> demandaList, Context context) {
+        super();
         this.demandaList = demandaList;
+        this.backup = demandaList;
         this.context = context;
+    }
+
+    public List<Demanda> getDemandaList() {
+        return demandaList;
     }
 
     @NonNull
@@ -125,7 +134,7 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
         viewHolder.alterar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlunoInicioFragment.alterar = true;
+                AlunoMainActivity.alterar = true;
                 codDemanda = demanda.getCodigo();
                 codCategoria = demanda.getCategoriaCod();
                 Intent demanda = new Intent(context, DemandaActivity.class);
@@ -187,6 +196,51 @@ public class DemandaAluAdapter extends RecyclerView.Adapter<DemandaAluAdapter.De
 
 
 
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String query = charSequence.toString().toLowerCase();
+                if(query.isEmpty())
+                {
+                    demandaList = backup;
+                }
+                else
+                {
+                    List<Demanda> filtro = new ArrayList<>();
+
+                    for(Demanda d : backup)
+
+                    {
+
+                        if(d.getDescricao().toLowerCase().startsWith(query) ||
+                                d.getStatus().toLowerCase().startsWith(query))
+                        {
+                            filtro.add(d);
+                        } else  if(d.getAtualizacao().toLowerCase().startsWith(query) ||
+                                d.getExpiracao().toLowerCase().startsWith(query))
+                        {
+                            filtro.add(d);
+                        }
+                    }
+                    demandaList = filtro;
+                }
+                FilterResults resultado = new FilterResults();
+                resultado.values = demandaList;
+                return resultado;
+
+            }
+            @Override
+
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                demandaList = (List<Demanda>) filterResults.values;
+                notifyDataSetChanged();
+            }
+
+        };
     }
 
 

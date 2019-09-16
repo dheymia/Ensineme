@@ -9,22 +9,22 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:screenOrientation="portrait">
         <activity
             android:name=".FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen"
-            android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".AlunoBuscaActivity"
-            android:parentActivityName=".AlunoMainActivity"
-            android:screenOrientation="portrait" >
+            android:parentActivityName=".AlunoMainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="senac.ensineme.AlunoMainActivity" />
@@ -33,7 +33,7 @@
             android:name=".OfertaValidaActivity"
             android:label="@string/title_activity_OfertaValida"
             android:parentActivityName=".AlunoMainActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="senac.ensineme.AlunoMainActivity" />
@@ -113,11 +113,13 @@
                 android:windowSoftInputMode="adjustResize" />
         </activity>
         <activity android:name=".RecuperaSenhaActivity" />
-        <activity android:name=".RecuperaSenhaActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+        <provider
+            android:name=".providers.DemandaSuggestionProvider"
+            android:authorities="senac.ensineme.providers.DemandaSuggestionProvider" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

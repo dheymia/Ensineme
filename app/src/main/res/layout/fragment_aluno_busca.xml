@@ -49,13 +49,17 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listAlunoDemandas"
+            android:id="@+id/listStatusDemandas"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spConsulta">
+            app:layout_constraintTop_toBottomOf="@+id/spConsulta"
+            tools:itemCount="6"
+            tools:layoutManager="GridLayoutManager"
+            tools:listitem="@layout/item_status_demanda"
+            tools:spanCount="2">
 
         </androidx.recyclerview.widget.RecyclerView>
 

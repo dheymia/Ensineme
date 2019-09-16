@@ -81,6 +81,7 @@
     <string name="acaoEscolher">Escolher</string>
     <string name="acaoEncerrar">Encerrar</string>
     <string name="acaoInserirProposta">Inserir proposta</string>
+    <string name="Buscar">Buscar</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>

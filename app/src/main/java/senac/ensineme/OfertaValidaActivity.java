@@ -32,8 +32,6 @@ import java.util.Locale;
 import senac.ensineme.adapters.OfertaAluAdapter;
 import senac.ensineme.models.Demanda;
 import senac.ensineme.models.Oferta;
-import senac.ensineme.ui.AlunoBuscaFragment;
-import senac.ensineme.ui.AlunoInicioFragment;
 
 import static android.view.View.GONE;
 
@@ -61,21 +59,16 @@ public class OfertaValidaActivity extends AppCompatActivity implements DatabaseR
         Button validar = findViewById(R.id.btnValidarProposta);
         progressBar = findViewById(R.id.loading);
 
-        if (AlunoInicioFragment.validar){
-            codDemanda = AlunoInicioFragment.demandaSelecionada.getCodigo();
-            aluno = AlunoInicioFragment.demandaSelecionada.getAluno();
-            codCategoria = AlunoInicioFragment.demandaSelecionada.getCategoriaCod();
-            descDemanda = AlunoInicioFragment.demandaSelecionada.getDescricao();
+        if (AlunoMainActivity.validar){
+            codDemanda = AlunoMainActivity.demandaSelecionada.getCodigo();
+            aluno = AlunoMainActivity.demandaSelecionada.getAluno();
+            codCategoria = AlunoMainActivity.demandaSelecionada.getCategoriaCod();
+            descDemanda = AlunoMainActivity.demandaSelecionada.getDescricao();
         }else if(AlunoBuscaActivity.validar){
         codDemanda = AlunoBuscaActivity.demandaSelecionada.getCodigo();
         aluno = AlunoBuscaActivity.demandaSelecionada.getAluno();
         codCategoria = AlunoBuscaActivity.demandaSelecionada.getCategoriaCod();
         descDemanda = AlunoBuscaActivity.demandaSelecionada.getDescricao();
-    }else if(AlunoBuscaFragment.validar){
-        codDemanda = AlunoBuscaFragment.demandaSelecionada.getCodigo();
-        aluno = AlunoBuscaFragment.demandaSelecionada.getAluno();
-        codCategoria = AlunoBuscaFragment.demandaSelecionada.getCategoriaCod();
-        descDemanda = AlunoBuscaFragment.demandaSelecionada.getDescricao();
     }
 
         demanda.setText("Aprender "+ descDemanda);

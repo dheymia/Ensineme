@@ -6,15 +6,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,15 +43,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import senac.ensineme.providers.DemandaSuggestionProvider;
 import senac.ensineme.adapters.DemandaAluAdapter;
 import senac.ensineme.adapters.OfertaProfAdapter;
 import senac.ensineme.models.Demanda;
 import senac.ensineme.models.Oferta;
-import senac.ensineme.ui.AlunoInicioFragment;
 
 import static android.view.View.GONE;
 
-public class AlunoBuscaActivity extends AppCompatActivity {
+public class AlunoBuscaActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     FirebaseDatabase firebase;
     private String aluno;
@@ -62,6 +69,13 @@ public class AlunoBuscaActivity extends AppCompatActivity {
     private List <Oferta> ofertaList = new ArrayList<>();
     public static boolean alterar = false;
     public static boolean validar = false;
+    SearchView searchView;
+    DemandaAluAdapter adapterDemandas;
+    private ArrayAdapter<CharSequence> statusAdapter;
+    private Spinner spConsulta;
+    private String consulta;
+    DatabaseReference refDem, refCat;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +84,7 @@ public class AlunoBuscaActivity extends AppCompatActivity {
 
         recyclerDemandas = findViewById(R.id.ListaBuscaDemandas);
         progressBar = findViewById(R.id.loading);
-
-        getSupportActionBar().setTitle(AlunoInicioFragment.categoria);
+        spConsulta = findViewById(R.id.spConsulta);
 
         firebase = FirebaseDatabase.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -80,14 +93,31 @@ public class AlunoBuscaActivity extends AppCompatActivity {
             aluno = firebaseUser.getUid();
         }
 
-        DatabaseReference refDem = firebase.getReference("usuarios/" + aluno + "/demandas");
+        refDem = firebase.getReference("demandas");
+        refCat = firebase.getReference("categorias/" + AlunoMainActivity.codCategoria + "/demandas");
+
+
+
+        statusAdapter = ArrayAdapter.createFromResource(this, R.array.statusDemanda, android.R.layout.simple_spinner_item);
+        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spConsulta.setAdapter(statusAdapter);
+        spConsulta.setSelection(statusAdapter.getPosition("Todos os status"));
+        spConsulta.setOnItemSelectedListener(this);
+        consulta = spConsulta.getSelectedItem().toString();
+
 
         recyclerDemandas.setHasFixedSize(true);
         recyclerDemandas.setLayoutManager(new LinearLayoutManager(this));
 
         progressBar.setFocusable(true);
         openProgressBar();
-        refDem.limitToFirst(100).orderByChild("categoria").equalTo(AlunoInicioFragment.categoria).addValueEventListener(ListenerGeralDemandas);
+
+        if (AlunoMainActivity.categoria.equals("Todas")){
+            getSupportActionBar().setTitle("Todas as demandas");
+        } else{
+            getSupportActionBar().setTitle(AlunoMainActivity.categoria);
+        }
+
     }
 
     private ValueEventListener ListenerGeralDemandas = new ValueEventListener() {
@@ -97,7 +127,9 @@ public class AlunoBuscaActivity extends AppCompatActivity {
 
             for (DataSnapshot ds : dataSnapshot.getChildren()) {
                 Demanda demanda = ds.getValue(Demanda.class);
-                demandasList.add(demanda);
+                if (demanda.getAluno().equals(aluno)){
+                    demandasList.add(demanda);
+                }
 
                 Collections.sort(demandasList, new Comparator<Demanda>() {
                     @Override
@@ -109,7 +141,7 @@ public class AlunoBuscaActivity extends AppCompatActivity {
                 });
             }
 
-            DemandaAluAdapter adapterDemandas = new DemandaAluAdapter(demandasList, AlunoBuscaActivity.this);
+            adapterDemandas = new DemandaAluAdapter(demandasList, AlunoBuscaActivity.this);
             adapterDemandas.setOnItemClickListener(onItemClickListenerDemandas);
             adapterDemandas.setClickConsultaPrposta(clickConsultar);
             recyclerDemandas.setAdapter(adapterDemandas);
@@ -296,8 +328,44 @@ public class AlunoBuscaActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(true); // Do not iconify the widget; expand it by default
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String d) {
+                adapterDemandas.getFilter().filter(d);
+                searchView.clearFocus();
+                if(adapterDemandas.getDemandaList().size() > 0){
+                    SearchRecentSuggestions suggestions = new SearchRecentSuggestions(AlunoBuscaActivity.this,
+                            DemandaSuggestionProvider.AUTHORITY, DemandaSuggestionProvider.MODE);
+                    suggestions.saveRecentQuery(d, null);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                adapterDemandas.getFilter().filter(s);
+                return false;
+            }
+        });
+
         return true;
+    }
+
+    @Override
+
+    public boolean onSearchRequested() {
+        return super.onSearchRequested();
     }
 
     @Override
@@ -322,4 +390,33 @@ public class AlunoBuscaActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id){
+        Object item = parent.getItemAtPosition(pos);
+
+        consulta = item.toString();
+
+        showToast("OnItemSelectedListener : " + item.toString());
+
+        if (consulta.equals("Todos os status")) {
+            openProgressBar();
+            if (AlunoMainActivity.categoria.equals("Todas")){
+                refDem.limitToFirst(100).addValueEventListener(ListenerGeralDemandas);
+            } else{
+                refCat.limitToFirst(100).addValueEventListener(ListenerGeralDemandas);
+            }
+        } else {
+            openProgressBar();
+            if (AlunoMainActivity.categoria.equals("Todas")){
+                refDem.limitToFirst(100).orderByChild("status").equalTo(consulta).addValueEventListener(ListenerGeralDemandas);
+            } else{
+                refCat.limitToFirst(100).orderByChild("status").equalTo(consulta).addValueEventListener(ListenerGeralDemandas);
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }
