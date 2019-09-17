@@ -1,5 +1,7 @@
 package senac.ensineme;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
@@ -28,4 +30,11 @@ public class SettingsActivity extends AppCompatActivity {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
         }
     }
+
+    @Override
+    public void onBackPressed()    {
+    finish();
+
+
+}
 }
