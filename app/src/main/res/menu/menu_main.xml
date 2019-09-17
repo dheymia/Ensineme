@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="senac.ensineme.AlunoMainActivity">
     <item
+        android:id="@+id/acaoPesquisar"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:orderInCategory="100"
+        android:title="@string/acaoConfigurar"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/acaoConfigurar"
         android:icon="@drawable/config"
         android:orderInCategory="100"
@@ -10,14 +16,8 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/acaoPesquisar"
-        android:icon="@drawable/config"
-        android:orderInCategory="100"
-        android:title="@string/acaoConfigurar"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/acaoSair"
+        android:icon="@drawable/sair"
         android:orderInCategory="100"
         android:title="@string/acaoSair"
         app:showAsAction="always" />

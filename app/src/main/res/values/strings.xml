@@ -107,6 +107,7 @@
     <string name="historic">Histórico</string>
     <string name="credencials">Credenciais</string>
     <string name="notification">Notificações</string>
+    <string name="speak_voice">Pesquisa por voz</string>
 
 
 </resources>

@@ -99,7 +99,7 @@ public class AlunoMainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Aluno");
 
 
-        imagemtoolbar.setImageResource(R.drawable.ensinemeprincipal);
+        imagemtoolbar.setImageResource(R.drawable.top);
 
         firebase = FirebaseDatabase.getInstance();
 
