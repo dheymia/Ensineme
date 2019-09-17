@@ -3,7 +3,6 @@ package senac.ensineme;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -83,7 +82,7 @@ public class AlunoBuscaActivity extends AppCompatActivity implements AdapterView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_busca_aluno);
+        setContentView(R.layout.activity_busca_aluno_professor);
 
         recyclerDemandas = findViewById(R.id.ListaBuscaDemandas);
         progressBar = findViewById(R.id.loading);

@@ -85,7 +85,6 @@ public class AlunoMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_aluno);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         ImageView imagemtoolbar = findViewById(R.id.app_bar_image);
@@ -99,7 +98,7 @@ public class AlunoMainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Aluno");
 
 
-        imagemtoolbar.setImageResource(R.drawable.top);
+        imagemtoolbar.setImageResource(R.drawable.top2);
 
         firebase = FirebaseDatabase.getInstance();
 

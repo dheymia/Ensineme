@@ -106,15 +106,7 @@ public class ProfessorInicioFragment extends Fragment implements DatabaseReferen
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_professor_inicio, container, false);
-        recyclerDemandas = root.findViewById(R.id.listDemandas);
-        recyclerCategorias = root.findViewById(R.id.listCategorias);
-        progressBar = root.findViewById(R.id.loading);
-        Toolbar toolbar = root.findViewById(R.id.toolbar);
-        ImageView imagemtoolbar = root.findViewById(R.id.app_bar_image);
-        imagemtoolbar.setImageResource(R.drawable.ensinemeprincipal);
 
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Professor");
 
 
          FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();

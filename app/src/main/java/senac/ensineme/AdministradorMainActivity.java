@@ -2,6 +2,7 @@ package senac.ensineme;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,6 +41,13 @@ public class AdministradorMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_administrador);
+        ImageView imagemtoolbar = findViewById(R.id.app_bar_image);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Admin");
+
+        imagemtoolbar.setImageResource(R.drawable.top3);
 
         btnAluno = (Button) findViewById(R.id.btnAluno);
         btnAluno.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +79,8 @@ public class AdministradorMainActivity extends AppCompatActivity {
         btnTeste.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                Intent intent = new Intent(getBaseContext(), UsuariosCadastradosActivity.class);
+                startActivity(intent);
             }
         });
 

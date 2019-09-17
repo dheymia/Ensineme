@@ -14,6 +14,15 @@ public class Usuario {
     private String celular;
     private String password;
     private String tipo;
+    private String inscricao;
+
+    public String getInscricao() {
+        return inscricao;
+    }
+
+    public void setInscricao(String inscricao) {
+        this.inscricao = inscricao;
+    }
 
     public String getNomecompleto() {
         return nomecompleto;

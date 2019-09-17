@@ -135,7 +135,7 @@
 
             <Button
                 android:id="@+id/btnAlteraProposta"
-                style="@style/botao"
+                style="@style/botaoeditar"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="4dp"

@@ -21,6 +21,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import senac.ensineme.models.Usuario;
 
 public class UsuarioActivity extends ComumActivity implements DatabaseReference.CompletionListener, View.OnClickListener {
@@ -32,7 +36,12 @@ public class UsuarioActivity extends ComumActivity implements DatabaseReference.
     private EditText txtSenha;
     private RadioButton rbAluno, rbProfessor;
     private Button btnCadastrar;
-    private String nome, sobrenome, nomecompleto, email, celular, senha;
+    private String nome, sobrenome, nomecompleto, email, celular, senha, inscricao;
+    private Date dataatual = new Date();
+    private String myFormat = "dd/MM/yyyy";
+    private String format = "yyyy/MM/dd";
+    private SimpleDateFormat formatoData =  new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
+    private SimpleDateFormat formatoDataDemanda = new SimpleDateFormat(format, new Locale("pt", "BR"));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +90,7 @@ public class UsuarioActivity extends ComumActivity implements DatabaseReference.
         celular = txtCelular.getText().toString();
         senha = txtSenha.getText().toString();
         nomecompleto = nome + " "+ sobrenome;
+        inscricao = (formatoDataDemanda.format(dataatual));
     }
 
     @Override
@@ -93,6 +103,7 @@ public class UsuarioActivity extends ComumActivity implements DatabaseReference.
         usuario.setEmail(email);
         usuario.setCelular(celular);
         usuario.setPassword(senha);
+        usuario.setInscricao(inscricao);
 
         if (rbAluno.isChecked()) {
             usuario.setTipo("aluno");

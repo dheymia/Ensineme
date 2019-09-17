@@ -8,11 +8,43 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppThemeAdm" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/vermelho</item>
+        <item name="colorPrimaryDark">@color/vermelhoescuro</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppThemeAluno" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/verdedestaque</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+
+    <style name="AppThemeProf.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppThemeAlun.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/verdedestaque</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+
+    <style name="AppThemeAdmin.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/vermelho</item>
+        <item name="colorPrimaryDark">@color/vermelhoescuro</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
@@ -81,6 +113,20 @@
         <item name="android:layout_marginBottom">24dp</item>
         <item name="android:enabled">true</item>
         <item name="android:background">@drawable/botaoexcluir</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:fontFamily">@font/cabin_bold</item>
+    </style>
+
+    <style name="botaoeditar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginBottom">24dp</item>
+        <item name="android:enabled">true</item>
+        <item name="android:background">@drawable/botaoeditar</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:fontFamily">@font/cabin_bold</item>

@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,9 +32,10 @@ import senac.ensineme.R;
 import senac.ensineme.models.Demanda;
 import senac.ensineme.models.Oferta;
 
-public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.DemandaProfViewHolder> {
+public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.DemandaProfViewHolder> implements Filterable {
 
     private List<Demanda> demandaList;
+    private List<Demanda> backup;
     private List <Oferta> ofertaList = new ArrayList<>();
     private Context context;
     public View.OnClickListener mOnItemClickListener, clickInserir, clickConsulta;
@@ -45,7 +48,12 @@ public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.
 
     public DemandaProfAdapter(List<Demanda> demandaList, Context context) {
         this.demandaList = demandaList;
+        this.backup = demandaList;
         this.context = context;
+    }
+
+    public List<Demanda> getDemandaList() {
+        return demandaList;
     }
 
     @NonNull
@@ -130,6 +138,45 @@ public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.
     @Override
     public int getItemCount() {
         return demandaList.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String query = charSequence.toString().toLowerCase();
+                if (query.isEmpty()) {
+                    demandaList = backup;
+                } else {
+                    List<Demanda> filtro = new ArrayList<>();
+
+                    for (Demanda d : backup) {
+
+                        if (d.getDescricao().toLowerCase().startsWith(query) ||
+                                d.getStatus().toLowerCase().startsWith(query)) {
+                            filtro.add(d);
+                        } else if (d.getAtualizacao().toLowerCase().startsWith(query) ||
+                                d.getExpiracao().toLowerCase().startsWith(query)) {
+                            filtro.add(d);
+                        }
+                    }
+                    demandaList = filtro;
+                }
+                FilterResults resultado = new FilterResults();
+                resultado.values = demandaList;
+                return resultado;
+
+            }
+
+            @Override
+
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                demandaList = (List<Demanda>) filterResults.values;
+                notifyDataSetChanged();
+            }
+
+        };
     }
 
 

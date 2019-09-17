@@ -10,12 +10,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".UsuariosCadastradosActivity"
+            android:label="@string/title_activity_usuario"
+            android:parentActivityName=".AdministradorMainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdm">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="senac.ensineme.AdministradorMainActivity" />
+        </activity>
         <activity
             android:name=".FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen"
-            android:theme="@style/FullscreenTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,25 +32,44 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AlunoBuscaActivity"
-            android:parentActivityName=".AlunoMainActivity"
+            android:name=".ProfessorBuscaActivity"
             android:launchMode="singleTop"
+            android:parentActivityName=".ProfessorMainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-            <meta-data android:name="android.app.searchable"
-                android:resource="@xml/searchable"/>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="senac.ensineme.ProfessorMainActivity" />
+        </activity>
+        <activity
+            android:name=".AlunoBuscaActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".AlunoMainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAluno">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="senac.ensineme.AlunoMainActivity" />
-
         </activity>
         <activity
             android:name=".OfertaValidaActivity"
             android:label="@string/title_activity_OfertaValida"
             android:parentActivityName=".AlunoMainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAluno">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="senac.ensineme.AlunoMainActivity" />
@@ -60,7 +88,7 @@
             android:label="@string/title_activity_main"
             android:parentActivityName=".LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppThemeProf.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="senac.ensineme.LoginActivity" />
@@ -69,7 +97,7 @@
             android:name=".AlunoMainActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppThemeAlun.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="senac.ensineme.LoginActivity" />
@@ -78,14 +106,17 @@
             android:name=".CategoriasActivity"
             android:label="@string/title_activity_categoria"
             android:parentActivityName=".AdministradorMainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdm">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="senac.ensineme.AdministradorMainActivity" />
         </activity>
         <activity
             android:name=".AdministradorMainActivity"
-            android:screenOrientation="portrait" />
+            android:label="@string/title_activity_administrador_main"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdmin.NoActionBar" />
         <activity
             android:name=".PrincipalActivity"
             android:label="@string/title_activity_principal"
@@ -94,7 +125,8 @@
             android:name=".DemandaActivity"
             android:label="@string/title_activity_demanda"
             android:parentActivityName=".AlunoMainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAluno">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="senac.ensineme.AlunoMainActivity"
@@ -125,6 +157,7 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
         <provider
             android:name=".providers.DemandaSuggestionProvider"
             android:authorities="senac.ensineme.providers.DemandaSuggestionProvider" />
