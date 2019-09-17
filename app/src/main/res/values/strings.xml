@@ -84,26 +84,29 @@
     <string name="Buscar">Buscar</string>
 
     <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
+    <string name="messages_header">Credenciais</string>
+    <string name="sync_header">Notificações</string>
 
     <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
+    <string name="signature_title">Assinatura</string>
+    <string name="email_title">Email</string>
 
     <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    <string name="sync_title">Sincronizar email periodicamente</string>
+    <string name="attachment_title">Baixar anexos recebidos</string>
+    <string name="attachment_summary_on">Baixar automaticamente anexos para receber e-mails
     </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="action_settings">Settings</string>
+    <string name="attachment_summary_off">Faça o download de anexos somente quando solicitado manualmente.</string>
+    <string name="action_settings">Configurações</string>
     <string name="title_activity_main">MainActivity</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="nome_do_aluno">Nome do aluno</string>
     <string name="title_activity_OfertaValida">Validar proposta</string>
+    <string name="historic">Histórico</string>
+    <string name="credencials">Credenciais</string>
+    <string name="notification">Notificações</string>
 
 
 </resources>
