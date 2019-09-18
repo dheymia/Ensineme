@@ -1,6 +1,7 @@
 package senac.ensineme;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ProgressBar;
@@ -96,10 +97,20 @@ public class FullscreenActivity extends AppCompatActivity {
                 Usuario usuariologado = dataSnapshot.getValue(Usuario.class);
                 if (usuariologado.getTipo() != null) {
                     String tipoUsuario = usuariologado.getTipo();
+                    String email = usuariologado.getEmail();
+                    String nome = usuariologado.getNomecompleto();
                     //Toast.makeText(FullscreenActivity.this,
                     //        idUsuario + " " + usuariologado.getTipo(),
                     //        Toast.LENGTH_LONG)
                     //        .show();
+
+                    SharedPreferences sharedPreferences = getSharedPreferences(
+                            getResources().getString(R.string.pref_data),
+                            MODE_PRIVATE);
+                    email = sharedPreferences.getString(getResources().getString(R.string.pref_Email), "");
+                    nome = sharedPreferences.getString(getResources().getString(R.string.pref_Nome), "");
+
+
                     switch (tipoUsuario) {
                         case "aluno":
                             Intent aluno = new Intent(FullscreenActivity.this, AlunoMainActivity.class);

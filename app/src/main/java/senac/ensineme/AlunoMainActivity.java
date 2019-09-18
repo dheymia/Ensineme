@@ -54,7 +54,7 @@ public class AlunoMainActivity extends AppCompatActivity {
 
 
     Usuario usuario,usuariologado;
-    public static String idUsuario, nomeUsuario, tipoUsuario;
+    public static String idUsuario, nomeUsuario, tipoUsuario, emailUsuario;
     private FirebaseDatabase firebase;
     private TextView bemvindo;
     public static boolean alterar = false;
@@ -115,7 +115,8 @@ public class AlunoMainActivity extends AppCompatActivity {
                 usuariologado = dataSnapshot.getValue(Usuario.class);
                 if (usuariologado.getTipo() != null) {
                     tipoUsuario = usuariologado.getTipo();
-                    nomeUsuario = usuariologado.getNome();
+                    nomeUsuario = usuariologado.getNomecompleto();
+                    emailUsuario = usuariologado.getEmail();
                 }
             }
 
@@ -423,6 +424,7 @@ public class AlunoMainActivity extends AppCompatActivity {
             startActivity(novaConfig);
             categoria = "Todas";
         }
+
 
         return super.onOptionsItemSelected(item);
     }

@@ -56,7 +56,7 @@ import static android.view.View.GONE;
 public class ProfessorMainActivity extends AppCompatActivity {
 
     private Usuario usuario,usuariologado;
-    public static String idUsuario, nomeUsuario, tipoUsuario;
+    public static String idUsuario, nomeUsuario, tipoUsuario, emailUsuario;
     private FirebaseDatabase firebase;
     private TextView bemvindo;
     public static boolean alterar = false;
@@ -117,7 +117,8 @@ public class ProfessorMainActivity extends AppCompatActivity {
                 usuariologado = dataSnapshot.getValue(Usuario.class);
                 if (usuariologado.getTipo() != null) {
                     tipoUsuario = usuariologado.getTipo();
-                    nomeUsuario = usuariologado.getNome();
+                    nomeUsuario = usuariologado.getNomecompleto();
+                    emailUsuario = usuariologado.getEmail();
                 }
             }
 
@@ -232,7 +233,7 @@ public class ProfessorMainActivity extends AppCompatActivity {
             txtCEPDemanda.setText(String.valueOf(demandaSelecionada.getCEP()));
             txtBairroDemanda.setText(String.valueOf(demandaSelecionada.getBairro()));
 
-            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(ProfessorMainActivity.this);
+            final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(ProfessorMainActivity.this);
 
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference refUsu = database.getReference("usuarios/" + demandaSelecionada.getAluno());
@@ -242,6 +243,7 @@ public class ProfessorMainActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Usuario aluno = dataSnapshot.getValue(Usuario.class);
                     nomeAluno = aluno.getNome();
+                    builder.setTitle(nomeAluno + " quer aprender");
                 }
 
                 @Override
@@ -249,7 +251,7 @@ public class ProfessorMainActivity extends AppCompatActivity {
 
                 }
             });
-            builder.setTitle(nomeAluno + " quer aprender");
+
 
             voltar.setOnClickListener(new View.OnClickListener() {
                 @Override

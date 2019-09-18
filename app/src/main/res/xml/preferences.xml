@@ -14,16 +14,21 @@
   ~ limitations under the License.
   -->
 
-<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory app:title="@string/messages_header">
 
         <ListPreference
+            android:entryValues="@string/pref_Nome"
+            android:title="@string/nome"
             app:key="signature"
             app:title="@string/nome"
             app:useSimpleSummaryProvider="true" />
 
         <ListPreference
+            android:entryValues="@string/pref_Email"
+            android:title="@string/email"
             app:key="email"
             app:title="@string/email"
             app:useSimpleSummaryProvider="true" />

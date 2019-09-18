@@ -363,8 +363,6 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         estado = txtEstadoDemanda.getText().toString();
         cargaHoraria = spnHorasaulaDemanda.getSelectedItem().toString();
         inicioDemanda = txtInicioDemanda.getText().toString();
-        inicioformatado = formatoData.parse(inicioDemanda);
-        inicio = formatoDataDemanda.format(inicioformatado);
         validadeDemanda = spnValidadeDemanda.getSelectedItem().toString();
 
 
@@ -427,6 +425,8 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
             data = formatoDataDemanda.format(dataatual);
             nomeCategoria = spnCatDemanda.getSelectedItem().toString();
             codCategoria = ((Categoria)spnCatDemanda.getSelectedItem()).getCodigo();
+            inicioformatado = formatoData.parse(inicioDemanda);
+            inicio = formatoDataDemanda.format(inicioformatado);
         }
 
         demanda = new Demanda();

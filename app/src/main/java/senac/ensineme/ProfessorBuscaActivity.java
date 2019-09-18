@@ -208,7 +208,7 @@ public class ProfessorBuscaActivity extends AppCompatActivity implements Adapter
             txtCEPDemanda.setText(String.valueOf(demandaSelecionada.getCEP()));
             txtBairroDemanda.setText(String.valueOf(demandaSelecionada.getBairro()));
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(ProfessorBuscaActivity.this);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(ProfessorBuscaActivity.this);
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference refUsu = database.getReference("usuarios/" + demandaSelecionada.getAluno());
 
@@ -217,6 +217,7 @@ public class ProfessorBuscaActivity extends AppCompatActivity implements Adapter
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Usuario aluno = dataSnapshot.getValue(Usuario.class);
                     nomeAluno = aluno.getNome();
+                    builder.setTitle(nomeAluno + " quer aprender");
                 }
 
                 @Override
@@ -224,7 +225,6 @@ public class ProfessorBuscaActivity extends AppCompatActivity implements Adapter
 
                 }
             });
-            builder.setTitle(nomeAluno + " quer aprender");
 
             voltar.setOnClickListener(new View.OnClickListener() {
                 @Override

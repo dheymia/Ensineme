@@ -35,7 +35,7 @@ public class AdministradorMainActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
-    private String idUsuario, nomeUsuario;
+    public static String idUsuario, nomeUsuario, emailUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +105,8 @@ public class AdministradorMainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 usuariologado = dataSnapshot.getValue(Usuario.class);
                 if (usuariologado.getTipo() != null) {
-                    nomeUsuario = usuariologado.getNome();
+                    nomeUsuario = usuariologado.getNomecompleto();
+                    emailUsuario = usuariologado.getEmail();
                     txtNome.setText("Olá " + nomeUsuario);
                 }
             }
