@@ -129,15 +129,14 @@ public class ProfessorBuscaActivity extends AppCompatActivity implements Adapter
 
             for (DataSnapshot ds : dataSnapshot.getChildren()) {
                 Demanda demanda = ds.getValue(Demanda.class);
-
-                    demandasList.add(demanda);
+                demandasList.add(demanda);
 
                 Collections.sort(demandasList, new Comparator<Demanda>() {
                     @Override
                     public int compare(Demanda demanda, Demanda t1) {
                         if (demanda.getExpiracao() == null || t1.getExpiracao() == null)
                             return 0;
-                        return demanda.getExpiracao().compareTo(demanda.getExpiracao());
+                        return t1.getExpiracao().compareTo(demanda.getExpiracao());
                     }
                 });
             }

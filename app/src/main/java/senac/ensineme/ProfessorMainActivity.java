@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
@@ -46,6 +48,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import senac.ensineme.adapters.CategoriaProfAdapter;
 import senac.ensineme.adapters.DemandaAluAdapter;
@@ -53,12 +56,14 @@ import senac.ensineme.adapters.DemandaProfAdapter;
 import senac.ensineme.adapters.OfertaProfAdapter;
 import senac.ensineme.models.Categoria;
 import senac.ensineme.models.Demanda;
+import senac.ensineme.models.FirebaseDB;
 import senac.ensineme.models.Oferta;
 import senac.ensineme.models.Usuario;
+import senac.ensineme.ui.ProfessorInicioFragment;
 
 import static android.view.View.GONE;
 
-public class ProfessorMainActivity extends AppCompatActivity {
+public class ProfessorMainActivity extends AppCompatActivity implements DatabaseReference.CompletionListener{
 
     Usuario usuario,usuariologado;
     public static String idUsuario, nomeUsuario, tipoUsuario;
@@ -68,6 +73,7 @@ public class ProfessorMainActivity extends AppCompatActivity {
     public static boolean validar = false;
     private androidx.appcompat.app.AlertDialog alertapropostas;
     private androidx.appcompat.app.AlertDialog alerta;
+    private androidx.appcompat.app.AlertDialog alertaoferta;
     private ProgressBar progressBar;
     private RecyclerView recyclerOfertas;
     private List<Oferta> ofertaList = new ArrayList<>();
@@ -75,11 +81,15 @@ public class ProfessorMainActivity extends AppCompatActivity {
     private List<Categoria> categoriaList = new ArrayList<>();
     private List<Demanda> demandasList = new ArrayList<>();
     public static Demanda demandaSelecionada;
+    private Date dataatual = new Date();
     private String myFormat = "dd/MM/yyyy";
     private String format = "yyyy/MM/dd";
     private SimpleDateFormat formatoData =  new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
     private SimpleDateFormat formatoDataDemanda = new SimpleDateFormat(format, new Locale("pt", "BR"));
     public static String categoria, codCategoria;
+    private String valorOferta;
+    private String comentarioOferta;
+    private String data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,7 +166,7 @@ public class ProfessorMainActivity extends AppCompatActivity {
             categoria = categoriaSelecionada.getNome();
             codCategoria = categoriaSelecionada.getCodigo();
 
-            Intent busca = new Intent(ProfessorMainActivity.this, AlunoBuscaActivity.class);
+            Intent busca = new Intent(ProfessorMainActivity.this, ProfessorBuscaActivity.class);
             startActivity(busca);
         }
     };
@@ -271,9 +281,9 @@ public class ProfessorMainActivity extends AppCompatActivity {
                 Collections.sort(demandasList, new Comparator<Demanda>() {
                     @Override
                     public int compare(Demanda demanda, Demanda t1) {
-                        if (demanda.getAtualizacao() == null || t1.getAtualizacao() == null)
+                        if (demanda.getExpiracao() == null || t1.getExpiracao() == null)
                             return 0;
-                        return t1.getAtualizacao().compareTo(demanda.getAtualizacao());
+                        return t1.getExpiracao().compareTo(demanda.getExpiracao());
                     }
                 });
 
@@ -284,6 +294,7 @@ public class ProfessorMainActivity extends AppCompatActivity {
             DemandaProfAdapter adapterDemandas = new DemandaProfAdapter(demandasList, ProfessorMainActivity.this);
             adapterDemandas.setOnItemClickListener(onItemClickListenerDemandas);
             adapterDemandas.setClickConsultaPrposta(clickConsultar);
+            adapterDemandas.setClickInserir(clickInserirProposta);
             recyclerDemandas.setAdapter(adapterDemandas);
             closeProgressBar();
         }
@@ -353,6 +364,123 @@ public class ProfessorMainActivity extends AppCompatActivity {
             alertapropostas.show();
         }
     };
+
+    private View.OnClickListener clickInserirProposta = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+            int position = viewHolder.getAdapterPosition();
+
+            demandaSelecionada = demandasList.get(position);
+
+            DatabaseReference refUsu = firebase.getReference("usuarios/" + demandaSelecionada.getAluno());
+            refUsu.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Usuario alunoSelecionado = dataSnapshot.getValue(Usuario.class);
+
+                    LayoutInflater li = getLayoutInflater();
+                    View view = li.inflate(R.layout.dialog_ofertas_inserir, null);
+
+                    final ProgressBar progressBar = view.findViewById(R.id.loading);
+                    final Button btnCadastrarOferta = view.findViewById(R.id.btnInserirOferta);
+                    final EditText txtValorOferta = view.findViewById(R.id.txtValorOferta);
+                    final EditText txtComentarioOferta = view.findViewById(R.id.txtComentarioOferta);
+                    LinearLayout voltar = view.findViewById(R.id.inserirPropostas);
+                    TextView txtAluno = view.findViewById(R.id.txtAluno);
+                    TextView txtInicio = view.findViewById(R.id.txtInicio);
+                    TextView txtEmail= view.findViewById(R.id.txtEmail);
+
+                    txtAluno.setText(String.valueOf(alunoSelecionado.getNome()));
+                    txtEmail.setText(String.valueOf(alunoSelecionado.getEmail()));
+
+                    try {
+                        Date inicioformatado = formatoDataDemanda.parse(demandaSelecionada.getInicio());
+                        String inicio = formatoData.format(Objects.requireNonNull(inicioformatado));
+                        txtInicio.setText(inicio);
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(ProfessorMainActivity.this);
+                    builder.setTitle("Ensinar "+ demandaSelecionada.getDescricao());
+                    builder.setView(view);
+                    alertaoferta = builder.create();
+                    alertaoferta.show();
+
+                    voltar.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View arg0) {
+                            alertaoferta.dismiss();
+                        }
+                    });
+
+                    btnCadastrarOferta.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View arg0) {
+
+                            valorOferta = txtValorOferta.getText().toString();
+                            comentarioOferta = txtComentarioOferta.getText().toString();
+                            data = formatoDataDemanda.format(dataatual);
+
+                            if (comentarioOferta.isEmpty()) {
+                                txtComentarioOferta.setError(getString(R.string.msg_erro_campo_empty));
+                                txtComentarioOferta.requestFocus();
+                            } else if (valorOferta.isEmpty()) {
+                                txtValorOferta.setError(getString(R.string.msg_erro_campo_empty));
+                                txtValorOferta.requestFocus();
+                            } else {
+                                progressBar.setFocusable(true);
+                                progressBar.setVisibility(View.VISIBLE);
+
+                                Oferta novaoferta = new Oferta();
+                                DatabaseReference database = FirebaseDB.getFirebase();
+                                String codOferta = database.child("propostas").push().getKey();
+                                novaoferta.setCodOferta(codOferta);
+                                novaoferta.setProfessor(idUsuario);
+                                novaoferta.setAluno(demandaSelecionada.getAluno());
+                                novaoferta.setCodDemanda(demandaSelecionada.getCodigo());
+                                novaoferta.setCodCategoria(demandaSelecionada.getCategoriaCod());
+                                novaoferta.setValorOferta(valorOferta);
+                                novaoferta.setStatusOferta("Aguardando avaliação");
+                                novaoferta.setDataOferta(data);
+                                novaoferta.setAtualizacao(data);
+                                novaoferta.setComentarioOferta(comentarioOferta);
+                                novaoferta.salvaOfertaDB(ProfessorMainActivity.this);
+
+                                Demanda demanda = new Demanda();
+                                demanda.setCodigo(demandaSelecionada.getCodigo());
+                                demanda.setAluno(demandaSelecionada.getAluno());
+                                demanda.setCategoriaCod(demandaSelecionada.getCategoriaCod());
+                                demanda.setStatus("Aguardando validação");
+                                demanda.setAtualizacao(data);
+                                demanda.atualizaStatusDemandaDB(ProfessorMainActivity.this);
+                            }
+                        }
+
+                    });
+
+
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    showSnackbar("Erro de leitura: " + databaseError.getCode());
+                    closeProgressBar();
+                }
+            });
+
+
+        }
+    };
+
+
+    @Override
+    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+        if (databaseError != null) {
+            showSnackbar(databaseError.getMessage());
+        } else {
+            showToast("Proposta criada com sucesso!");
+        }
+    }
 
     private void openProgressBar(){
         progressBar.setVisibility( View.VISIBLE );

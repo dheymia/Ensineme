@@ -7,14 +7,14 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_gravity="center"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/inserirtexto"
-        android:elevation="4dp"
+        android:elevation="2dp"
         android:orientation="vertical">
 
         <ImageView
@@ -29,13 +29,14 @@
     <TextView
         android:id="@+id/txtNomeCategoria"
         style="@style/titulo_item"
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="40dp"
         android:layout_marginStart="2dp"
         android:layout_marginEnd="2dp"
         android:gravity="center_horizontal|center_vertical"
         android:text="Categoria Selecionada"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp" />
 
 </LinearLayout>

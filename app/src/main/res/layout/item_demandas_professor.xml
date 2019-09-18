@@ -121,7 +121,7 @@
                 android:textColor="@color/verdeescuro" />
 
             <Button
-                android:id="@+id/btnExcluiProposta"
+                android:id="@+id/btnExcluirProposta"
                 style="@style/botaoexcluir"
                 android:layout_width="40dp"
                 android:layout_height="40dp"

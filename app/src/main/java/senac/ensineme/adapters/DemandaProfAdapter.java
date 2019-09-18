@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import senac.ensineme.ProfessorMainActivity;
 import senac.ensineme.R;
 import senac.ensineme.models.Demanda;
 import senac.ensineme.models.Oferta;
@@ -35,6 +36,7 @@ import senac.ensineme.models.Oferta;
 public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.DemandaProfViewHolder> implements Filterable {
 
     private List<Demanda> demandaList;
+    private List<Oferta> professorOfertaList = new ArrayList<>();
     private List<Demanda> backup;
     private List <Oferta> ofertaList = new ArrayList<>();
     private Context context;
@@ -101,8 +103,12 @@ public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ofertaList.clear();
+                professorOfertaList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Oferta oferta = ds.getValue(Oferta.class);
+                    if (oferta.getProfessor().equals(ProfessorMainActivity.idUsuario)){
+                        professorOfertaList.add(oferta);
+                    }
                     ofertaList.add(oferta);
                 }
                 if (ofertaList.size() == 0) {
@@ -110,6 +116,13 @@ public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.
                 } else {
                     viewHolder.consulta.setVisibility(View.VISIBLE);
                     viewHolder.consulta.setText(String.valueOf(ofertaList.size()));
+                }
+             if (professorOfertaList.size() > 0) {
+                 viewHolder.inserir.setVisibility(View.GONE);
+                } else {
+                 viewHolder.inserir.setVisibility(View.VISIBLE);
+                 viewHolder.alterar.setVisibility(View.GONE);
+                 viewHolder.excluir.setVisibility(View.GONE);
                 }
 
             }
@@ -188,6 +201,8 @@ public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.
         final TextView resumo;
         final Button inserir;
         final Button consulta;
+        final Button alterar;
+        final Button excluir;
 
         DemandaProfViewHolder(@NonNull View itemView) {
 
@@ -199,6 +214,8 @@ public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.
             descricao = itemView.findViewById(R.id.txtDescricaoDemanda);
             inserir = itemView.findViewById(R.id.btnInserirProposta);
             consulta = itemView.findViewById(R.id.btnConsultaPropostas);
+            alterar = itemView.findViewById(R.id.btnAlteraProposta);
+            excluir = itemView.findViewById(R.id.btnExcluirProposta);
 
 
             itemView.setTag(this);
