@@ -94,7 +94,8 @@
     <string name="email_title">Email</string>
     <string name="pref_data">preferencias</string>
     <string name="pref_Nome">nome</string>
-    <string name="pref_Email">Email</string>
+    <string name="pref_Email">email</string>
+    <string name="pref_notification">notification</string>
 
     <!-- Sync Preferences -->
     <string name="sync_title">Sincronizar email periodicamente</string>

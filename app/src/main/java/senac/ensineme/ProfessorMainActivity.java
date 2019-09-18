@@ -233,7 +233,12 @@ public class ProfessorMainActivity extends AppCompatActivity {
             txtCEPDemanda.setText(String.valueOf(demandaSelecionada.getCEP()));
             txtBairroDemanda.setText(String.valueOf(demandaSelecionada.getBairro()));
 
-            final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(ProfessorMainActivity.this);
+            voltar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    alerta.cancel();
+                }
+            });
 
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference refUsu = database.getReference("usuarios/" + demandaSelecionada.getAluno());
@@ -243,7 +248,12 @@ public class ProfessorMainActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Usuario aluno = dataSnapshot.getValue(Usuario.class);
                     nomeAluno = aluno.getNome();
+
+                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(ProfessorMainActivity.this);
                     builder.setTitle(nomeAluno + " quer aprender");
+                    builder.setView(view);
+                    alerta = builder.create();
+                    alerta.show();
                 }
 
                 @Override
@@ -251,25 +261,6 @@ public class ProfessorMainActivity extends AppCompatActivity {
 
                 }
             });
-
-
-            voltar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    alerta.cancel();
-                }
-            });
-
-  /*      builder.setNegativeButton("Voltar", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog,int id) {
-                dialog.cancel();
-            }
-        });*/
-            builder.setView(view);
-            alerta = builder.create();
-            alerta.show();
 
         }
     };

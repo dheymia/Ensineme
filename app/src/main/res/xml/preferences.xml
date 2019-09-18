@@ -19,17 +19,13 @@
 
     <PreferenceCategory app:title="@string/messages_header">
 
-        <ListPreference
-            android:entryValues="@string/pref_Nome"
-            android:title="@string/nome"
-            app:key="signature"
+        <Preference
+            app:key="@string/nome"
             app:title="@string/nome"
             app:useSimpleSummaryProvider="true" />
 
-        <ListPreference
-            android:entryValues="@string/pref_Email"
-            android:title="@string/email"
-            app:key="email"
+        <Preference
+            app:key="@string/email"
             app:title="@string/email"
             app:useSimpleSummaryProvider="true" />
 

@@ -208,7 +208,13 @@ public class ProfessorBuscaActivity extends AppCompatActivity implements Adapter
             txtCEPDemanda.setText(String.valueOf(demandaSelecionada.getCEP()));
             txtBairroDemanda.setText(String.valueOf(demandaSelecionada.getBairro()));
 
-            final AlertDialog.Builder builder = new AlertDialog.Builder(ProfessorBuscaActivity.this);
+            voltar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    alerta.cancel();
+                }
+            });
+
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference refUsu = database.getReference("usuarios/" + demandaSelecionada.getAluno());
 
@@ -217,7 +223,12 @@ public class ProfessorBuscaActivity extends AppCompatActivity implements Adapter
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Usuario aluno = dataSnapshot.getValue(Usuario.class);
                     nomeAluno = aluno.getNome();
+
+                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(ProfessorBuscaActivity.this);
                     builder.setTitle(nomeAluno + " quer aprender");
+                    builder.setView(view);
+                    alerta = builder.create();
+                    alerta.show();
                 }
 
                 @Override
@@ -225,25 +236,6 @@ public class ProfessorBuscaActivity extends AppCompatActivity implements Adapter
 
                 }
             });
-
-            voltar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    alerta.cancel();
-                }
-            });
-
-  /*      builder.setNegativeButton("Voltar", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog,int id) {
-                dialog.cancel();
-            }
-        });*/
-            builder.setView(view);
-            alerta = builder.create();
-            alerta.show();
-
         }
     };
 
