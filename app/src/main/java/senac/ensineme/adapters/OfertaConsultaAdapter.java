@@ -1,7 +1,6 @@
 package senac.ensineme.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +21,13 @@ import senac.ensineme.R;
 import senac.ensineme.models.Oferta;
 import senac.ensineme.models.Usuario;
 
-public class OfertaProfAdapter extends RecyclerView.Adapter<OfertaProfAdapter.OfertaViewHolder> {
+public class OfertaConsultaAdapter extends RecyclerView.Adapter<OfertaConsultaAdapter.OfertaViewHolder> {
 
     private List<Oferta> ofertaList;
     private Context context;
     public View.OnClickListener mOnItemClickListener;
 
-    public OfertaProfAdapter(List<Oferta> ofertaList, Context context) {
+    public OfertaConsultaAdapter(List<Oferta> ofertaList, Context context) {
         this.ofertaList = ofertaList;
         this.context = context;
     }
@@ -36,13 +35,13 @@ public class OfertaProfAdapter extends RecyclerView.Adapter<OfertaProfAdapter.Of
 
     @NonNull
     @Override
-    public OfertaProfAdapter.OfertaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OfertaConsultaAdapter.OfertaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_ofertas_professor,parent,false);
         return new OfertaViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final OfertaProfAdapter.OfertaViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final OfertaConsultaAdapter.OfertaViewHolder holder, int position) {
 
         final Oferta oferta = ofertaList.get(position);
 
@@ -53,7 +52,7 @@ public class OfertaProfAdapter extends RecyclerView.Adapter<OfertaProfAdapter.Of
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 Usuario professor = dataSnapshot.getValue(Usuario.class);
-                ((OfertaViewHolder) holder).professor.setText(professor.getNome());
+                ((OfertaViewHolder) holder).professor.setText(professor.getNomecompleto());
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

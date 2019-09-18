@@ -45,18 +45,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import senac.ensineme.adapters.DemandaAluAdapter;
 import senac.ensineme.adapters.DemandaProfAdapter;
-import senac.ensineme.adapters.OfertaProfAdapter;
+import senac.ensineme.adapters.OfertaConsultaAdapter;
 import senac.ensineme.models.Demanda;
 import senac.ensineme.models.Oferta;
+import senac.ensineme.models.Usuario;
 import senac.ensineme.providers.DemandaSuggestionProvider;
 
 import static android.view.View.GONE;
 
 public class ProfessorBuscaActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    FirebaseDatabase firebase;
+    private FirebaseDatabase firebase;
     private String aluno;
     private RecyclerView recyclerDemandas;
     private ProgressBar progressBar;
@@ -72,12 +72,13 @@ public class ProfessorBuscaActivity extends AppCompatActivity implements Adapter
     private List <Oferta> ofertaList = new ArrayList<>();
     public static boolean alterar = false;
     public static boolean validar = false;
-    SearchView searchView;
-    DemandaProfAdapter adapterDemandas;
+    private SearchView searchView;
+    private DemandaProfAdapter adapterDemandas;
     private ArrayAdapter<CharSequence> statusAdapter;
     private Spinner spConsulta;
     private String consulta;
-    DatabaseReference refDem, refCat;
+    private DatabaseReference refDem, refCat;
+    private String nomeAluno;
 
 
     @Override
@@ -208,7 +209,22 @@ public class ProfessorBuscaActivity extends AppCompatActivity implements Adapter
             txtBairroDemanda.setText(String.valueOf(demandaSelecionada.getBairro()));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(ProfessorBuscaActivity.this);
-            builder.setTitle(" quer aprender");
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference refUsu = database.getReference("usuarios/" + demandaSelecionada.getAluno());
+
+            refUsu.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Usuario aluno = dataSnapshot.getValue(Usuario.class);
+                    nomeAluno = aluno.getNome();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+            builder.setTitle(nomeAluno + " quer aprender");
 
             voltar.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -248,22 +264,10 @@ public class ProfessorBuscaActivity extends AppCompatActivity implements Adapter
             Button btnSelecionaProposta = view.findViewById(R.id.btnEscolherProposta);
             TextView txtTitulo = view.findViewById(R.id.txtTitulo);
 
-            txtTitulo.setText("Propostas recebidas");
+            txtTitulo.setText("Propostas enviadas");
 
-            if (demandaSelecionada.getStatus().equals("Aguardando validação")){
-                btnSelecionaProposta.setVisibility(View.VISIBLE);
-            } else {
-                btnSelecionaProposta.setVisibility(View.GONE);
-            }
+            btnSelecionaProposta.setVisibility(View.GONE);
 
-            btnSelecionaProposta.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    validar = true;
-                    Intent oferta = new Intent(ProfessorBuscaActivity.this, OfertaValidaActivity.class);
-                    startActivity(oferta);
-                }
-            });
 
             recyclerOfertas.setHasFixedSize(true);
             recyclerOfertas.setLayoutManager(new LinearLayoutManager(ProfessorBuscaActivity.this, LinearLayoutManager.VERTICAL, false));
@@ -279,7 +283,7 @@ public class ProfessorBuscaActivity extends AppCompatActivity implements Adapter
                         Oferta oferta = ds.getValue(Oferta.class);
                         ofertaList.add(oferta);
                     }
-                    OfertaProfAdapter adapterOfertas = new OfertaProfAdapter(ofertaList, ProfessorBuscaActivity.this);
+                    OfertaConsultaAdapter adapterOfertas = new OfertaConsultaAdapter(ofertaList, ProfessorBuscaActivity.this);
                     recyclerOfertas.setAdapter(adapterOfertas);
                     progressBar.setVisibility(GONE);
                 }
@@ -297,7 +301,7 @@ public class ProfessorBuscaActivity extends AppCompatActivity implements Adapter
             });
 
             AlertDialog.Builder builder = new AlertDialog.Builder(ProfessorBuscaActivity.this);
-            builder.setTitle("Aprender " + demandaSelecionada.getDescricao());
+            builder.setTitle("Ensinar " + demandaSelecionada.getDescricao());
             builder.setView(view);
             alertapropostas = builder.create();
             alertapropostas.show();

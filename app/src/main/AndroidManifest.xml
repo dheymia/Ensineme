@@ -10,11 +10,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UsuariosCadastradosActivity"
+        <activity android:name=".OfertaActivity"
+            android:parentActivityName=".ProfessorMainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="senac.ensineme.ProfessorMainActivity" />
+        </activity>
+        <activity
+            android:name=".UsuariosCadastradosActivity"
             android:label="@string/title_activity_usuario"
             android:parentActivityName=".AdministradorMainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeAdm">
+            android:theme="@style/AppThemeAdm"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="senac.ensineme.AdministradorMainActivity" />
@@ -33,13 +48,12 @@
         </activity>
         <activity
             android:name=".ProfessorBuscaActivity"
-            android:launchMode="singleTop"
             android:parentActivityName=".ProfessorMainActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -75,13 +89,33 @@
                 android:value="senac.ensineme.AlunoMainActivity" />
         </activity>
         <activity
-            android:name=".SettingsActivity"
+        android:name=".SettingsActivity"
+        android:label="@string/title_activity_settings"
+        android:parentActivityName=".AlunoMainActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppThemeAluno">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="senac.ensineme.AlunoMainActivity" />
+    </activity>
+        <activity
+            android:name=".SettingsActivityAdmin"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".LoginActivity"
+            android:parentActivityName=".AdministradorMainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdm">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="senac.ensineme.AdministradorMainActivity" />
+        </activity>
+        <activity
+            android:name=".SettingsActivityProf"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".ProfessorMainActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="senac.ensineme.LoginActivity" />
+                android:value="senac.ensineme.ProfessorMainActivity" />
         </activity>
         <activity
             android:name=".ProfessorMainActivity"

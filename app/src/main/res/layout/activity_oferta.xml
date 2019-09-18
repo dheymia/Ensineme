@@ -2,76 +2,158 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/layoutTelasInserir"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".OfertaValidaActivity">
+    tools:context=".OfertaActivity">
 
-    <TextView
-        android:id="@+id/txtSolicitacao"
-        style="@style/titulo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
-    <RadioGroup
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/ListOfertasValidar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </RadioGroup>
-
-    <LinearLayout
-        android:id="@+id/layoutBotoes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtCatDemanda">
-
         <androidx.constraintlayout.widget.ConstraintLayout
-            style="@style/metadetela"
+            style="@style/layoutTelasInserir"
             android:layout_width="match_parent"
-            android:layout_height="100dp">
+            android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/btnEncerrarSemValidar"
-                style="@style/botao"
-                android:layout_width="130dp"
-
-                android:text="@string/acaoEncerrar"
-                android:textSize="12sp"
+            <EditText
+                android:id="@+id/txtComentarioOferta"
+                style="@style/inserirtexto"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="Deixe um comentário sobre a proposta"
+                android:inputType="textMultiLine"
+                android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/LinDemanda" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            style="@style/metadetela"
-            android:layout_width="match_parent"
-            android:layout_height="100dp">
+            <EditText
+                android:id="@+id/txtValorOferta"
+                style="@style/inserirtexto"
 
-            <Button
-                android:id="@+id/btnValidarProposta"
-                style="@style/botao"
-                android:layout_width="130dp"
-                android:text="@string/acaoEscolher"
-                android:textSize="12sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:hint="@string/valor"
+                android:inputType="numberDecimal"
+                android:numeric="decimal"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtComentarioOferta" />
+
+            <LinearLayout
+                android:id="@+id/LinDemanda"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="24dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <TextView
+                    android:id="@+id/txtRotulo1"
+                    style="@style/texto_titulo_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:text="Para"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/txtAluno"
+                    style="@style/titulosipinners"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:text="Nome do Aluno"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/txtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/cabin_semibold"
+                    android:text="Email do aluno"
+                    android:textAlignment="center"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/txtRotul3"
+                    style="@style/texto_titulo_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="A partir de"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/txtInicio"
+                    style="@style/titulosipinners"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginBottom="0dp"
+                    android:text="@string/inicioDemanda"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/textRotul5"
+                    style="@style/titulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Minha proposta"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/txtValorOferta"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/layout2"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center|center_horizontal|left|end"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnInserirOferta"
+                style="@style/botao"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="0dp"
+                android:gravity="right|center_vertical"
+                android:text="@string/acaoCadastrar" />
+        </LinearLayout>
+
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/loading"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+
 </LinearLayout>

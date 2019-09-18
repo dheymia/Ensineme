@@ -103,7 +103,7 @@
                 <Button
                     android:id="@+id/btnEscolherProposta"
                     style="@style/botao"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="2dp"
                     android:layout_marginRight="0dp"
                     android:gravity="right|center_vertical"
                     android:text="Validar" />

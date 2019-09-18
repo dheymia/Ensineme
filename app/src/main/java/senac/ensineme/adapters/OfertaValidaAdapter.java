@@ -23,7 +23,7 @@ import senac.ensineme.R;
 import senac.ensineme.models.Oferta;
 import senac.ensineme.models.Usuario;
 
-public class OfertaAluAdapter extends RecyclerView.Adapter<OfertaAluAdapter.OfertaViewHolder> {
+public class OfertaValidaAdapter extends RecyclerView.Adapter<OfertaValidaAdapter.OfertaViewHolder> {
 
     private List<Oferta> ofertaList;
     private Context context;
@@ -31,7 +31,7 @@ public class OfertaAluAdapter extends RecyclerView.Adapter<OfertaAluAdapter.Ofer
     private int lastSelectedPosition = -1;
     public static String codProfessor, codOferta, mensagem;
 
-    public OfertaAluAdapter(List<Oferta> ofertaList, Context context) {
+    public OfertaValidaAdapter(List<Oferta> ofertaList, Context context) {
         this.ofertaList = ofertaList;
         this.context = context;
     }
@@ -39,13 +39,13 @@ public class OfertaAluAdapter extends RecyclerView.Adapter<OfertaAluAdapter.Ofer
 
     @NonNull
     @Override
-    public OfertaAluAdapter.OfertaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OfertaValidaAdapter.OfertaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_ofertas_aluno,parent,false);
         return new OfertaViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final OfertaAluAdapter.OfertaViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final OfertaValidaAdapter.OfertaViewHolder holder, int position) {
 
         Oferta oferta = ofertaList.get(position);
 
@@ -56,7 +56,7 @@ public class OfertaAluAdapter extends RecyclerView.Adapter<OfertaAluAdapter.Ofer
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 professorselecionado = dataSnapshot.getValue(Usuario.class);
-                ((OfertaViewHolder) holder).professor.setText(professorselecionado.getNome());
+                ((OfertaViewHolder) holder).professor.setText(professorselecionado.getNomecompleto());
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -100,13 +100,13 @@ public class OfertaAluAdapter extends RecyclerView.Adapter<OfertaAluAdapter.Ofer
                 public void onClick(View v) {
                     lastSelectedPosition = getAdapterPosition();
                     notifyDataSetChanged();
-                    Toast.makeText(OfertaAluAdapter.this.context,
+                    Toast.makeText(OfertaValidaAdapter.this.context,
                             "Seleção: proposta R$ " + valorOferta.getText() + " de " + professor.getText(),
                             Toast.LENGTH_LONG).show();
 
                     codProfessor = (String) codProf.getText();
                     codOferta = (String) codOfer.getText();
-                    mensagem = "Você selecionou a proposta no valor de " + valorOferta.getText() + " de " + professor.getText() + ".";
+                    mensagem = "Você selecionou a proposta no valor de R$ " + valorOferta.getText() + " de " + professor.getText() + ".";
 
                 }
             });

@@ -47,7 +47,7 @@ import java.util.Locale;
 
 import senac.ensineme.providers.DemandaSuggestionProvider;
 import senac.ensineme.adapters.DemandaAluAdapter;
-import senac.ensineme.adapters.OfertaProfAdapter;
+import senac.ensineme.adapters.OfertaConsultaAdapter;
 import senac.ensineme.models.Demanda;
 import senac.ensineme.models.Oferta;
 
@@ -69,8 +69,6 @@ public class AlunoBuscaActivity extends AppCompatActivity implements AdapterView
     private AlertDialog alerta;
     private RecyclerView recyclerOfertas;
     private List <Oferta> ofertaList = new ArrayList<>();
-    public static boolean alterar = false;
-    public static boolean validar = false;
     SearchView searchView;
     DemandaAluAdapter adapterDemandas;
     private ArrayAdapter<CharSequence> statusAdapter;
@@ -260,7 +258,7 @@ public class AlunoBuscaActivity extends AppCompatActivity implements AdapterView
             btnSelecionaProposta.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    validar = true;
+                    AlunoMainActivity.validar = true;
                     Intent oferta = new Intent(AlunoBuscaActivity.this, OfertaValidaActivity.class);
                     startActivity(oferta);
                 }
@@ -280,7 +278,7 @@ public class AlunoBuscaActivity extends AppCompatActivity implements AdapterView
                         Oferta oferta = ds.getValue(Oferta.class);
                         ofertaList.add(oferta);
                     }
-                    OfertaProfAdapter adapterOfertas = new OfertaProfAdapter(ofertaList, AlunoBuscaActivity.this);
+                    OfertaConsultaAdapter adapterOfertas = new OfertaConsultaAdapter(ofertaList, AlunoBuscaActivity.this);
                     recyclerOfertas.setAdapter(adapterOfertas);
                     progressBar.setVisibility(GONE);
                 }

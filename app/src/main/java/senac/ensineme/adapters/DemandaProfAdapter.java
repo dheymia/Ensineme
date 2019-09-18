@@ -1,6 +1,8 @@
 package senac.ensineme.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import senac.ensineme.AlunoMainActivity;
+import senac.ensineme.DemandaActivity;
+import senac.ensineme.OfertaActivity;
 import senac.ensineme.ProfessorMainActivity;
 import senac.ensineme.R;
 import senac.ensineme.models.Demanda;
@@ -35,13 +40,15 @@ import senac.ensineme.models.Oferta;
 
 public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.DemandaProfViewHolder> implements Filterable {
 
+    public static String codDemanda, codCategoria, aluno, inicio, descricao;
     private List<Demanda> demandaList;
     private List<Oferta> professorOfertaList = new ArrayList<>();
     private List<Demanda> backup;
     private List <Oferta> ofertaList = new ArrayList<>();
     private Context context;
+    private String datainicio;
+    private Oferta ofertaSelecionada;
     public View.OnClickListener mOnItemClickListener, clickInserir, clickConsulta;
-    String inicio;
     private String myFormat = "dd/MM/yyyy";
     private String format = "yyyy/MM/dd";
     private SimpleDateFormat formatoData =  new SimpleDateFormat(myFormat, new Locale("pt", "BR"));
@@ -74,6 +81,7 @@ public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.
 
         viewHolder.categoria.setText(demanda.getCategoria());
         viewHolder.descricao.setText("Ensinar " + demanda.getDescricao());
+        viewHolder.status.setText(demanda.getStatus());
 
         if (demanda.getStatus().equals("Aguardando proposta")){
             viewHolder.inserir.setVisibility(View.VISIBLE);
@@ -89,13 +97,13 @@ public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.
             viewHolder.expiracao.setText(expiracao);
 
             Date inicioformatada = formatoDataDemanda.parse(demanda.getInicio());
-            inicio = formatoData.format(inicioformatada);
+            datainicio = formatoData.format(inicioformatada);
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        viewHolder.resumo.setText(demanda.getHorasaula() + " horas/aula a partir de " + inicio + " em " + demanda.getLocalidade() + " (" + demanda.getEstado() + ").");
+        viewHolder.resumo.setText(demanda.getHorasaula() + " horas/aula a partir de " + datainicio + " em " + demanda.getLocalidade() + " (" + demanda.getEstado() + ").");
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference refOfer = database.getReference("demandas/" + demanda.getCodigo() + "/propostas");
@@ -108,23 +116,28 @@ public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.
                     Oferta oferta = ds.getValue(Oferta.class);
                     if (oferta.getProfessor().equals(ProfessorMainActivity.idUsuario)){
                         professorOfertaList.add(oferta);
+                        ofertaSelecionada = oferta;
                     }
                     ofertaList.add(oferta);
                 }
                 if (ofertaList.size() == 0) {
                     viewHolder.consulta.setVisibility(View.GONE);
                 } else {
-                    viewHolder.consulta.setVisibility(View.VISIBLE);
                     viewHolder.consulta.setText(String.valueOf(ofertaList.size()));
                 }
-             if (professorOfertaList.size() > 0) {
-                 viewHolder.inserir.setVisibility(View.GONE);
-                } else {
-                 viewHolder.inserir.setVisibility(View.VISIBLE);
-                 viewHolder.alterar.setVisibility(View.GONE);
-                 viewHolder.excluir.setVisibility(View.GONE);
-                }
 
+                if (demanda.getSituacao(demanda.getStatus()).equals("ATIVA")) {
+                    if (professorOfertaList.size() > 0) {
+                        viewHolder.inserir.setVisibility(View.GONE);
+                    } else {
+                        viewHolder.alterar.setVisibility(View.GONE);
+                        viewHolder.excluir.setVisibility(View.GONE);
+                    }
+                } else {
+                    viewHolder.inserir.setVisibility(View.GONE);
+                    viewHolder.alterar.setVisibility(View.GONE);
+                    viewHolder.excluir.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -132,15 +145,63 @@ public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.
             }
         });
 
+        viewHolder.alterar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProfessorMainActivity.alterar = true;
+                codDemanda = demanda.getCodigo();
+                codCategoria  = demanda.getCategoriaCod();
+                aluno = demanda.getAluno();
+                descricao = demanda.getDescricao();
+                inicio = demanda.getInicio();
+                Intent oferta = new Intent(context, OfertaActivity.class);
+                context.startActivity(oferta);
+            }
+        });
+        viewHolder.inserir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProfessorMainActivity.alterar = false;
+                codDemanda = demanda.getCodigo();
+                codCategoria  = demanda.getCategoriaCod();
+                aluno = demanda.getAluno();
+                descricao = demanda.getDescricao();
+                inicio = demanda.getInicio();
+                Intent oferta = new Intent(context, OfertaActivity.class);
+                context.startActivity(oferta);
+            }
+        });
+        viewHolder.excluir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+                builder
+                        .setMessage("Deseja excluir esta solicitação?")
+                        .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                ofertaSelecionada.excluiofertaDB();
+                                dialog.cancel();
+
+                            }
+                        })
+
+                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
+            }
+        });
 
     }
 
     public void setOnItemClickListener(View.OnClickListener itemClickListener) {
         mOnItemClickListener = itemClickListener;
-    }
-
-    public void setClickInserir(View.OnClickListener itemClickListener) {
-        clickInserir = itemClickListener;
     }
 
     public void setClickConsultaPrposta(View.OnClickListener itemClickListener) {
@@ -199,6 +260,7 @@ public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.
         final TextView expiracao;
         final TextView descricao;
         final TextView resumo;
+        final TextView status;
         final Button inserir;
         final Button consulta;
         final Button alterar;
@@ -216,12 +278,12 @@ public class DemandaProfAdapter extends RecyclerView.Adapter<DemandaProfAdapter.
             consulta = itemView.findViewById(R.id.btnConsultaPropostas);
             alterar = itemView.findViewById(R.id.btnAlteraProposta);
             excluir = itemView.findViewById(R.id.btnExcluirProposta);
+            status = itemView.findViewById(R.id.txtStaDemandas);
 
 
+            inserir.setTag(this);
             itemView.setTag(this);
             itemView.setOnClickListener(mOnItemClickListener);
-            inserir.setTag(this);
-            inserir.setOnClickListener(clickInserir);
             consulta.setTag(this);
             consulta.setOnClickListener(clickConsulta);
 

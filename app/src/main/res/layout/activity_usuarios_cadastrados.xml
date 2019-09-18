@@ -9,8 +9,24 @@
     tools:context=".UsuariosCadastradosActivity">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ListaUsuarios"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:itemCount="4"
         tools:listitem="@layout/item_usuarios_cadastrados" />
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/txtDescricaoDemanda"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

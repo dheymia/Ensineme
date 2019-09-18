@@ -139,7 +139,7 @@ public class AdministradorMainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.acaoConfigurar) {
-            Intent novaConfig = new Intent(getBaseContext(), SettingsActivity.class);
+            Intent novaConfig = new Intent(getBaseContext(), SettingsActivityAdmin.class);
             startActivity(novaConfig);
         }
 

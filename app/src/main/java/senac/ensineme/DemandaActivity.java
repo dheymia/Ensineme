@@ -108,7 +108,7 @@ public class DemandaActivity extends ComumActivity implements DatabaseReference.
         btnCadastrar = (Button) findViewById(R.id.btnCadastrarDemanda);
         btnCadastrar.setOnClickListener((View.OnClickListener) this);
 
-        if (AlunoMainActivity.alterar || AlunoBuscaActivity.alterar){
+        if (AlunoMainActivity.alterar){
             getSupportActionBar().setTitle("Alterar demanda");
             spnCatDemanda.setVisibility( View.GONE );
             btnCadastrar.setText(getString(R.string.acaoAlterar));

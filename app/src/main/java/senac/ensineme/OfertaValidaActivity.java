@@ -29,7 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import senac.ensineme.adapters.OfertaAluAdapter;
+import senac.ensineme.adapters.OfertaValidaAdapter;
 import senac.ensineme.models.Demanda;
 import senac.ensineme.models.Oferta;
 
@@ -51,7 +51,7 @@ public class OfertaValidaActivity extends AppCompatActivity implements DatabaseR
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_oferta);
+        setContentView(R.layout.activity_oferta_valida);
 
         final RecyclerView recyclerOfertas = findViewById(R.id.ListOfertasValidar);
         TextView demanda = findViewById(R.id.txtSolicitacao);
@@ -64,11 +64,6 @@ public class OfertaValidaActivity extends AppCompatActivity implements DatabaseR
             aluno = AlunoMainActivity.demandaSelecionada.getAluno();
             codCategoria = AlunoMainActivity.demandaSelecionada.getCategoriaCod();
             descDemanda = AlunoMainActivity.demandaSelecionada.getDescricao();
-        }else if(AlunoBuscaActivity.validar){
-        codDemanda = AlunoBuscaActivity.demandaSelecionada.getCodigo();
-        aluno = AlunoBuscaActivity.demandaSelecionada.getAluno();
-        codCategoria = AlunoBuscaActivity.demandaSelecionada.getCategoriaCod();
-        descDemanda = AlunoBuscaActivity.demandaSelecionada.getDescricao();
     }
 
         demanda.setText("Aprender "+ descDemanda);
@@ -90,7 +85,7 @@ public class OfertaValidaActivity extends AppCompatActivity implements DatabaseR
                     Oferta oferta = ds.getValue(Oferta.class);
                     ofertaList.add(oferta);
                 }
-                OfertaAluAdapter adapter = new OfertaAluAdapter(ofertaList, OfertaValidaActivity.this);
+                OfertaValidaAdapter adapter = new OfertaValidaAdapter(ofertaList, OfertaValidaActivity.this);
                 recyclerOfertas.setAdapter(adapter);
                 closeProgressBar();
             }
@@ -134,7 +129,7 @@ public class OfertaValidaActivity extends AppCompatActivity implements DatabaseR
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(OfertaValidaActivity.this);
                 builder
-                        .setMessage(OfertaAluAdapter.mensagem)
+                        .setMessage(OfertaValidaAdapter.mensagem)
                         .setPositiveButton("Confirmar",  new DialogInterface.OnClickListener() {
 
                             @Override
@@ -171,8 +166,8 @@ public class OfertaValidaActivity extends AppCompatActivity implements DatabaseR
 
         }
         Oferta propostaselecionada = new Oferta();
-        propostaselecionada.setCodOferta(OfertaAluAdapter.codOferta);
-        propostaselecionada.setProfessor(OfertaAluAdapter.codProfessor);
+        propostaselecionada.setCodOferta(OfertaValidaAdapter.codOferta);
+        propostaselecionada.setProfessor(OfertaValidaAdapter.codProfessor);
         propostaselecionada.setCodDemanda(codDemanda);
         propostaselecionada.setStatusOferta("Aceita");
         propostaselecionada.atualizaStatusOfertaDB(OfertaValidaActivity.this);

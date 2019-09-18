@@ -3,7 +3,6 @@ package senac.ensineme;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,7 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,11 +28,6 @@ import com.google.firebase.database.ValueEventListener;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,7 +42,7 @@ import java.util.Locale;
 
 import senac.ensineme.adapters.CategoriaProfAdapter;
 import senac.ensineme.adapters.DemandaAluAdapter;
-import senac.ensineme.adapters.OfertaProfAdapter;
+import senac.ensineme.adapters.OfertaConsultaAdapter;
 import senac.ensineme.models.Categoria;
 import senac.ensineme.models.Demanda;
 import senac.ensineme.models.Oferta;
@@ -352,7 +345,7 @@ public class AlunoMainActivity extends AppCompatActivity {
                         Oferta oferta = ds.getValue(Oferta.class);
                         ofertaList.add(oferta);
                     }
-                    OfertaProfAdapter adapterOfertas = new OfertaProfAdapter(ofertaList, AlunoMainActivity.this);
+                    OfertaConsultaAdapter adapterOfertas = new OfertaConsultaAdapter(ofertaList, AlunoMainActivity.this);
                     recyclerOfertas.setAdapter(adapterOfertas);
                     progressBar.setVisibility(GONE);
                 }

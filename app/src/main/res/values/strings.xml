@@ -110,6 +110,15 @@
     <string name="credencials">Credenciais</string>
     <string name="notification">Notificações</string>
     <string name="speak_voice">Pesquisa por voz</string>
+    <string formatted="true" name = "bemvindo">Bem vindo ao ensine-me.
+
+                    Vamos começar?
+
+                    O que você deseja aprender?</string>
+    <string formatted="true" name = "bemvindoprofessor">Bem vindo ao ensine-me.
+
+                   Não há demandas disponíveis no momento.</string>
+
 
 
 </resources>

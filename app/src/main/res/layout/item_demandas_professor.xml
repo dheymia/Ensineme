@@ -99,11 +99,13 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/txtStatusDemandas"
+                android:id="@+id/txtStaDemandas"
+                style="@style/texto_titulo_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="Status"
+                android:textColor="@color/colorPrimaryDark" />
 
             <Button
                 android:id="@+id/btnConsultaPropostas"
